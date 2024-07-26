@@ -19,6 +19,7 @@ class Person {
     if (lastName.isEmpty) throw ArgumentError('Last name cannot be empty');
     if (position.isEmpty) throw ArgumentError('Position cannot be empty');
   }
+
   bool isEmpty() {
     return firstName.isEmpty || lastName.isEmpty || position.isEmpty;
   }
