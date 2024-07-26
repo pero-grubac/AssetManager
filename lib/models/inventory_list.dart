@@ -1,19 +1,15 @@
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
-import 'inventory_item.dart';
-
 const uuid = Uuid();
 
 class InventoryList {
   final String id;
   final String name;
-  final List<InventoryItem> items;
 
   InventoryList({
     String? id,
     required this.name,
-    required this.items,
   }) : id = id ?? uuid.v4() {
     if (name.isEmpty) throw ArgumentError('Name cannot be empty');
   }
@@ -23,7 +19,6 @@ class InventoryList {
     return {
       'id': id,
       'name': name,
-      'items': items.map((item) => item.toMap()).toList(),
     };
   }
 
@@ -32,8 +27,6 @@ class InventoryList {
     return InventoryList(
       id: map['id'],
       name: map['name'],
-      items: List<InventoryItem>.from(
-          map['items']?.map((item) => InventoryItem.fromMap(item))),
     );
   }
 
