@@ -5,6 +5,7 @@ const uuid = Uuid();
 
 class InventoryItem {
   final String id;
+  final String assetListId;
   final String assetId;
   final String currentPersonId;
   final String newPersonId;
@@ -13,6 +14,7 @@ class InventoryItem {
 
   InventoryItem({
     String? id,
+    required this.assetListId,
     required this.assetId,
     required this.currentPersonId,
     required this.newPersonId,
@@ -37,6 +39,7 @@ class InventoryItem {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'assetListId': assetListId,
       'assetId': assetId,
       'currentPersonId': currentPersonId,
       'newPersonId': newPersonId,
@@ -49,6 +52,7 @@ class InventoryItem {
   factory InventoryItem.fromMap(Map<String, dynamic> map) {
     return InventoryItem(
       id: map['id'],
+      assetListId: map['assetListId'],
       assetId: map['assetId'],
       currentPersonId: map['currentPersonId'],
       newPersonId: map['newPersonId'],
