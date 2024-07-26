@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:asset_manager/models/person.dart';
 import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
@@ -11,7 +12,7 @@ class Asset {
   final int barcode;
   final double price;
   final DateTime creationDate;
-  final String assignedPerson;
+  final int assignedPersonId;
   final String assignedLocation;
   final String imagePath;
 
@@ -22,7 +23,7 @@ class Asset {
     required this.barcode,
     required this.price,
     required this.creationDate,
-    required this.assignedPerson,
+    required this.assignedPersonId,
     required this.assignedLocation,
     required this.imagePath,
   }) : id = id ?? uuid.v4() {
@@ -31,9 +32,7 @@ class Asset {
     if (description.isEmpty) throw ArgumentError('Description cannot be empty');
     if (barcode <= 0) throw ArgumentError('Barcode must be a positive integer');
     if (price <= 0) throw ArgumentError('Price must be a positive number');
-    if (assignedPerson.isEmpty) {
-      throw ArgumentError('Assigned person cannot be empty');
-    }
+
     if (assignedLocation.isEmpty) {
       throw ArgumentError('Assigned location cannot be empty');
     }
@@ -49,7 +48,7 @@ class Asset {
       'barcode': barcode,
       'price': price,
       'creationDate': creationDate.toIso8601String(),
-      'assignedPerson': assignedPerson,
+      'assignedPersonId': assignedPersonId,
       'assignedLocation': assignedLocation,
       'imagePath': imagePath,
     };
@@ -64,7 +63,7 @@ class Asset {
       barcode: map['barcode'],
       price: map['price'],
       creationDate: DateTime.parse(map['creationDate']),
-      assignedPerson: map['assignedPerson'],
+      assignedPersonId: map['assignedPersonId'],
       assignedLocation: map['assignedLocation'],
       imagePath: map['imagePath'],
     );
