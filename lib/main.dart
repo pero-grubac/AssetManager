@@ -29,7 +29,7 @@ class _AssetManagerState extends State<AssetManager> {
       debugShowCheckedModeBanner: false,
       title: 'Test',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlueAccent),
+        primaryColor: const Color(0xFF0D47A1), // Primarna boja
         useMaterial3: true,
       ),
       supportedLocales: localization.supportedLocales,
