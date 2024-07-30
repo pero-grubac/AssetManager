@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const id = 'home_screen';
   const HomeScreen({super.key});
 
   @override

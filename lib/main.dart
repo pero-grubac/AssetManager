@@ -1,5 +1,7 @@
 import 'package:asset_manager/localization/locals.dart';
 import 'package:asset_manager/screens/home_screen.dart';
+import 'package:asset_manager/screens/loading_screen.dart';
+import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 
@@ -7,43 +9,27 @@ void main() {
   runApp(const AssetManager());
 }
 
-class AssetManager extends StatefulWidget {
+class AssetManager extends StatelessWidget {
   const AssetManager({super.key});
 
-  @override
-  State<AssetManager> createState() => _AssetManagerState();
-}
+  // final FlutterLocalization localization = FlutterLocalization.instance;
 
-class _AssetManagerState extends State<AssetManager> {
-  final FlutterLocalization localization = FlutterLocalization.instance;
-
-  @override
+  /* @override
   void initState() {
     configureLocalization();
     super.initState();
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Test',
-      theme: ThemeData(
-        primaryColor: const Color(0xFF0D47A1), // Primarna boja
-        useMaterial3: true,
-      ),
-      supportedLocales: localization.supportedLocales,
-      localizationsDelegates: localization.localizationsDelegates,
-      home: HomeScreen(),
+      initialRoute: WorkersScreen.id,
+      routes: {
+        HomeScreen.id: (context) => const HomeScreen(),
+        LoadingScreen.id: (context) => const LoadingScreen(),
+        WorkersScreen.id: (context) => const WorkersScreen(),
+      },
     );
-  }
-
-  void configureLocalization() {
-    localization.init(mapLocales: LOCALS, initLanguageCode: "en");
-    localization.onTranslatedLanguage = onTranslatedLanguage;
-  }
-
-  void onTranslatedLanguage(Locale? locale) {
-    setState(() {});
   }
 }

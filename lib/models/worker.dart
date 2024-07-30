@@ -3,13 +3,13 @@ import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
 
-class Person {
+class Worker {
   final String id;
   final String firstName;
   final String lastName;
   final String position;
 
-  Person({
+  Worker({
     String? id,
     required this.firstName,
     required this.lastName,
@@ -35,8 +35,8 @@ class Person {
   }
 
   // Convert a Map object into a Person object
-  factory Person.fromMap(Map<String, dynamic> map) {
-    return Person(
+  factory Worker.fromMap(Map<String, dynamic> map) {
+    return Worker(
       id: map['id'],
       firstName: map['firstName'],
       lastName: map['lastName'],
@@ -48,5 +48,5 @@ class Person {
   String toJson() => json.encode(toMap());
 
   // Convert a JSON object into a Person object
-  factory Person.fromJson(String source) => Person.fromMap(json.decode(source));
+  factory Worker.fromJson(String source) => Worker.fromMap(json.decode(source));
 }
