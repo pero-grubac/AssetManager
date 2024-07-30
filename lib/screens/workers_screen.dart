@@ -1,3 +1,4 @@
+import 'package:asset_manager/widgets/worker_overlay.dart';
 import 'package:asset_manager/widgets/workers_list.dart';
 import 'package:flutter/material.dart';
 
@@ -134,13 +135,27 @@ class _WorkersScreenState extends State<WorkersScreen> {
         phoneNumber: '+38765123456',
         email: 'email@email.com'),
   ];
+  void _openAddWorkerOverlay() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => WorkerOverlay(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Workers'),
+        actions: [
+          IconButton(
+            onPressed: _openAddWorkerOverlay,
+            icon: const Icon(Icons.add),
+          )
+        ],
+      ),
       body: Column(
         children: [
-          const Text('Workers'),
           Expanded(
             child: WorkersList(workers: _workers),
           ),
