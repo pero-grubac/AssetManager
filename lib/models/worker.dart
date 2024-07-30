@@ -7,21 +7,28 @@ class Worker {
   final String id;
   final String firstName;
   final String lastName;
-  final String position;
+  final String phoneNumber;
+  final String email;
 
   Worker({
     String? id,
     required this.firstName,
     required this.lastName,
-    required this.position,
+    required this.phoneNumber,
+    required this.email,
   }) : id = id ?? uuid.v4() {
     if (firstName.isEmpty) throw ArgumentError('First name cannot be empty');
     if (lastName.isEmpty) throw ArgumentError('Last name cannot be empty');
-    if (position.isEmpty) throw ArgumentError('Position cannot be empty');
+    if (phoneNumber.isEmpty) throw ArgumentError('Phone cannot be empty');
+    if (email.isEmpty) throw ArgumentError('Email cannot be empty');
   }
 
   bool isEmpty() {
-    return firstName.isEmpty || lastName.isEmpty || position.isEmpty;
+    return firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty;
+  }
+
+  String get fullName {
+    return "$firstName $lastName";
   }
 
   // Convert a Person object into a Map object
@@ -30,7 +37,8 @@ class Worker {
       'id': id,
       'firstName': firstName,
       'lastName': lastName,
-      'position': position,
+      'phoneNumber': phoneNumber,
+      'email': email,
     };
   }
 
@@ -40,7 +48,8 @@ class Worker {
       id: map['id'],
       firstName: map['firstName'],
       lastName: map['lastName'],
-      position: map['position'],
+      phoneNumber: map['phoneNumber'],
+      email: map['email'],
     );
   }
 
