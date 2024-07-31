@@ -22,6 +22,21 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
     super.dispose();
   }
 
+  bool _isValidPhoneNumber(String phoneNumber) {
+    final RegExp phoneRegex = RegExp(
+      r'^\+?[0-9]{7,15}$',
+    );
+    return phoneRegex.hasMatch(phoneNumber);
+  }
+
+  void _submitData() {
+    if (_firstNameController.text.trim().isEmpty ||
+        _lastNameController.text.trim().isEmpty ||
+        _emailNameController.text.trim().isEmpty ||
+        _phoneController.text.trim().isEmpty ||
+        !_isValidPhoneNumber(_phoneController.text)) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -65,7 +80,7 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
               ),
               const Spacer(),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _submitData,
                 child: const Text('Save'),
               )
             ],
