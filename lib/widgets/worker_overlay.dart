@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../screens/workers_screen.dart';
-
 class WorkerOverlay extends StatefulWidget {
   const WorkerOverlay({super.key});
 
@@ -13,13 +11,14 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailNameController = TextEditingController();
-  final _phoneNameController = TextEditingController();
+  final _phoneController = TextEditingController();
+
   @override
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailNameController.dispose();
-    _phoneNameController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -49,7 +48,7 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
             keyboardType: TextInputType.emailAddress,
           ),
           TextField(
-            controller: _phoneNameController,
+            controller: _phoneController,
             decoration: const InputDecoration(
               label: Text('Phone number'),
             ),

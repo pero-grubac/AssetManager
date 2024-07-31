@@ -16,9 +16,9 @@ class _WorkersScreenState extends State<WorkersScreen> {
   final List<Worker> _workers = [
     Worker(
         firstName: 'firstName0',
-        lastName: 'lastName',
+        lastName: 'lastName0',
         phoneNumber: '+38765123456',
-        email: 'email@email.com'),
+        email: 'email0@email.com'),
     Worker(
         firstName: 'firstName1',
         lastName: 'lastName',
@@ -135,6 +135,26 @@ class _WorkersScreenState extends State<WorkersScreen> {
         phoneNumber: '+38765123456',
         email: 'email@email.com'),
   ];
+
+  List<Worker>? _searchedWorkers;
+  final _searchController = TextEditingController();
+  void _searchWorkers(String query) {
+    final searchedWorkers = _workers.where((worker) {
+      final firstNameLower = worker.firstName.toLowerCase();
+      final lastNameLower = worker.lastName.toLowerCase();
+      final emailLower = worker.email.toLowerCase();
+      final searchLower = query.toLowerCase();
+
+      return firstNameLower.contains(searchLower) ||
+          lastNameLower.contains(searchLower) ||
+          emailLower.contains(searchLower);
+    }).toList();
+
+    setState(() {
+      _searchedWorkers = searchedWorkers;
+    });
+  }
+
   void _openAddWorkerOverlay() {
     showModalBottomSheet(
       context: context,
@@ -144,9 +164,19 @@ class _WorkersScreenState extends State<WorkersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final displayedWorkers = _searchedWorkers ?? _workers;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Workers'),
+        title: TextField(
+          controller: _searchController,
+          decoration: const InputDecoration(
+            hintText: 'Search...',
+            border: InputBorder.none,
+            hintStyle: TextStyle(color: Colors.black),
+          ),
+          style: const TextStyle(color: Colors.black, fontSize: 18.0),
+          onChanged: _searchWorkers,
+        ),
         actions: [
           IconButton(
             onPressed: _openAddWorkerOverlay,
@@ -157,7 +187,7 @@ class _WorkersScreenState extends State<WorkersScreen> {
       body: Column(
         children: [
           Expanded(
-            child: WorkersList(workers: _workers),
+            child: WorkersList(workers: displayedWorkers),
           ),
         ],
       ),
