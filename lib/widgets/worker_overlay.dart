@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-class WorkerOverlay extends StatefulWidget {
-  const WorkerOverlay({super.key});
+import '../models/worker.dart';
 
+class WorkerOverlay extends StatefulWidget {
+  const WorkerOverlay({super.key, required this.onAddWorker});
+  final void Function(Worker worker) onAddWorker;
   @override
   State<WorkerOverlay> createState() => _WorkerOverlayState();
 }
@@ -29,18 +31,69 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
     return phoneRegex.hasMatch(phoneNumber);
   }
 
+  bool _isValidEmail(String email) {
+    final RegExp emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(email);
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Invalid input'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+            },
+            child: const Text('Okay'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _submitData() {
-    if (_firstNameController.text.trim().isEmpty ||
-        _lastNameController.text.trim().isEmpty ||
-        _emailNameController.text.trim().isEmpty ||
-        _phoneController.text.trim().isEmpty ||
-        !_isValidPhoneNumber(_phoneController.text)) {}
+    final enteredFirstName = _firstNameController.text.trim();
+    final enteredLastName = _lastNameController.text.trim();
+    final enteredEmail = _emailNameController.text.trim();
+    final enteredPhone = _phoneController.text.trim();
+
+    if (enteredFirstName.isEmpty) {
+      _showErrorDialog('First name is required');
+      return;
+    }
+
+    if (enteredLastName.isEmpty) {
+      _showErrorDialog('Last name is required');
+      return;
+    }
+
+    if (enteredEmail.isEmpty || !_isValidEmail(enteredEmail)) {
+      _showErrorDialog('Please enter a valid email address');
+      return;
+    }
+
+    if (enteredPhone.isEmpty || !_isValidPhoneNumber(enteredPhone)) {
+      _showErrorDialog('Please enter a valid phone number');
+      return;
+    }
+    widget.onAddWorker(Worker(
+      firstName: enteredFirstName,
+      lastName: enteredLastName,
+      phoneNumber: enteredPhone,
+      email: enteredEmail,
+    ));
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
           TextField(
@@ -69,7 +122,7 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
             ),
             keyboardType: TextInputType.phone,
           ),
-          const Spacer(),
+          const SizedBox(height: 16),
           Row(
             children: [
               ElevatedButton(
