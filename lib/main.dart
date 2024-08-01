@@ -2,6 +2,7 @@ import 'package:asset_manager/localization/locals.dart';
 import 'package:asset_manager/screens/home_screen.dart';
 import 'package:asset_manager/screens/loading_screen.dart';
 import 'package:asset_manager/screens/workers_screen.dart';
+import 'package:asset_manager/theme/theme_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 
@@ -24,6 +25,9 @@ class AssetManager extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system,
       initialRoute: WorkersScreen.id,
       routes: {
         HomeScreen.id: (context) => const HomeScreen(),

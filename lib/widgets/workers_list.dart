@@ -14,10 +14,18 @@ class WorkersList extends StatelessWidget {
       itemCount: workers.length,
       itemBuilder: (context, index) => Dismissible(
         key: ValueKey(workers[index]),
-        child: WorkerCard(worker: workers[index]),
         onDismissed: (direction) {
           onRemoveWorker(workers[index]);
         },
+        direction: DismissDirection.startToEnd,
+        background: Container(
+          color: Theme.of(context).colorScheme.error,
+          margin: Theme.of(context).cardTheme.margin,
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(left: 20.0),
+          child: const Icon(Icons.delete, color: Colors.white),
+        ),
+        child: WorkerCard(worker: workers[index]),
       ),
     );
   }

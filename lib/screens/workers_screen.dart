@@ -102,9 +102,7 @@ class _WorkersScreenState extends State<WorkersScreen> {
           decoration: const InputDecoration(
             hintText: 'Search...',
             border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.black),
           ),
-          style: const TextStyle(color: Colors.black, fontSize: 18.0),
           onChanged: _searchWorkers,
         ),
         actions: [
