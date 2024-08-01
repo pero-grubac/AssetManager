@@ -157,9 +157,24 @@ class _WorkersScreenState extends State<WorkersScreen> {
 
   void _openAddWorkerOverlay() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
-      builder: (ctx) => WorkerOverlay(),
+      builder: (ctx) => WorkerOverlay(
+        onAddWorker: _addWorker,
+      ),
     );
+  }
+
+  void _addWorker(Worker worker) {
+    setState(() {
+      _workers.insert(0, worker);
+    });
+  }
+
+  void _removeWorker(Worker worker) {
+    setState(() {
+      _workers.remove(worker);
+    });
   }
 
   @override
@@ -187,7 +202,10 @@ class _WorkersScreenState extends State<WorkersScreen> {
       body: Column(
         children: [
           Expanded(
-            child: WorkersList(workers: displayedWorkers),
+            child: WorkersList(
+              workers: displayedWorkers,
+              onRemoveWorker: _removeWorker,
+            ),
           ),
         ],
       ),
