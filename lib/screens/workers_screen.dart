@@ -21,119 +21,9 @@ class _WorkersScreenState extends State<WorkersScreen> {
         email: 'email0@email.com'),
     Worker(
         firstName: 'firstName1',
-        lastName: 'lastName',
+        lastName: 'lastName1',
         phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName2',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName3',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName4',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName5',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName6',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName7',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName8',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName9',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName10',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName11',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName0',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName1',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName2',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName3',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName4',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName5',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName6',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName7',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName8',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName9',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName10',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
-    Worker(
-        firstName: 'firstName11',
-        lastName: 'lastName',
-        phoneNumber: '+38765123456',
-        email: 'email@email.com'),
+        email: 'email1@email.com'),
   ];
 
   List<Worker>? _searchedWorkers;
@@ -172,14 +62,39 @@ class _WorkersScreenState extends State<WorkersScreen> {
   }
 
   void _removeWorker(Worker worker) {
+    final workerIndex = _workers.indexOf(worker);
     setState(() {
       _workers.remove(worker);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text('Worker deleted.'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _workers.insert(workerIndex, worker);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final displayedWorkers = _searchedWorkers ?? _workers;
+    Widget mainContent = const Center(
+      child: Text('No workers found.'),
+    );
+    if (displayedWorkers.isNotEmpty) {
+      mainContent = WorkersList(
+        workers: displayedWorkers,
+        onRemoveWorker: _removeWorker,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: TextField(
@@ -202,10 +117,7 @@ class _WorkersScreenState extends State<WorkersScreen> {
       body: Column(
         children: [
           Expanded(
-            child: WorkersList(
-              workers: displayedWorkers,
-              onRemoveWorker: _removeWorker,
-            ),
+            child: mainContent,
           ),
         ],
       ),
