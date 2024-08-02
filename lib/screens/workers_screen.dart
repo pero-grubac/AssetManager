@@ -47,6 +47,7 @@ class _WorkersScreenState extends State<WorkersScreen> {
 
   void _openAddWorkerOverlay() {
     showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
       builder: (ctx) => WorkerOverlay(

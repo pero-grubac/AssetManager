@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter_localization/flutter_localization.dart';
 
 const List<MapLocale> LOCALS = [
