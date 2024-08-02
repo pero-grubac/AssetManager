@@ -3,13 +3,13 @@ import 'dart:convert';
 
 const uuid = Uuid();
 
-class PlaceLocation {
+class Location {
   final String id;
   final double latitude;
   final double longitude;
   final String address;
 
-  PlaceLocation(
+  Location(
       {String? id,
       required this.latitude,
       required this.longitude,
@@ -27,8 +27,8 @@ class PlaceLocation {
   }
 
   // Convert a Map object into a PlaceLocation object
-  factory PlaceLocation.fromMap(Map<String, dynamic> map) {
-    return PlaceLocation(
+  factory Location.fromMap(Map<String, dynamic> map) {
+    return Location(
       id: map['id'],
       latitude: map['latitude'],
       longitude: map['longitude'],
@@ -40,6 +40,6 @@ class PlaceLocation {
   String toJson() => json.encode(toMap());
 
   // Convert a JSON object into a PlaceLocation object
-  factory PlaceLocation.fromJson(String source) =>
-      PlaceLocation.fromMap(json.decode(source));
+  factory Location.fromJson(String source) =>
+      Location.fromMap(json.decode(source));
 }

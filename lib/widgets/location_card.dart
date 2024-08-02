@@ -1,9 +1,9 @@
-import 'package:asset_manager/models/place_location.dart';
+import 'package:asset_manager/models/location.dart';
 import 'package:flutter/material.dart';
 
 class LocationCard extends StatelessWidget {
   const LocationCard({super.key, required this.location});
-  final PlaceLocation location;
+  final Location location;
   @override
   Widget build(BuildContext context) {
     return Card(
