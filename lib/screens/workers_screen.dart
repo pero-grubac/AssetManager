@@ -3,6 +3,7 @@ import 'package:asset_manager/widgets/workers_list.dart';
 import 'package:flutter/material.dart';
 
 import '../models/worker.dart';
+import '../screens/screen.dart'; // Import the new widget
 
 class WorkersScreen extends StatefulWidget {
   static const id = 'workers_screen';
@@ -96,30 +97,11 @@ class _WorkersScreenState extends State<WorkersScreen> {
         onRemoveWorker: _removeWorker,
       );
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          controller: _searchController,
-          decoration: const InputDecoration(
-            hintText: 'Search...',
-            border: InputBorder.none,
-          ),
-          onChanged: _searchWorkers,
-        ),
-        actions: [
-          IconButton(
-            onPressed: _openAddWorkerOverlay,
-            icon: const Icon(Icons.add),
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: mainContent,
-          ),
-        ],
-      ),
+    return Screen(
+      searchController: _searchController,
+      onSearchChanged: _searchWorkers,
+      onAddButtonPressed: _openAddWorkerOverlay,
+      body: mainContent,
     );
   }
 }

@@ -157,11 +157,14 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
 
         return SizedBox(
           height: double.infinity,
+          width: double.infinity,
           child: SingleChildScrollView(
+
             padding: EdgeInsets.only(bottom: keyboardSpace),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
+                mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ..._buildTextFields(isWideScreen: isWideScreen),
