@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/worker.dart';
+import '../../models/worker.dart';
 
 class WorkerOverlay extends StatefulWidget {
   const WorkerOverlay({super.key, required this.onAddWorker});
@@ -159,7 +159,6 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
           height: double.infinity,
           width: double.infinity,
           child: SingleChildScrollView(
-
             padding: EdgeInsets.only(bottom: keyboardSpace),
             child: Padding(
               padding: const EdgeInsets.all(16),

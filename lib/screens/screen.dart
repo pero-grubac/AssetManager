@@ -3,21 +3,30 @@ import 'package:flutter/material.dart';
 class Screen extends StatelessWidget {
   final TextEditingController searchController;
   final ValueChanged<String> onSearchChanged;
-  final VoidCallback onAddButtonPressed;
   final Widget body;
+  final Widget overlay;
   final String hintText;
 
   const Screen({
     super.key,
     required this.searchController,
     required this.onSearchChanged,
-    required this.onAddButtonPressed,
     required this.body,
+    required this.overlay,
     this.hintText = 'Search...',
   });
 
   @override
   Widget build(BuildContext context) {
+    void openAddOverlay() {
+      showModalBottomSheet(
+        useSafeArea: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) => overlay,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: TextField(
@@ -30,7 +39,7 @@ class Screen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: onAddButtonPressed,
+            onPressed: openAddOverlay,
             icon: const Icon(Icons.add),
           )
         ],

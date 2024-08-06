@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/worker.dart';
+import '../../models/worker.dart';
 import 'worker_card.dart';
-import 'dismissible_list.dart';
+import '../dismissible_list.dart';
 
 class WorkersList extends StatelessWidget {
   const WorkersList({
@@ -19,7 +19,6 @@ class WorkersList extends StatelessWidget {
       items: workers,
       onRemoveItem: onRemoveWorker,
       itemBuilder: (context, worker) => WorkerCard(worker: worker),
-      itemKey: (worker) => worker.email,
     );
   }
 }

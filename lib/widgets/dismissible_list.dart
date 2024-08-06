@@ -4,14 +4,12 @@ class DismissibleList<T> extends StatelessWidget {
   final List<T> items;
   final void Function(T item) onRemoveItem;
   final Widget Function(BuildContext context, T item) itemBuilder;
-  final String Function(T item) itemKey;
 
   const DismissibleList({
     super.key,
     required this.items,
     required this.onRemoveItem,
     required this.itemBuilder,
-    required this.itemKey,
   });
 
   @override
@@ -21,7 +19,7 @@ class DismissibleList<T> extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = items[index];
         return Dismissible(
-          key: ValueKey(itemKey(item)),
+          key: ValueKey(item),
           onDismissed: (direction) {
             onRemoveItem(item);
           },

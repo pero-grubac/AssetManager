@@ -1,5 +1,5 @@
-import 'package:asset_manager/widgets/worker_overlay.dart';
-import 'package:asset_manager/widgets/workers_list.dart';
+import 'package:asset_manager/widgets/worker/worker_overlay.dart';
+import 'package:asset_manager/widgets/worker/workers_list.dart';
 import 'package:flutter/material.dart';
 
 import '../models/worker.dart';
@@ -46,17 +46,6 @@ class _WorkersScreenState extends State<WorkersScreen> {
     });
   }
 
-  void _openAddWorkerOverlay() {
-    showModalBottomSheet(
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: context,
-      builder: (ctx) => WorkerOverlay(
-        onAddWorker: _addWorker,
-      ),
-    );
-  }
-
   void _addWorker(Worker worker) {
     setState(() {
       _workers.insert(0, worker);
@@ -100,8 +89,10 @@ class _WorkersScreenState extends State<WorkersScreen> {
     return Screen(
       searchController: _searchController,
       onSearchChanged: _searchWorkers,
-      onAddButtonPressed: _openAddWorkerOverlay,
       body: mainContent,
+      overlay: WorkerOverlay(
+        onAddWorker: _addWorker,
+      ),
     );
   }
 }
