@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/worker.dart';
 import '../screens/screen.dart';
 import '../widgets/dismissible_list.dart';
-import '../widgets/worker/worker_card.dart'; // Import the new widget
+import '../widgets/worker/worker_card.dart';
 
 class WorkersScreen extends StatefulWidget {
   static const id = 'workers_screen';
@@ -31,11 +31,11 @@ class _WorkersScreenState extends State<WorkersScreen> {
   List<Worker>? _searchedWorkers;
   final _searchController = TextEditingController();
   void _searchWorkers(String query) {
+    final searchLower = query.toLowerCase();
     final searchedWorkers = _workers.where((worker) {
       final firstNameLower = worker.firstName.toLowerCase();
       final lastNameLower = worker.lastName.toLowerCase();
       final emailLower = worker.email.toLowerCase();
-      final searchLower = query.toLowerCase();
 
       return firstNameLower.contains(searchLower) ||
           lastNameLower.contains(searchLower) ||
@@ -78,12 +78,13 @@ class _WorkersScreenState extends State<WorkersScreen> {
   @override
   Widget build(BuildContext context) {
     final displayedWorkers = _searchedWorkers ?? _workers;
+
     Widget mainContent = const Center(
       child: Text('No workers found.'),
     );
     if (displayedWorkers.isNotEmpty) {
       mainContent = DismissibleList<Worker>(
-        items: _workers,
+        items: displayedWorkers,
         onRemoveItem: _removeWorker,
         itemBuilder: (context, worker) => WorkerCard(worker: worker),
       );

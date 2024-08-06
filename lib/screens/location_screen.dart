@@ -16,8 +16,16 @@ class LocationScreen extends StatefulWidget {
 
 class _LocationScreenState extends State<LocationScreen> {
   final List<Location> _locations = [
-    Location(latitude: 12, longitude: 12, address: 'address'),
-    Location(latitude: 13, longitude: 13, address: 'bddress'),
+    Location(
+      latitude: 12,
+      longitude: 12,
+      address: 'address',
+    ),
+    Location(
+      latitude: 13,
+      longitude: 13,
+      address: 'address2',
+    ),
   ];
   List<Location>? _searchedLocations;
   final _searchController = TextEditingController();
@@ -76,23 +84,23 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     final displayedLocations = _searchedLocations ?? _locations;
-    print(displayedLocations);
     Widget mainContent = const Center(
       child: Text('No locations found.'),
     );
     if (displayedLocations.isNotEmpty) {
       mainContent = DismissibleList<Location>(
-        items: _locations,
+        items: displayedLocations,
         onRemoveItem: _removeLocation,
         itemBuilder: (context, location) => LocationCard(location: location),
       );
     }
     return Screen(
-        searchController: _searchController,
-        onSearchChanged: _searchLocation,
-        body: mainContent,
-        overlay: LocationOverlay(
-          onAddLocation: _addLocation,
-        ));
+      searchController: _searchController,
+      onSearchChanged: _searchLocation,
+      body: mainContent,
+      overlay: LocationOverlay(
+        onAddLocation: _addLocation,
+      ),
+    );
   }
 }
