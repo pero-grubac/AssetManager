@@ -3,7 +3,9 @@ import 'package:asset_manager/widgets/worker/workers_list.dart';
 import 'package:flutter/material.dart';
 
 import '../models/worker.dart';
-import '../screens/screen.dart'; // Import the new widget
+import '../screens/screen.dart';
+import '../widgets/dismissible_list.dart';
+import '../widgets/worker/worker_card.dart'; // Import the new widget
 
 class WorkersScreen extends StatefulWidget {
   static const id = 'workers_screen';
@@ -81,9 +83,10 @@ class _WorkersScreenState extends State<WorkersScreen> {
       child: Text('No workers found.'),
     );
     if (displayedWorkers.isNotEmpty) {
-      mainContent = WorkersList(
-        workers: displayedWorkers,
-        onRemoveWorker: _removeWorker,
+      mainContent = DismissibleList<Worker>(
+        items: _workers,
+        onRemoveItem: _removeWorker,
+        itemBuilder: (context, worker) => WorkerCard(worker: worker),
       );
     }
     return Screen(

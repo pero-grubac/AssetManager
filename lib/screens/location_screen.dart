@@ -1,8 +1,10 @@
 import 'package:asset_manager/screens/screen.dart';
+import 'package:asset_manager/widgets/location/location_card.dart';
 import 'package:asset_manager/widgets/location/location_overlay.dart';
 import 'package:flutter/material.dart';
 
 import '../models/location.dart';
+import '../widgets/dismissible_list.dart';
 import '../widgets/location/location_list.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -76,9 +78,10 @@ class _LocationScreenState extends State<LocationScreen> {
       child: Text('No locations found.'),
     );
     if (displayedWorkers.isNotEmpty) {
-      mainContent = LocationList(
-        locations: _locations,
-        onRemoveLocation: _removeLocation,
+      mainContent = DismissibleList<Location>(
+        items: _locations,
+        onRemoveItem: _removeLocation,
+        itemBuilder: (context, location) => LocationCard(location: location),
       );
     }
     return Screen(

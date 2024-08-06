@@ -22,17 +22,87 @@ class _LocationOverlayState extends State<LocationOverlay> {
 
   void _submitData() {
     final enteredName = _nameController.text;
-    final enteredLatitude = double.parse(_latitudeController.text);
-    final enteredLongitude = double.parse(_longitudeController.text);
+    double? enteredLatitude = double.tryParse(_latitudeController.text);
+    double? enteredLongitude = double.tryParse(_longitudeController.text);
+
+    if (enteredName.isEmpty) {
+      _showErrorDialog('Invalid Name');
+      return;
+    }
+    if (enteredLongitude == null) {
+      _showErrorDialog('Invalid longitude');
+      return;
+    }
+    if (enteredLatitude == null) {
+      _showErrorDialog('Invalid latitude');
+      return;
+    }
     widget.onAddLocation(Location(
-        latitude: enteredLatitude,
-        longitude: enteredLongitude,
+        latitude: enteredLatitude!,
+        longitude: enteredLongitude!,
         address: enteredName));
     Navigator.pop(context);
   }
 
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Invalid input'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+            },
+            child: const Text('Okay'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return LayoutBuilder(
+      builder: (ctx, constraints) {
+        final isWideScreen = constraints.maxWidth > 600;
+
+        return SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: keyboardSpace),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ..._buildTextFields(isWideScreen: isWideScreen),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: _submitData,
+                        child: const Text('Save'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
