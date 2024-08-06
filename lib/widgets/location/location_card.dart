@@ -4,37 +4,39 @@ import 'package:asset_manager/widgets/util/icon_text_row.dart';
 import 'package:flutter/material.dart';
 
 class LocationCard extends StatelessWidget {
-  const LocationCard({super.key, required this.location});
+  const LocationCard({
+    super.key,
+    required this.location,
+    this.onTap,
+  });
+
   final Location location;
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 16,
+      child: ListTile(
+        onTap: onTap,
+        title: CenterRowIconText(
+          icon: Icons.location_city,
+          text: location.address,
         ),
-        child: Column(
-          children: [
-            CenterRowIconText(
-              icon: Icons.location_city,
-              text: location.address,
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                IconTextRow(
-                  icon: Icons.navigation,
-                  text: location.longitude.toStringAsFixed(6),
-                ),
-                const Spacer(),
-                IconTextRow(
-                  icon: Icons.navigation,
-                  text: location.latitude.toStringAsFixed(6),
-                ),
-              ],
-            )
-          ],
+        subtitle: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Row(
+            children: [
+              IconTextRow(
+                icon: Icons.navigation,
+                text: location.longitude.toStringAsFixed(6),
+              ),
+              const Spacer(),
+              IconTextRow(
+                icon: Icons.navigation,
+                text: location.latitude.toStringAsFixed(6),
+              ),
+            ],
+          ),
         ),
       ),
     );

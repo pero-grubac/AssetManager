@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../models/worker.dart';
 
 class WorkerOverlay extends StatefulWidget {
-  const WorkerOverlay({super.key, required this.onSaveWorker, this.worker});
-  final void Function(Worker worker) onSaveWorker;
+  const WorkerOverlay({super.key, this.onSaveWorker, this.worker});
+  final void Function(Worker worker)? onSaveWorker;
   final Worker? worker;
   @override
   State<WorkerOverlay> createState() => _WorkerOverlayState();
@@ -35,17 +35,6 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
     super.dispose();
   }
 
-  bool _isValidPhoneNumber(String phoneNumber) {
-    final RegExp phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
-    return phoneRegex.hasMatch(phoneNumber);
-  }
-
-  bool _isValidEmail(String email) {
-    final RegExp emailRegex =
-        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return emailRegex.hasMatch(email);
-  }
-
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -70,33 +59,23 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
     final enteredEmail = _emailController.text.trim();
     final enteredPhone = _phoneController.text.trim();
 
-    if (enteredFirstName.isEmpty) {
-      _showErrorDialog('First name is required');
-      return;
-    }
+    try {
+      final worker = Worker(
+        firstName: enteredFirstName,
+        lastName: enteredLastName,
+        phoneNumber: enteredPhone,
+        email: enteredEmail,
+      );
 
-    if (enteredLastName.isEmpty) {
-      _showErrorDialog('Last name is required');
-      return;
+      widget.onSaveWorker!(worker);
+      Navigator.pop(context);
+    } catch (e) {
+      if (e is ArgumentError) {
+        _showErrorDialog(e.message);
+      } else {
+        _showErrorDialog('An unknown error occurred');
+      }
     }
-
-    if (enteredEmail.isEmpty || !_isValidEmail(enteredEmail)) {
-      _showErrorDialog('Please enter a valid email address');
-      return;
-    }
-
-    if (enteredPhone.isEmpty || !_isValidPhoneNumber(enteredPhone)) {
-      _showErrorDialog('Please enter a valid phone number');
-      return;
-    }
-
-    widget.onSaveWorker(Worker(
-      firstName: enteredFirstName,
-      lastName: enteredLastName,
-      phoneNumber: enteredPhone,
-      email: enteredEmail,
-    ));
-    Navigator.pop(context);
   }
 
   Widget _buildTextField({
@@ -181,17 +160,19 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
                   const SizedBox(height: 16),
                   Row(
                     children: [
+                      if (widget.onSaveWorker == null) const Spacer(),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
                         child: const Text('Cancel'),
                       ),
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: _submitData,
-                        child: const Text('Save'),
-                      ),
+                      if (widget.onSaveWorker != null) const Spacer(),
+                      if (widget.onSaveWorker != null)
+                        ElevatedButton(
+                          onPressed: _submitData,
+                          child: const Text('Save'),
+                        ),
                     ],
                   ),
                 ],

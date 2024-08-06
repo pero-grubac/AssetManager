@@ -1,25 +1,26 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DismissibleList<T> extends StatelessWidget {
-  final List<T> items;
+class DismissibleList<T> extends ConsumerWidget {
+  // final List<T> items;
   final void Function(T item) onRemoveItem;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final void Function(T item)? onEditItem;
   final bool isEditable;
+  final StateNotifierProvider<StateNotifier, List<T>> provider;
 
-  const DismissibleList({
-    super.key,
-    required this.items,
-    required this.onRemoveItem,
-    required this.isEditable,
-    this.onEditItem,
-    required this.itemBuilder,
-  });
+  const DismissibleList(
+      {super.key,
+      //  required this.items,
+      required this.onRemoveItem,
+      required this.isEditable,
+      this.onEditItem,
+      required this.itemBuilder,
+      required this.provider});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final items = ref.watch(provider);
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {

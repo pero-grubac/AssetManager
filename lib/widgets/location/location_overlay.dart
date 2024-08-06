@@ -22,26 +22,25 @@ class _LocationOverlayState extends State<LocationOverlay> {
 
   void _submitData() {
     final enteredName = _nameController.text;
-    double? enteredLatitude = double.tryParse(_latitudeController.text);
-    double? enteredLongitude = double.tryParse(_longitudeController.text);
+    final enteredLatitude = _latitudeController.text;
+    final enteredLongitude = _longitudeController.text;
 
-    if (enteredName.isEmpty) {
-      _showErrorDialog('Invalid Name');
-      return;
+    try {
+      final newLocation = Location.fromStrings(
+        latitude: enteredLatitude,
+        longitude: enteredLongitude,
+        address: enteredName,
+      );
+
+      widget.onAddLocation(newLocation);
+      Navigator.pop(context);
+    } catch (e) {
+      if (e is ArgumentError) {
+        _showErrorDialog(e.message);
+      } else {
+        _showErrorDialog('An unknown error occurred');
+      }
     }
-    if (enteredLongitude == null) {
-      _showErrorDialog('Invalid longitude');
-      return;
-    }
-    if (enteredLatitude == null) {
-      _showErrorDialog('Invalid latitude');
-      return;
-    }
-    widget.onAddLocation(Location(
-        latitude: enteredLatitude!,
-        longitude: enteredLongitude!,
-        address: enteredName));
-    Navigator.pop(context);
   }
 
   void _showErrorDialog(String message) {

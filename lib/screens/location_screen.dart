@@ -1,21 +1,23 @@
 import 'package:asset_manager/models/worker.dart';
+import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/location/location_card.dart';
 import 'package:asset_manager/widgets/location/location_overlay.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/location.dart';
 import '../widgets/util/dismissible_list.dart';
 
-class LocationScreen extends StatefulWidget {
+class LocationScreen extends ConsumerStatefulWidget {
   static const id = 'location_screen';
   const LocationScreen({super.key});
 
   @override
-  State<LocationScreen> createState() => _LocationScreenState();
+  ConsumerState<LocationScreen> createState() => _LocationScreenState();
 }
 
-class _LocationScreenState extends State<LocationScreen> {
+class _LocationScreenState extends ConsumerState<LocationScreen> {
   final List<Location> _locations = [
     Location(
       latitude: 12,
@@ -55,9 +57,7 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   void _addLocation(Location location) {
-    setState(() {
-      _locations.insert(0, location);
-    });
+    ref.read(locationProvider.notifier).addLocation(location);
   }
 
   void _removeLocation(Location location) {
@@ -85,15 +85,19 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     final displayedLocations = _searchedLocations ?? _locations;
+
     Widget mainContent = const Center(
       child: Text('No locations found.'),
     );
     if (displayedLocations.isNotEmpty) {
       mainContent = DismissibleList<Location>(
-        items: displayedLocations,
+        //  items: displayedLocations,
         onRemoveItem: _removeLocation,
-        itemBuilder: (context, location) => LocationCard(location: location),
+        itemBuilder: (context, location) => LocationCard(
+          location: location,
+        ),
         isEditable: false,
+        provider: locationProvider,
       );
     }
     return Screen(

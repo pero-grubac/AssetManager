@@ -17,6 +17,23 @@ class Location {
       : id = id ?? uuid.v4() {
     if (address.isEmpty) throw ArgumentError('Address cannot be empty');
   }
+  Location.fromStrings({
+    String? id,
+    required String latitude,
+    required String longitude,
+    required this.address,
+  })  : id = id ?? uuid.v4(),
+        latitude = double.parse(latitude),
+        longitude = double.parse(longitude) {
+    if (address.isEmpty) throw ArgumentError('Address cannot be empty');
+
+    if (longitude.isEmpty) {
+      throw ArgumentError('Longitude type is wrong.');
+    }
+    if (latitude.isEmpty) {
+      throw ArgumentError('Latitude type is wrong.');
+    }
+  }
   Map<String, dynamic> toMap() {
     return {
       'id': id,
