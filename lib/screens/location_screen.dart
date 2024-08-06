@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../models/location.dart';
 import '../widgets/dismissible_list.dart';
-import '../widgets/location/location_list.dart';
 
 class LocationScreen extends StatefulWidget {
   static const id = 'location_screen';

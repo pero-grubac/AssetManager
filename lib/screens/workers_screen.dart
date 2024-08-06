@@ -1,5 +1,4 @@
 import 'package:asset_manager/widgets/worker/worker_overlay.dart';
-import 'package:asset_manager/widgets/worker/workers_list.dart';
 import 'package:flutter/material.dart';
 
 import '../models/worker.dart';
