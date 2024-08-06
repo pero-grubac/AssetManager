@@ -15,8 +15,11 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  final List<Location> _locations = [];
-  List<Location>? _searchedLocations = [];
+  final List<Location> _locations = [
+    Location(latitude: 12, longitude: 12, address: 'address'),
+    Location(latitude: 13, longitude: 13, address: 'bddress'),
+  ];
+  List<Location>? _searchedLocations;
   final _searchController = TextEditingController();
 
   void _searchLocation(String query) {
@@ -72,11 +75,12 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final displayedWorkers = _searchedLocations ?? _locations;
+    final displayedLocations = _searchedLocations ?? _locations;
+    print(displayedLocations);
     Widget mainContent = const Center(
       child: Text('No locations found.'),
     );
-    if (displayedWorkers.isNotEmpty) {
+    if (displayedLocations.isNotEmpty) {
       mainContent = DismissibleList<Location>(
         items: _locations,
         onRemoveItem: _removeLocation,

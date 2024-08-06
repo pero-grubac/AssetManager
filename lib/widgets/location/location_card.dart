@@ -15,6 +15,7 @@ class LocationCard extends StatelessWidget {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.location_city),
                 const SizedBox(width: 8),
@@ -28,7 +29,7 @@ class LocationCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.navigation),
                     const SizedBox(width: 8),
-                    Text(location.longitude as String)
+                    Text(location.longitude.toStringAsFixed(6))
                   ],
                 ),
                 const Spacer(),
@@ -36,7 +37,7 @@ class LocationCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.navigation),
                     const SizedBox(width: 8),
-                    Text(location.latitude as String)
+                    Text(location.latitude.toStringAsFixed(6))
                   ],
                 ),
               ],
