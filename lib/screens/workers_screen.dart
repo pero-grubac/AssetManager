@@ -86,7 +86,7 @@ class _WorkersScreenState extends State<WorkersScreen> {
           setState(() {
             final index = _workers.indexOf(worker);
             _workers[index] = updatedWorker;
-            _searchedWorkers = null; // Reset search results to show all workers
+            _searchedWorkers = null;
           });
         },
         worker: worker,
