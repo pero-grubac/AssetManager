@@ -1,3 +1,4 @@
+import 'package:asset_manager/models/worker.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/location/location_card.dart';
 import 'package:asset_manager/widgets/location/location_overlay.dart';
@@ -92,6 +93,7 @@ class _LocationScreenState extends State<LocationScreen> {
         items: displayedLocations,
         onRemoveItem: _removeLocation,
         itemBuilder: (context, location) => LocationCard(location: location),
+        isEditable: false,
       );
     }
     return Screen(

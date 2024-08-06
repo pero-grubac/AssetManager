@@ -49,6 +49,7 @@ class _WorkersScreenState extends State<WorkersScreen> {
 
   void _addWorker(Worker worker) {
     setState(() {
+      _searchedWorkers = null;
       _workers.insert(0, worker);
     });
   }
@@ -75,6 +76,24 @@ class _WorkersScreenState extends State<WorkersScreen> {
     );
   }
 
+  void _editWorker(Worker worker) {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => WorkerOverlay(
+        onSaveWorker: (updatedWorker) {
+          setState(() {
+            final index = _workers.indexOf(worker);
+            _workers[index] = updatedWorker;
+            _searchedWorkers = null; // Reset search results to show all workers
+          });
+        },
+        worker: worker,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final displayedWorkers = _searchedWorkers ?? _workers;
@@ -86,7 +105,9 @@ class _WorkersScreenState extends State<WorkersScreen> {
       mainContent = DismissibleList<Worker>(
         items: displayedWorkers,
         onRemoveItem: _removeWorker,
+        onEditItem: _editWorker,
         itemBuilder: (context, worker) => WorkerCard(worker: worker),
+        isEditable: true,
       );
     }
     return Screen(
@@ -94,7 +115,7 @@ class _WorkersScreenState extends State<WorkersScreen> {
       onSearchChanged: _searchWorkers,
       body: mainContent,
       overlay: WorkerOverlay(
-        onAddWorker: _addWorker,
+        onSaveWorker: _addWorker,
       ),
     );
   }

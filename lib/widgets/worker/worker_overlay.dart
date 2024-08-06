@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../../models/worker.dart';
 
 class WorkerOverlay extends StatefulWidget {
-  const WorkerOverlay({super.key, required this.onAddWorker});
-  final void Function(Worker worker) onAddWorker;
-
+  const WorkerOverlay({super.key, required this.onSaveWorker, this.worker});
+  final void Function(Worker worker) onSaveWorker;
+  final Worker? worker;
   @override
   State<WorkerOverlay> createState() => _WorkerOverlayState();
 }
@@ -14,6 +14,17 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.worker != null) {
+      _firstNameController.text = widget.worker!.firstName;
+      _lastNameController.text = widget.worker!.lastName;
+      _emailController.text = widget.worker!.email;
+      _phoneController.text = widget.worker!.phoneNumber;
+    }
+  }
 
   @override
   void dispose() {
@@ -79,7 +90,7 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
       return;
     }
 
-    widget.onAddWorker(Worker(
+    widget.onSaveWorker(Worker(
       firstName: enteredFirstName,
       lastName: enteredLastName,
       phoneNumber: enteredPhone,
