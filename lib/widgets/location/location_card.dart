@@ -1,4 +1,6 @@
 import 'package:asset_manager/models/location.dart';
+import 'package:asset_manager/widgets/util/center_icon_text_row.dart';
+import 'package:asset_manager/widgets/util/icon_text_row.dart';
 import 'package:flutter/material.dart';
 
 class LocationCard extends StatelessWidget {
@@ -14,31 +16,21 @@ class LocationCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.location_city),
-                const SizedBox(width: 8),
-                Text(location.address)
-              ],
+            CenterRowIconText(
+              icon: Icons.location_city,
+              text: location.address,
             ),
             const SizedBox(height: 4),
             Row(
               children: [
-                Row(
-                  children: [
-                    const Icon(Icons.navigation),
-                    const SizedBox(width: 8),
-                    Text(location.longitude.toStringAsFixed(6))
-                  ],
+                IconTextRow(
+                  icon: Icons.navigation,
+                  text: location.longitude.toStringAsFixed(6),
                 ),
                 const Spacer(),
-                Row(
-                  children: [
-                    const Icon(Icons.navigation),
-                    const SizedBox(width: 8),
-                    Text(location.latitude.toStringAsFixed(6))
-                  ],
+                IconTextRow(
+                  icon: Icons.navigation,
+                  text: location.latitude.toStringAsFixed(6),
                 ),
               ],
             )

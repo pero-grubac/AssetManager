@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../models/worker.dart';
 import '../screens/screen.dart';
-import '../widgets/dismissible_list.dart';
+import '../widgets/util/dismissible_list.dart';
 import '../widgets/worker/worker_card.dart';
 
 class WorkersScreen extends StatefulWidget {

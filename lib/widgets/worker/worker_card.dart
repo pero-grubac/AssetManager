@@ -1,5 +1,8 @@
 import 'package:asset_manager/models/worker.dart';
+import 'package:asset_manager/widgets/util/center_icon_text_row.dart';
 import 'package:flutter/material.dart';
+
+import '../util/icon_text_row.dart';
 
 class WorkerCard extends StatelessWidget {
   const WorkerCard({super.key, required this.worker});
@@ -14,31 +17,21 @@ class WorkerCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.person_2),
-                const SizedBox(width: 8),
-                Text(worker.fullName),
-              ],
+            CenterRowIconText(
+              icon: Icons.person_2,
+              text: worker.fullName,
             ),
             const SizedBox(height: 4),
             Row(
               children: [
-                Row(
-                  children: [
-                    const Icon(Icons.email),
-                    const SizedBox(width: 8),
-                    Text(worker.email),
-                  ],
+                IconTextRow(
+                  icon: Icons.email,
+                  text: worker.email,
                 ),
                 const Spacer(),
-                Row(
-                  children: [
-                    const Icon(Icons.phone),
-                    const SizedBox(width: 8),
-                    Text(worker.phoneNumber),
-                  ],
+                IconTextRow(
+                  icon: Icons.phone,
+                  text: worker.phoneNumber,
                 ),
               ],
             )

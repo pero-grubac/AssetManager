@@ -5,7 +5,7 @@ import 'package:asset_manager/widgets/location/location_overlay.dart';
 import 'package:flutter/material.dart';
 
 import '../models/location.dart';
-import '../widgets/dismissible_list.dart';
+import '../widgets/util/dismissible_list.dart';
 
 class LocationScreen extends StatefulWidget {
   static const id = 'location_screen';
