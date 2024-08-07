@@ -26,15 +26,15 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
     if (query.isEmpty) {
       results = state;
     } else {
-      final searchLower = query.toLowerCase();
+      final queryLower = query.toLowerCase();
       results = state.where((worker) {
         final firstNameLower = worker.firstName.toLowerCase();
         final lastNameLower = worker.lastName.toLowerCase();
         final emailLower = worker.email.toLowerCase();
 
-        return firstNameLower.contains(searchLower) ||
-            lastNameLower.contains(searchLower) ||
-            emailLower.contains(searchLower);
+        return firstNameLower.contains(queryLower) ||
+            lastNameLower.contains(queryLower) ||
+            emailLower.contains(queryLower);
       }).toList();
     }
     state = results;
