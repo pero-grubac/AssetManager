@@ -1,3 +1,4 @@
+import 'package:asset_manager/widgets/util/build_text_field.dart';
 import 'package:flutter/material.dart';
 import '../../models/worker.dart';
 
@@ -95,39 +96,28 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
     }
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-      ),
-      keyboardType: keyboardType,
-      readOnly: !widget.isEditable,
-    );
-  }
-
   List<Widget> _buildTextFields({required bool isWideScreen}) {
-    final firstNameWidget = _buildTextField(
+    final firstNameWidget = BuildTextField(
       controller: _firstNameController,
       label: 'First name',
+      isEditable: widget.isEditable,
     );
-    final lastNameWidget = _buildTextField(
+    final lastNameWidget = BuildTextField(
       controller: _lastNameController,
       label: 'Last name',
+      isEditable: widget.isEditable,
     );
-    final emailWidget = _buildTextField(
+    final emailWidget = BuildTextField(
       controller: _emailController,
       label: 'Email',
       keyboardType: TextInputType.emailAddress,
+      isEditable: widget.isEditable,
     );
-    final phoneWidget = _buildTextField(
+    final phoneWidget = BuildTextField(
       controller: _phoneController,
       label: 'Phone number',
       keyboardType: TextInputType.phone,
+      isEditable: widget.isEditable,
     );
 
     if (isWideScreen) {

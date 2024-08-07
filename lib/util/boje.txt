@@ -1,0 +1,7 @@
+Ime: Prikaži ime imovine.
+Cena: Prikaži cenu sa ikonom koja označava novac.
+Datum kreiranja: Prikaži datum kreiranja sa ikonom kalendara.
+Preporučene Ikonice
+Name: Možeš koristiti ikonu koja označava ime ili opis, kao što je Icons.label ili Icons.description.
+Price: Koristi ikonu koja označava novac, kao što je Icons.attach_money.
+Creation Date: Koristi ikonu kalendara, kao što je Icons.calendar_today.
