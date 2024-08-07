@@ -105,20 +105,74 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
     }
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return BuildTextField(
-      controller: controller,
-      label: label,
+  List<Widget> _buildTextFields({required bool isWideScreen}) {
+    final nameWidget = BuildTextField(
+      controller: _nameController,
+      label: 'Name',
       isEditable: !widget.isEditable,
     );
+    final descriptionWidget = BuildTextField(
+      controller: _descriptionController,
+      label: 'Description',
+      isEditable: !widget.isEditable,
+    );
+    final barcodeWidget = BuildTextField(
+      controller: _barcodeController,
+      label: 'Barcode',
+      isEditable: !widget.isEditable,
+    );
+    final priceWidget = BuildTextField(
+      controller: _priceController,
+      label: 'Price',
+      isEditable: !widget.isEditable,
+    );
+    if (isWideScreen) {
+      // TODO
+      return [];
+    } else {
+      return [
+        nameWidget,
+        priceWidget,
+        descriptionWidget,
+        barcodeWidget,
+      ];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Asset Details'),
+        actions: widget.isEditable
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.save),
+                  onPressed: _submitData,
+                ),
+              ]
+            : null,
+      ),
+      body: LayoutBuilder(
+        builder: (ctx, constraints) {
+          final isWideScreen = constraints.maxWidth > 600;
+          return SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: keyboardSpace),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ..._buildTextFields(isWideScreen: isWideScreen),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

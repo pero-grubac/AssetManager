@@ -100,24 +100,24 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
     final firstNameWidget = BuildTextField(
       controller: _firstNameController,
       label: 'First name',
-      isEditable: widget.isEditable,
+      isEditable: !widget.isEditable,
     );
     final lastNameWidget = BuildTextField(
       controller: _lastNameController,
       label: 'Last name',
-      isEditable: widget.isEditable,
+      isEditable: !widget.isEditable,
     );
     final emailWidget = BuildTextField(
       controller: _emailController,
       label: 'Email',
       keyboardType: TextInputType.emailAddress,
-      isEditable: widget.isEditable,
+      isEditable: !widget.isEditable,
     );
     final phoneWidget = BuildTextField(
       controller: _phoneController,
       label: 'Phone number',
       keyboardType: TextInputType.phone,
-      isEditable: widget.isEditable,
+      isEditable: !widget.isEditable,
     );
 
     if (isWideScreen) {
