@@ -1,4 +1,3 @@
-import 'package:asset_manager/models/worker.dart';
 import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/location/location_card.dart';
@@ -18,42 +17,10 @@ class LocationScreen extends ConsumerStatefulWidget {
 }
 
 class _LocationScreenState extends ConsumerState<LocationScreen> {
-  final List<Location> _locations = [
-    Location(
-      latitude: 12,
-      longitude: 12,
-      address: 'address',
-    ),
-    Location(
-      latitude: 13,
-      longitude: 13,
-      address: 'address2',
-    ),
-  ];
-  List<Location>? _searchedLocations;
   final _searchController = TextEditingController();
 
   void _searchLocation(String query) {
-    final queryLower = query.toLowerCase();
-    double? queryAsDouble = double.tryParse(query);
-
-    final searchedLocations = _locations.where((location) {
-      final locationAddress = location.address.toLowerCase();
-      final locationLongitude = location.longitude;
-      final locationLatitude = location.latitude;
-
-      bool matchesAddress = locationAddress.contains(queryLower);
-      bool matchesLongitude =
-          queryAsDouble != null && locationLongitude == queryAsDouble;
-      bool matchesLatitude =
-          queryAsDouble != null && locationLatitude == queryAsDouble;
-
-      return matchesAddress || matchesLongitude || matchesLatitude;
-    }).toList();
-
-    setState(() {
-      _searchedLocations = searchedLocations;
-    });
+    ref.read(locationProvider.notifier).searchLocation(query);
   }
 
   void _addLocation(Location location) {
@@ -61,10 +28,10 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   }
 
   void _removeLocation(Location location) {
-    final workerIndex = _locations.indexOf(location);
-    setState(() {
-      _locations.remove(location);
-    });
+    final workerIndex =
+        ref.read(locationProvider.notifier).indexOfLocation(location);
+    ref.read(locationProvider.notifier).removeLocation(location);
+
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -73,9 +40,9 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () {
-            setState(() {
-              _locations.insert(workerIndex, location);
-            });
+            ref
+                .read(locationProvider.notifier)
+                .insetLocation(location, workerIndex);
           },
         ),
       ),
@@ -84,26 +51,18 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final displayedLocations = _searchedLocations ?? _locations;
-
-    Widget mainContent = const Center(
-      child: Text('No locations found.'),
-    );
-    if (displayedLocations.isNotEmpty) {
-      mainContent = DismissibleList<Location>(
-        //  items: displayedLocations,
+    return Screen(
+      searchController: _searchController,
+      onSearchChanged: _searchLocation,
+      body: DismissibleList<Location>(
         onRemoveItem: _removeLocation,
         itemBuilder: (context, location) => LocationCard(
           location: location,
         ),
         isEditable: false,
         provider: locationProvider,
-      );
-    }
-    return Screen(
-      searchController: _searchController,
-      onSearchChanged: _searchLocation,
-      body: mainContent,
+        emptyMessage: 'No locations found.',
+      ),
       overlay: LocationOverlay(
         onAddLocation: _addLocation,
       ),

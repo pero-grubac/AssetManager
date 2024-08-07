@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import '../../models/worker.dart';
 
 class WorkerOverlay extends StatefulWidget {
-  const WorkerOverlay({super.key, this.onSaveWorker, this.worker});
+  const WorkerOverlay({
+    super.key,
+    this.onSaveWorker,
+    this.worker,
+    this.isEditable = true,
+  });
   final void Function(Worker worker)? onSaveWorker;
   final Worker? worker;
+  final bool isEditable;
   @override
   State<WorkerOverlay> createState() => _WorkerOverlayState();
 }
@@ -58,16 +64,27 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
     final enteredLastName = _lastNameController.text.trim();
     final enteredEmail = _emailController.text.trim();
     final enteredPhone = _phoneController.text.trim();
-
     try {
-      final worker = Worker(
-        firstName: enteredFirstName,
-        lastName: enteredLastName,
-        phoneNumber: enteredPhone,
-        email: enteredEmail,
-      );
+      Worker worker;
+      if (widget.worker != null) {
+        worker = Worker(
+          id: widget.worker!.id,
+          firstName: enteredFirstName,
+          lastName: enteredLastName,
+          phoneNumber: enteredPhone,
+          email: enteredEmail,
+        );
+      } else {
+        worker = Worker(
+          firstName: enteredFirstName,
+          lastName: enteredLastName,
+          phoneNumber: enteredPhone,
+          email: enteredEmail,
+        );
+      }
 
       widget.onSaveWorker!(worker);
+
       Navigator.pop(context);
     } catch (e) {
       if (e is ArgumentError) {
@@ -85,8 +102,11 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
   }) {
     return TextField(
       controller: controller,
-      decoration: InputDecoration(labelText: label),
+      decoration: InputDecoration(
+        labelText: label,
+      ),
       keyboardType: keyboardType,
+      readOnly: !widget.isEditable,
     );
   }
 

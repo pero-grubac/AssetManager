@@ -2,8 +2,14 @@ import 'package:asset_manager/models/location.dart';
 import 'package:flutter/material.dart';
 
 class LocationOverlay extends StatefulWidget {
-  const LocationOverlay({super.key, required this.onAddLocation});
+  const LocationOverlay({
+    super.key,
+    required this.onAddLocation,
+    this.isEditable = true,
+  });
   final void Function(Location location) onAddLocation;
+  final bool isEditable;
+
   @override
   State<LocationOverlay> createState() => _LocationOverlayState();
 }
@@ -26,6 +32,7 @@ class _LocationOverlayState extends State<LocationOverlay> {
     final enteredLongitude = _longitudeController.text;
 
     try {
+      // TODO worker_overlay
       final newLocation = Location.fromStrings(
         latitude: enteredLatitude,
         longitude: enteredLongitude,

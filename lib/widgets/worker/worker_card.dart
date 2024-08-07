@@ -21,6 +21,7 @@ class WorkerCard extends StatelessWidget {
         context: context,
         builder: (ctx) => WorkerOverlay(
           worker: worker,
+          isEditable: false,
         ),
       );
     }
