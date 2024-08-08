@@ -106,35 +106,48 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
   }
 
   List<Widget> _buildTextFields({required bool isWideScreen}) {
-    final nameWidget = BuildTextField(
+    final nameTextField = BuildTextField(
       controller: _nameController,
       label: 'Name',
       isEditable: !widget.isEditable,
     );
-    final descriptionWidget = BuildTextField(
+    final descriptionTextField = BuildTextField(
       controller: _descriptionController,
       label: 'Description',
       isEditable: !widget.isEditable,
     );
-    final barcodeWidget = BuildTextField(
+    final barcodeTextField = BuildTextField(
       controller: _barcodeController,
       label: 'Barcode',
       isEditable: !widget.isEditable,
     );
-    final priceWidget = BuildTextField(
+    final priceTextField = BuildTextField(
       controller: _priceController,
       label: 'Price',
       isEditable: !widget.isEditable,
     );
+    final barcodeIcon = Row(
+      children: [
+        Expanded(child: barcodeTextField),
+        const SizedBox(width: 8),
+        IconButton(
+          icon: const Icon(Icons.qr_code),
+          onPressed: () {
+            // Define your QR code scanning functionality here
+          },
+        ),
+      ],
+    );
+    final barcodeRow = widget.isEditable ? barcodeIcon : barcodeTextField;
     if (isWideScreen) {
       // TODO
       return [];
     } else {
       return [
-        nameWidget,
-        priceWidget,
-        descriptionWidget,
-        barcodeWidget,
+        nameTextField,
+        priceTextField,
+        descriptionTextField,
+        barcodeRow,
       ];
     }
   }

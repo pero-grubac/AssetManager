@@ -1,3 +1,4 @@
+import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:asset_manager/models/asset.dart';
 
@@ -10,10 +11,22 @@ class AssetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void openOverlay() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AssetDetailsScreen(
+            asset: asset,
+            isEditable: false,
+          ),
+        ),
+      );
+    }
+
     return Card(
       child: ListTile(
         title: CenterRowIconText(
-          icon: Icons.label,
+          icon: Icons.business_center,
           widget: Text(asset.name),
         ),
         subtitle: Column(
@@ -25,10 +38,7 @@ class AssetCard extends StatelessWidget {
                   icon: Icons.attach_money,
                   widget: Text(asset.price.toStringAsFixed(2)),
                 ),
-              ],
-            ),
-            Row(
-              children: [
+                const Spacer(),
                 RowIconWidget(
                   icon: Icons.calendar_today,
                   widget: Text(
@@ -38,10 +48,7 @@ class AssetCard extends StatelessWidget {
             ),
           ],
         ),
-        trailing: const Icon(Icons.more_vert),
-        onTap: () {
-          // Define your onTap functionality here
-        },
+        onTap: openOverlay,
       ),
     );
   }
