@@ -33,7 +33,7 @@ class AssetManager extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: WorkersScreen.id,
+      initialRoute: AssetScreen.id,
       routes: {
         HomeScreen.id: (context) => const HomeScreen(),
         LoadingScreen.id: (context) => const LoadingScreen(),

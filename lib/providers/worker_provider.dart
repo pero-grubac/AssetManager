@@ -1,4 +1,5 @@
 import 'package:asset_manager/models/worker.dart';
+import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class WorkerNotifier extends StateNotifier<List<Worker>> {
@@ -16,6 +17,8 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
             email: 'email1@email.com',
           ),
         ]);
+
+  List<Worker> get allWorkers => state;
 
   void addWorker(Worker worker) {
     state = [worker, ...state];
@@ -65,3 +68,17 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
 final workerProvider = StateNotifierProvider<WorkerNotifier, List<Worker>>(
   (ref) => WorkerNotifier(),
 );
+
+final filteredWorkersProvider = Provider<List<Worker>>((ref) {
+  final query = ref.watch(searchQueryProvider).toLowerCase();
+  final workers = ref.watch(workerProvider);
+  if (query.isEmpty) return workers;
+  return workers.where((worker) {
+    final firstNameLower = worker.firstName.toLowerCase();
+    final lastNameLower = worker.lastName.toLowerCase();
+    final emailLower = worker.email.toLowerCase();
+    return firstNameLower.contains(query) ||
+        lastNameLower.contains(query) ||
+        emailLower.contains(query);
+  }).toList();
+});

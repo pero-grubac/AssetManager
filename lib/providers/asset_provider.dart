@@ -1,4 +1,5 @@
 import 'package:asset_manager/models/asset.dart';
+import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AssetNotifier extends StateNotifier<List<Asset>> {
@@ -73,3 +74,18 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
 final assetProvider = StateNotifierProvider<AssetNotifier, List<Asset>>(
   (ref) => AssetNotifier(),
 );
+
+final filteredAssetsProvider = Provider<List<Asset>>((ref) {
+  final query = ref.watch(searchQueryProvider).toLowerCase();
+  double? queryAsDouble = double.tryParse(query);
+
+  final assets = ref.watch(assetProvider);
+  if (query.isEmpty) return assets;
+  return assets.where((asset) {
+    final assetName = asset.name.toLowerCase();
+    final assetPrice = asset.price;
+    bool matchesName = assetName.contains(query);
+    bool matchesPrice = queryAsDouble != null && assetPrice == queryAsDouble;
+    return matchesPrice || matchesName;
+  }).toList();
+});

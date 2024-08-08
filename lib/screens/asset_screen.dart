@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/asset.dart';
+import '../providers/search_provider.dart';
 
 class AssetScreen extends ConsumerStatefulWidget {
   static const id = 'asset_screen';
@@ -20,7 +21,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   final _searchController = TextEditingController();
 
   void _searchAssets(String query) {
-    ref.read(assetProvider.notifier).searchAssets(query);
+    ref.read(searchQueryProvider.notifier).state = query;
   }
 
   void _addAsset(Asset asset) {
@@ -71,7 +72,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
           itemBuilder: (context, asset) => AssetCard(
             asset: asset,
           ),
-          provider: assetProvider,
+          provider: filteredAssetsProvider,
           emptyMessage: 'No assets found',
         ),
         overlay: AssetDetailsScreen(

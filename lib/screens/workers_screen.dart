@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/worker.dart';
+import '../providers/search_provider.dart';
 import '../screens/screen.dart';
 import '../widgets/util/dismissible_list.dart';
 import '../widgets/worker/worker_card.dart';
@@ -20,7 +21,7 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
   final _searchController = TextEditingController();
 
   void _searchWorkers(String query) {
-    ref.read(workerProvider.notifier).searchWorker(query);
+    ref.read(searchQueryProvider.notifier).state = query;
   }
 
   void _addWorker(Worker worker) {
@@ -47,7 +48,6 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
   }
 
   void _editWorker(Worker worker) {
-    final originalWorker = worker;
     showModalBottomSheet(
       useSafeArea: true,
       isScrollControlled: true,
@@ -63,6 +63,8 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredWorkers = ref.watch(filteredWorkersProvider);
+
     return Screen(
       searchController: _searchController,
       onSearchChanged: _searchWorkers,
@@ -73,7 +75,7 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
           worker: worker,
         ),
         isEditable: true,
-        provider: workerProvider,
+        provider: filteredWorkersProvider,
         emptyMessage: 'No workers found.',
       ),
       overlay: WorkerOverlay(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/location.dart';
+import '../providers/search_provider.dart';
 import '../widgets/util/dismissible_list.dart';
 
 class LocationScreen extends ConsumerStatefulWidget {
@@ -20,7 +21,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   final _searchController = TextEditingController();
 
   void _searchLocation(String query) {
-    ref.read(locationProvider.notifier).searchLocation(query);
+    ref.read(searchQueryProvider.notifier).state = query;
   }
 
   void _addLocation(Location location) {
@@ -60,7 +61,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
           location: location,
         ),
         isEditable: false,
-        provider: locationProvider,
+        provider: filteredLocationsProvider,
         emptyMessage: 'No locations found.',
       ),
       overlay: LocationOverlay(

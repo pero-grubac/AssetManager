@@ -6,9 +6,8 @@ class DismissibleList<T> extends ConsumerWidget {
   final Widget Function(BuildContext context, T item) itemBuilder;
   final void Function(T item)? onEditItem;
   final bool isEditable;
-  final StateNotifierProvider<StateNotifier, List<T>> provider;
+  final Provider<List<T>> provider;
   final String emptyMessage;
-
   const DismissibleList({
     super.key,
     required this.onRemoveItem,
