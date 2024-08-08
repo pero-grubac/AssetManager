@@ -1,4 +1,5 @@
 import 'package:asset_manager/models/asset.dart';
+import 'package:asset_manager/widgets/image/image_input.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/util/build_text_field.dart';
@@ -79,7 +80,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           creationDate: DateTime.now(),
           assignedPersonId: 'assignedPersonId',
           assignedLocationId: 'assignedLocationId',
-          imagePath: 'imagePath',
+          image: null,
         );
       } else {
         asset = Asset(
@@ -91,7 +92,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           creationDate: DateTime.now(),
           assignedPersonId: 'assignedPersonId',
           assignedLocationId: 'assignedLocationId',
-          imagePath: 'imagePath',
+          image: null,
         );
       }
       widget.onSaveAsset!(asset);
@@ -138,6 +139,8 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
         ),
       ],
     );
+
+    final imageWidget = ImageInput();
     final barcodeRow = widget.isEditable ? barcodeIcon : barcodeTextField;
     if (isWideScreen) {
       // TODO
@@ -148,6 +151,10 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
         priceTextField,
         descriptionTextField,
         barcodeRow,
+        const SizedBox(
+          height: 10,
+        ),
+        imageWidget
       ];
     }
   }

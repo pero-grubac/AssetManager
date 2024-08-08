@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:uuid/uuid.dart';
 
@@ -13,7 +14,7 @@ class Asset {
   final DateTime creationDate;
   final String assignedPersonId;
   final String assignedLocationId;
-  final String imagePath;
+  final File? image;
 
   Asset({
     String? id,
@@ -24,7 +25,7 @@ class Asset {
     required this.creationDate,
     required this.assignedPersonId,
     required this.assignedLocationId,
-    required this.imagePath,
+    required this.image,
   }) : id = id ?? uuid.v4() {
     // Basic validation
     if (name.isEmpty) throw ArgumentError('Name cannot be empty');
@@ -37,7 +38,7 @@ class Asset {
     if (assignedLocationId.isEmpty) {
       throw ArgumentError('Assigned location id cannot be empty');
     }
-    if (imagePath.isEmpty) throw ArgumentError('Image path cannot be empty');
+    if (image == null) throw ArgumentError('Image  cannot be empty');
   }
 
   // Convert an Asset object into a Map object
@@ -51,7 +52,7 @@ class Asset {
       'creationDate': creationDate.toIso8601String(),
       'assignedPersonId': assignedPersonId,
       'assignedLocationId': assignedLocationId,
-      'imagePath': imagePath,
+      'image': image?.path,
     };
   }
 
@@ -66,7 +67,7 @@ class Asset {
       creationDate: DateTime.parse(map['creationDate']),
       assignedPersonId: map['assignedPersonId'],
       assignedLocationId: map['assignedLocationId'],
-      imagePath: map['imagePath'],
+      image: File(map['imagePath']),
     );
   }
 

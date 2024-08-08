@@ -13,7 +13,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
             creationDate: DateTime.now(),
             assignedPersonId: 'assignedPersonId',
             assignedLocationId: 'assignedLocationId',
-            imagePath: 'imagePath',
+            image: null,
           ),
           Asset(
             name: '1ime',
@@ -23,7 +23,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
             creationDate: DateTime.now(),
             assignedPersonId: '1assignedPersonId',
             assignedLocationId: '1assignedLocationId',
-            imagePath: '1imagePath',
+            image: null,
           )
         ]);
   void addAsset(Asset asset) {
