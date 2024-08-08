@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class IconTextRow extends StatelessWidget {
+class RowIconWidget extends StatelessWidget {
   final IconData icon;
-  final String text;
+  final Widget widget;
 
-  const IconTextRow({
+  const RowIconWidget({
     super.key,
     required this.icon,
-    required this.text,
+    required this.widget,
   });
 
   @override
@@ -16,7 +16,7 @@ class IconTextRow extends StatelessWidget {
       children: [
         Icon(icon),
         const SizedBox(width: 8),
-        Text(text),
+        widget,
       ],
     );
   }

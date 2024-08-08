@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class CenterRowIconText extends StatelessWidget {
   final IconData icon;
-  final String text;
+  final Widget widget;
 
   const CenterRowIconText({
     super.key,
     required this.icon,
-    required this.text,
+    required this.widget,
   });
 
   @override
@@ -17,7 +17,7 @@ class CenterRowIconText extends StatelessWidget {
       children: [
         Icon(icon),
         const SizedBox(width: 8),
-        Text(text),
+        widget,
       ],
     );
   }

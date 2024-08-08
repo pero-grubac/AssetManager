@@ -1,6 +1,6 @@
 import 'package:asset_manager/models/worker.dart';
-import 'package:asset_manager/widgets/util/center_icon_text_row.dart';
-import 'package:asset_manager/widgets/util/icon_text_row.dart';
+import 'package:asset_manager/widgets/util/center_row_icon_widget.dart';
+import 'package:asset_manager/widgets/util/row_icon_widget.dart';
 import 'package:asset_manager/widgets/worker/worker_overlay.dart';
 import 'package:flutter/material.dart';
 
@@ -31,20 +31,20 @@ class WorkerCard extends StatelessWidget {
         onTap: openOverlay,
         title: CenterRowIconText(
           icon: Icons.person_2,
-          text: worker.fullName,
+          widget: Text(worker.fullName),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Row(
             children: [
-              IconTextRow(
+              RowIconWidget(
                 icon: Icons.email,
-                text: worker.email,
+                widget: Text(worker.email),
               ),
               const Spacer(),
-              IconTextRow(
+              RowIconWidget(
                 icon: Icons.phone,
-                text: worker.phoneNumber,
+                widget: Text(worker.phoneNumber),
               ),
             ],
           ),

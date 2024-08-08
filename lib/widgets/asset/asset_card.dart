@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:asset_manager/models/asset.dart';
 
-import '../util/center_icon_text_row.dart';
-import '../util/icon_text_row.dart';
+import '../util/center_row_icon_widget.dart';
+import '../util/row_icon_widget.dart';
 
 class AssetCard extends StatelessWidget {
   const AssetCard({super.key, required this.asset});
@@ -14,24 +14,25 @@ class AssetCard extends StatelessWidget {
       child: ListTile(
         title: CenterRowIconText(
           icon: Icons.label,
-          text: asset.name,
+          widget: Text(asset.name),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                IconTextRow(
+                RowIconWidget(
                   icon: Icons.attach_money,
-                  text: asset.price.toStringAsFixed(2),
+                  widget: Text(asset.price.toStringAsFixed(2)),
                 ),
               ],
             ),
             Row(
               children: [
-                IconTextRow(
+                RowIconWidget(
                   icon: Icons.calendar_today,
-                  text: asset.creationDate.toLocal().toString().split(' ')[0],
+                  widget: Text(
+                      asset.creationDate.toLocal().toString().split(' ')[0]),
                 ),
               ],
             ),
