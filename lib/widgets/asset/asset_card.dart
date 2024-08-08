@@ -25,7 +25,11 @@ class AssetCard extends StatelessWidget {
 
     return Card(
       child: ListTile(
-        title: CenterRowIconText(
+        leading: CircleAvatar(
+          radius: 26,
+          backgroundImage: FileImage(asset.image),
+        ),
+        title: RowIconWidget(
           icon: Icons.business_center,
           widget: Text(asset.name),
         ),

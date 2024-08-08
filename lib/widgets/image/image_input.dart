@@ -5,8 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageInput extends StatefulWidget {
-  const ImageInput({super.key});
-
+  const ImageInput({
+    super.key,
+    required this.onPickImage,
+    this.image,
+    this.isEditable = true,
+  });
+  final void Function(File image) onPickImage;
+  final File? image;
+  final bool isEditable;
   @override
   State<ImageInput> createState() => _ImageInputState();
 }
@@ -14,6 +21,14 @@ class ImageInput extends StatefulWidget {
 class _ImageInputState extends State<ImageInput> {
   File? _selectedImage;
   bool isCammera = true;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.image != null) {
+      _selectedImage = widget.image;
+    }
+  }
+
   void _takePicture(ImageSource source) async {
     final imagePicker = ImagePicker();
     final pickedImage = await imagePicker.pickImage(
@@ -24,6 +39,7 @@ class _ImageInputState extends State<ImageInput> {
     setState(() {
       _selectedImage = File(pickedImage.path);
     });
+    widget.onPickImage(_selectedImage!);
   }
 
   void _cancelPicture() {
@@ -64,12 +80,16 @@ class _ImageInputState extends State<ImageInput> {
 
     if (_selectedImage != null) {
       content = GestureDetector(
-        onTap: () => _takePicture(
-          isCammera ? ImageSource.camera : ImageSource.gallery,
-        ),
+        onTap: () => widget.isEditable
+            ? _takePicture(
+                isCammera ? ImageSource.camera : ImageSource.gallery,
+              )
+            : null,
         onDoubleTap: () {
-          _cancelPicture();
-          content = buttonsRow;
+          if (widget.isEditable) {
+            _cancelPicture();
+            content = buttonsRow;
+          }
         },
         child: Image.file(
           _selectedImage!,

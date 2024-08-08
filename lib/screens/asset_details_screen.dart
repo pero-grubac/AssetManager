@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:asset_manager/models/asset.dart';
 import 'package:asset_manager/widgets/image/image_input.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
   final _barcodeController = TextEditingController();
   final _priceController = TextEditingController();
   // TODO date picker
+  File? _selectedImage;
   @override
   void initState() {
     super.initState();
@@ -33,6 +36,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       _descriptionController.text = widget.asset!.description;
       _barcodeController.text = widget.asset!.barcode.toString();
       _priceController.text = widget.asset!.price.toString();
+      _selectedImage = widget.asset?.image;
     }
   }
 
@@ -68,7 +72,18 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
     final enteredDescription = _descriptionController.text.trim();
     double? enteredPrice = double.tryParse(_priceController.text.trim());
     int? enteredBarcode = int.tryParse(_barcodeController.text.trim());
-    if (enteredPrice == null || enteredBarcode == null) return;
+    if (enteredPrice == null) {
+      _showErrorDialog('Price  can not be empty');
+      return;
+    }
+    if (enteredBarcode == null) {
+      _showErrorDialog('Barcode  can not be empty');
+      return;
+    }
+    if (_selectedImage == null) {
+      _showErrorDialog('Image  can not be empty');
+      return;
+    }
     try {
       Asset asset;
       if (widget.asset == null) {
@@ -80,7 +95,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           creationDate: DateTime.now(),
           assignedPersonId: 'assignedPersonId',
           assignedLocationId: 'assignedLocationId',
-          image: null,
+          image: _selectedImage!,
         );
       } else {
         asset = Asset(
@@ -92,7 +107,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           creationDate: DateTime.now(),
           assignedPersonId: 'assignedPersonId',
           assignedLocationId: 'assignedLocationId',
-          image: null,
+          image: _selectedImage!,
         );
       }
       widget.onSaveAsset!(asset);
@@ -140,7 +155,13 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       ],
     );
 
-    final imageWidget = ImageInput();
+    final imageWidget = ImageInput(
+      onPickImage: (image) {
+        _selectedImage = image;
+      },
+      image: _selectedImage,
+      isEditable: widget.isEditable,
+    );
     final barcodeRow = widget.isEditable ? barcodeIcon : barcodeTextField;
     if (isWideScreen) {
       // TODO

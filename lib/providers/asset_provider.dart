@@ -3,29 +3,7 @@ import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AssetNotifier extends StateNotifier<List<Asset>> {
-  AssetNotifier()
-      : super([
-          Asset(
-            name: 'ime',
-            description: 'description',
-            barcode: 123456,
-            price: 123456,
-            creationDate: DateTime.now(),
-            assignedPersonId: 'assignedPersonId',
-            assignedLocationId: 'assignedLocationId',
-            image: null,
-          ),
-          Asset(
-            name: '1ime',
-            description: '1description',
-            barcode: 1123456,
-            price: 1123456,
-            creationDate: DateTime.now(),
-            assignedPersonId: '1assignedPersonId',
-            assignedLocationId: '1assignedLocationId',
-            image: null,
-          )
-        ]);
+  AssetNotifier() : super([]);
   void addAsset(Asset asset) {
     state = [asset, ...state];
   }

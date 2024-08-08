@@ -14,7 +14,7 @@ class Asset {
   final DateTime creationDate;
   final String assignedPersonId;
   final String assignedLocationId;
-  final File? image;
+  final File image;
 
   Asset({
     String? id,
