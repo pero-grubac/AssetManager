@@ -47,6 +47,7 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
   }
 
   void _editWorker(Worker worker) {
+    final originalWorker = worker;
     showModalBottomSheet(
       useSafeArea: true,
       isScrollControlled: true,

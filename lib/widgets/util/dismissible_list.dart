@@ -32,13 +32,20 @@ class DismissibleList<T> extends ConsumerWidget {
           final item = items[index];
           return Dismissible(
             key: ValueKey(item),
-            onDismissed: (direction) {
+            confirmDismiss: (direction) async {
               if (direction == DismissDirection.startToEnd) {
-                onRemoveItem(item);
+                return true;
               } else if (direction == DismissDirection.endToStart) {
                 if (isEditable && onEditItem != null) {
                   onEditItem!(item);
                 }
+                return false;
+              }
+              return false;
+            },
+            onDismissed: (direction) {
+              if (direction == DismissDirection.startToEnd) {
+                onRemoveItem(item);
               }
             },
             direction: isEditable
