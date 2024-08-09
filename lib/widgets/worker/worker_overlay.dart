@@ -1,6 +1,7 @@
 import 'package:asset_manager/widgets/util/build_text_field.dart';
 import 'package:flutter/material.dart';
 import '../../models/worker.dart';
+import '../util/error_dialog.dart';
 
 class WorkerOverlay extends StatefulWidget {
   const WorkerOverlay({
@@ -42,24 +43,6 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
     super.dispose();
   }
 
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Invalid input'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-            },
-            child: const Text('Okay'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _submitData() {
     final enteredFirstName = _firstNameController.text.trim();
     final enteredLastName = _lastNameController.text.trim();
@@ -89,9 +72,9 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
       Navigator.pop(context);
     } catch (e) {
       if (e is ArgumentError) {
-        _showErrorDialog(e.message);
+        ErrorDialog.show(context, e.message);
       } else {
-        _showErrorDialog('An unknown error occurred');
+        ErrorDialog.show(context, 'An unknown error occurred');
       }
     }
   }
