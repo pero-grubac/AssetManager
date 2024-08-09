@@ -22,6 +22,14 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     newList[index] = location;
     state = newList;
   }
+
+  AssetLocation? findLocationById(String id) {
+    try {
+      return state.firstWhere((location) => location.id == id);
+    } catch (e) {
+      return null; // Return null if no location is found with the given ID
+    }
+  }
 }
 
 final locationProvider =

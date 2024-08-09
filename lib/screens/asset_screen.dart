@@ -26,6 +26,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
   void _addAsset(Asset asset) {
     ref.read(assetProvider.notifier).addAsset(asset);
+    // TODO save asset.image
   }
 
   void _removeAsset(Asset asset) {
