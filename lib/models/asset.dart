@@ -52,7 +52,7 @@ class Asset {
       'creationDate': creationDate.toIso8601String(),
       'assignedPersonId': assignedPersonId,
       'assignedLocationId': assignedLocationId,
-      'image': image?.path,
+      'image': image.path,
     };
   }
 

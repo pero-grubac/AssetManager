@@ -73,7 +73,7 @@ class _LocationOverlayState extends State<LocationOverlay> {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
     return LayoutBuilder(
       builder: (ctx, constraints) {
-        final isWideScreen = constraints.maxWidth > 600;
+        // final isWideScreen = constraints.maxWidth > 600;
 
         return SizedBox(
           height: double.infinity,

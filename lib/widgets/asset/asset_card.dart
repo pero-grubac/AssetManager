@@ -2,7 +2,6 @@ import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:asset_manager/models/asset.dart';
 
-import '../util/center_row_icon_widget.dart';
 import '../util/row_icon_widget.dart';
 
 class AssetCard extends StatelessWidget {

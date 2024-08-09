@@ -63,8 +63,6 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredWorkers = ref.watch(filteredWorkersProvider);
-
     return Screen(
       searchController: _searchController,
       onSearchChanged: _searchWorkers,
