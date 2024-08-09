@@ -5,7 +5,7 @@ import 'package:asset_manager/widgets/location/location_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/location.dart';
+import '../models/asset_location.dart';
 import '../providers/search_provider.dart';
 import '../widgets/util/dismissible_list.dart';
 
@@ -24,11 +24,11 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
-  void _addLocation(Location location) {
+  void _addLocation(AssetLocation location) {
     ref.read(locationProvider.notifier).addLocation(location);
   }
 
-  void _removeLocation(Location location) {
+  void _removeLocation(AssetLocation location) {
     final workerIndex =
         ref.read(locationProvider.notifier).indexOfLocation(location);
     ref.read(locationProvider.notifier).removeLocation(location);
@@ -55,7 +55,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
     return Screen(
       searchController: _searchController,
       onSearchChanged: _searchLocation,
-      body: DismissibleList<Location>(
+      body: DismissibleList<AssetLocation>(
         onRemoveItem: _removeLocation,
         itemBuilder: (context, location) => LocationCard(
           location: location,

@@ -1,4 +1,4 @@
-import 'package:asset_manager/models/location.dart';
+import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/widgets/util/center_row_icon_widget.dart';
 import 'package:asset_manager/widgets/util/row_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class LocationCard extends StatelessWidget {
     this.onTap,
   });
 
-  final Location location;
+  final AssetLocation location;
   final VoidCallback? onTap;
 
   @override

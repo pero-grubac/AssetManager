@@ -1,23 +1,23 @@
-import 'package:asset_manager/models/location.dart';
+import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LocationNotifier extends StateNotifier<List<Location>> {
+class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   LocationNotifier() : super(const []);
 
-  void addLocation(Location location) {
+  void addLocation(AssetLocation location) {
     state = [location, ...state];
   }
 
-  void removeLocation(Location location) {
+  void removeLocation(AssetLocation location) {
     state = state.where((l) => l.id != location.id).toList();
   }
 
-  int indexOfLocation(Location location) {
+  int indexOfLocation(AssetLocation location) {
     return state.indexOf(location);
   }
 
-  void insetLocation(Location location, int index) {
+  void insetLocation(AssetLocation location, int index) {
     final newList = [...state];
     newList[index] = location;
     state = newList;
@@ -25,11 +25,11 @@ class LocationNotifier extends StateNotifier<List<Location>> {
 }
 
 final locationProvider =
-    StateNotifierProvider<LocationNotifier, List<Location>>(
+    StateNotifierProvider<LocationNotifier, List<AssetLocation>>(
   (ref) => LocationNotifier(),
 );
 
-final filteredLocationsProvider = Provider<List<Location>>((ref) {
+final filteredLocationsProvider = Provider<List<AssetLocation>>((ref) {
   final query = ref.watch(searchQueryProvider).toLowerCase();
   double? queryAsDouble = double.tryParse(query);
 

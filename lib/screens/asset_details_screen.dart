@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:asset_manager/models/asset.dart';
 import 'package:asset_manager/widgets/image/image_input.dart';
+import 'package:asset_manager/widgets/location/location_input.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/util/build_text_field.dart';
+import '../widgets/util/error_dialog.dart';
 
 class AssetDetailsScreen extends StatefulWidget {
   const AssetDetailsScreen({
@@ -49,39 +51,21 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
     super.dispose();
   }
 
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Invalid input'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-            },
-            child: const Text('Okay'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _submitData() {
     final enteredName = _nameController.text.trim();
     final enteredDescription = _descriptionController.text.trim();
     double? enteredPrice = double.tryParse(_priceController.text.trim());
     int? enteredBarcode = int.tryParse(_barcodeController.text.trim());
     if (enteredPrice == null) {
-      _showErrorDialog('Price  can not be empty');
+      ErrorDialog.show(context, 'Price  can not be empty');
       return;
     }
     if (enteredBarcode == null) {
-      _showErrorDialog('Barcode  can not be empty');
+      ErrorDialog.show(context, 'Barcode  can not be empty');
       return;
     }
     if (_selectedImage == null) {
-      _showErrorDialog('Image  can not be empty');
+      ErrorDialog.show(context, 'Image  can not be empty');
       return;
     }
     try {
@@ -114,9 +98,9 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       Navigator.pop(context);
     } catch (e) {
       if (e is ArgumentError) {
-        _showErrorDialog(e.message);
+        ErrorDialog.show(context, e.message);
       } else {
-        _showErrorDialog('An unknown error occurred');
+        ErrorDialog.show(context, 'An unknown error occurred');
       }
     }
   }
@@ -163,6 +147,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       isEditable: widget.isEditable,
     );
     final barcodeRow = widget.isEditable ? barcodeIcon : barcodeTextField;
+    final locationWidget = LocationInput();
     if (isWideScreen) {
       // TODO
       return [];
@@ -175,7 +160,11 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
         const SizedBox(
           height: 10,
         ),
-        imageWidget
+        imageWidget,
+        const SizedBox(
+          height: 10,
+        ),
+        locationWidget,
       ];
     }
   }

@@ -3,13 +3,13 @@ import 'dart:convert';
 
 const uuid = Uuid();
 
-class Location {
+class AssetLocation {
   final String id;
   final double latitude;
   final double longitude;
   final String address;
 
-  Location(
+  AssetLocation(
       {String? id,
       required this.latitude,
       required this.longitude,
@@ -17,23 +17,7 @@ class Location {
       : id = id ?? uuid.v4() {
     if (address.isEmpty) throw ArgumentError('Address cannot be empty');
   }
-  Location.fromStrings({
-    String? id,
-    required String latitude,
-    required String longitude,
-    required this.address,
-  })  : id = id ?? uuid.v4(),
-        latitude = double.parse(latitude),
-        longitude = double.parse(longitude) {
-    if (address.isEmpty) throw ArgumentError('Address cannot be empty');
 
-    if (longitude.isEmpty) {
-      throw ArgumentError('Longitude type is wrong.');
-    }
-    if (latitude.isEmpty) {
-      throw ArgumentError('Latitude type is wrong.');
-    }
-  }
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -44,8 +28,8 @@ class Location {
   }
 
   // Convert a Map object into a PlaceLocation object
-  factory Location.fromMap(Map<String, dynamic> map) {
-    return Location(
+  factory AssetLocation.fromMap(Map<String, dynamic> map) {
+    return AssetLocation(
       id: map['id'],
       latitude: map['latitude'],
       longitude: map['longitude'],
@@ -57,6 +41,6 @@ class Location {
   String toJson() => json.encode(toMap());
 
   // Convert a JSON object into a PlaceLocation object
-  factory Location.fromJson(String source) =>
-      Location.fromMap(json.decode(source));
+  factory AssetLocation.fromJson(String source) =>
+      AssetLocation.fromMap(json.decode(source));
 }

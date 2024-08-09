@@ -1,4 +1,5 @@
-import 'package:asset_manager/models/location.dart';
+import 'package:asset_manager/models/asset_location.dart';
+import 'package:asset_manager/widgets/util/error_dialog.dart';
 import 'package:flutter/material.dart';
 
 class LocationOverlay extends StatefulWidget {
@@ -7,7 +8,7 @@ class LocationOverlay extends StatefulWidget {
     required this.onAddLocation,
     this.isEditable = true,
   });
-  final void Function(Location location) onAddLocation;
+  final void Function(AssetLocation location) onAddLocation;
   final bool isEditable;
 
   @override
@@ -33,19 +34,19 @@ class _LocationOverlayState extends State<LocationOverlay> {
 
     try {
       // TODO worker_overlay
-      final newLocation = Location.fromStrings(
+      /*  final newLocation = AssetLocation.fromStrings(
         latitude: enteredLatitude,
         longitude: enteredLongitude,
         address: enteredName,
       );
 
       widget.onAddLocation(newLocation);
-      Navigator.pop(context);
+      Navigator.pop(context);*/
     } catch (e) {
       if (e is ArgumentError) {
-        _showErrorDialog(e.message);
+        ErrorDialog.show(context, e.message);
       } else {
-        _showErrorDialog('An unknown error occurred');
+        ErrorDialog.show(context, 'An unknown error occurred');
       }
     }
   }
