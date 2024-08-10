@@ -98,16 +98,21 @@ class _ImageInputState extends State<ImageInput> {
         ),
       );
     }
-    return Container(
-      height: 250,
-      width: double.infinity,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
+    return Column(
+      children: [
+        Container(
+          height: 250,
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+            ),
+          ),
+          child: content,
         ),
-      ),
-      child: content,
+        if (_selectedImage != null && widget.isEditable) buttonsRow
+      ],
     );
   }
 }

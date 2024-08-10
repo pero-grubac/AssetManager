@@ -67,6 +67,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
             if (location.id != oldAsset?.assignedLocationId) {
               ref.read(locationProvider.notifier).addLocation(location);
             }
+
             ref.read(assetProvider.notifier).updateAsset(updatedAsset);
           },
           asset: asset,
