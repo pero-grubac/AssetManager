@@ -4,6 +4,8 @@ import 'dart:convert';
 const uuid = Uuid();
 
 class AssetLocation {
+  static const String dbName = 'locations';
+  static const String dbFullName = 'locations.db';
   final String id;
   final double latitude;
   final double longitude;

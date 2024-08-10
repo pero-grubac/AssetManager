@@ -60,6 +60,10 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AssetDetailsScreen(
+          onSaveAsset: (updatedAsset, location) {
+            ref.read(assetProvider.notifier).updateAsset(updatedAsset);
+            // TODO old location == new location
+          },
           asset: asset,
         ),
       ),

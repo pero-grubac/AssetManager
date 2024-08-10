@@ -6,6 +6,9 @@ import 'package:uuid/uuid.dart';
 const uuid = Uuid();
 
 class Asset {
+  static const String dbName = 'assets';
+  static const String dbFullName = 'assets.db';
+
   final String id;
   final String name;
   final String description;

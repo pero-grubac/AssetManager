@@ -3,39 +3,15 @@ import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as syspaths;
 import 'package:path/path.dart' as path;
-import 'package:sqflite/sqflite.dart' as sql;
-import 'package:sqflite/sqlite_api.dart' as sql_api;
 
-Future<sql_api.Database> _getDatabase() async {
-  final dbPath = await sql.getDatabasesPath();
-  final db = await sql.openDatabase(
-    path.join(dbPath, 'assets.db'),
-    onCreate: (db, version) {
-      return db.execute('''
-        CREATE TABLE assets(
-          id TEXT PRIMARY KEY, 
-          name TEXT,
-           description TEXT,
-           barcode INTEGER, 
-           price REAL,
-           creationDate TEXT, 
-           assignedPersonId TEXT,
-           assignedLocationId TEXT, 
-           imagePath TEXT)
-         ''');
-    },
-    version: 1,
-  );
-  return db;
-}
+import 'database.dart';
 
 class AssetNotifier extends StateNotifier<List<Asset>> {
   AssetNotifier() : super([]);
-  final dbName = 'assets';
 
   Future<void> loadAssets() async {
-    final db = await _getDatabase();
-    final data = await db.query(dbName);
+    final db = await getAssetDatabase();
+    final data = await db.query(Asset.dbName);
     final assets = data.map((row) => Asset.fromMap(row)).toList();
     state = assets;
   }
@@ -46,19 +22,28 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     final copiedImage = await asset.image.copy('${appDir.path}/$fileName');
     asset.image = copiedImage;
 
-    final db = await _getDatabase();
-    db.insert(dbName, asset.toMap());
+    final db = await getAssetDatabase();
+    db.insert(Asset.dbName, asset.toMap());
 
     state = [asset, ...state];
   }
 
   Future<void> removeAsset(Asset asset) async {
-    final db = await _getDatabase();
+    final db = await getAssetDatabase();
     await db.delete(
-      dbName,
+      Asset.dbName,
       where: 'id = ?',
       whereArgs: [asset.id],
     );
+    final locationDb = await getLocationDatabase();
+    await locationDb.delete(
+      'locations',
+      where: 'id = ?',
+      whereArgs: [asset.assignedLocationId],
+    );
+    if (await asset.image.exists()) {
+      await asset.image.delete();
+    }
     state = state.where((a) => a.id != asset.id).toList();
   }
 
@@ -67,9 +52,9 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<void> insetAsset(Asset asset, int index) async {
-    final db = await _getDatabase();
+    final db = await getAssetDatabase();
     await db.update(
-      dbName,
+      Asset.dbName,
       asset.toMap(),
       where: 'id = ?',
       whereArgs: [asset.id],
@@ -80,9 +65,9 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<void> updateAsset(Asset updatedAsset) async {
-    final db = await _getDatabase();
+    final db = await getAssetDatabase();
     await db.update(
-      dbName,
+      Asset.dbName,
       updatedAsset.toMap(),
       where: 'id = ?',
       whereArgs: [updatedAsset.id],
