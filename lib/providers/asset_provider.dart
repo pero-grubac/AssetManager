@@ -40,7 +40,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     state = assets;
   }
 
-  void addAsset(Asset asset) async {
+  Future<void> addAsset(Asset asset) async {
     final appDir = await syspaths.getApplicationDocumentsDirectory();
     final fileName = path.basename(asset.image.path);
     final copiedImage = await asset.image.copy('${appDir.path}/$fileName');
@@ -48,31 +48,17 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
 
     final db = await _getDatabase();
     db.insert(dbName, asset.toMap());
-    print(asset.toJson());
 
     state = [asset, ...state];
   }
 
-  void searchAssets(String query) {
-    List<Asset> results;
-    if (query.isEmpty) {
-      results = state;
-    } else {
-      final queryLower = query.toLowerCase();
-      double? queryAsDouble = double.tryParse(query);
-      results = state.where((asset) {
-        final assetName = asset.name.toLowerCase();
-        final assetPrice = asset.price;
-        bool matchesName = assetName.contains(queryLower);
-        bool matchesPrice =
-            queryAsDouble != null && assetPrice == queryAsDouble;
-        return matchesPrice || matchesName;
-      }).toList();
-    }
-    state = results;
-  }
-
-  void removeAsset(Asset asset) {
+  Future<void> removeAsset(Asset asset) async {
+    final db = await _getDatabase();
+    await db.delete(
+      dbName,
+      where: 'id = ?',
+      whereArgs: [asset.id],
+    );
     state = state.where((a) => a.id != asset.id).toList();
   }
 
@@ -80,13 +66,28 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     return state.indexOf(asset);
   }
 
-  void insetAsset(Asset asset, int index) {
+  Future<void> insetAsset(Asset asset, int index) async {
+    final db = await _getDatabase();
+    await db.update(
+      dbName,
+      asset.toMap(),
+      where: 'id = ?',
+      whereArgs: [asset.id],
+    );
     final newList = [...state];
     newList.insert(index, asset);
     state = newList;
   }
 
-  void updateAsset(Asset updatedAsset) {
+  Future<void> updateAsset(Asset updatedAsset) async {
+    final db = await _getDatabase();
+    await db.update(
+      dbName,
+      updatedAsset.toMap(),
+      where: 'id = ?',
+      whereArgs: [updatedAsset.id],
+    );
+
     final index = state.indexWhere((asset) => asset.id == updatedAsset.id);
     List<Asset> temp = state;
     temp[index] = updatedAsset;

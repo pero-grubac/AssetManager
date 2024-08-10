@@ -53,19 +53,12 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     state = state.where((l) => l.id != location.id).toList();
   }
 
-  Future<int> indexOfLocation(AssetLocation location) async {
-    // Load the locations from the database without updating the state
-    final db = await _getDatabase();
-    final data = await db.query(dbName);
-    final locations = data.map((row) => AssetLocation.fromMap(row)).toList();
-
-    // Now find the index of the location in the list
-    return locations.indexOf(location);
+  int indexOfLocation(AssetLocation location) {
+    return state.indexOf(location);
   }
 
   Future<void> insetLocation(AssetLocation location, int index) async {
     final db = await _getDatabase();
-    // Assuming you want to update an existing location by ID
     await db.update(
       dbName,
       location.toMap(),
