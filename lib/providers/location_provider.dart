@@ -34,32 +34,62 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     state = locations;
   }
 
-  void addLocation(AssetLocation location) async {
+  Future<void> addLocation(AssetLocation location) async {
     final db = await _getDatabase();
-    db.insert(dbName, location.toMap());
+    await db.insert(dbName, location.toMap(),
+        conflictAlgorithm: sql.ConflictAlgorithm.replace);
 
     state = [location, ...state];
   }
 
-  void removeLocation(AssetLocation location) {
+  Future<void> removeLocation(AssetLocation location) async {
+    final db = await _getDatabase();
+    await db.delete(
+      dbName,
+      where: 'id = ?',
+      whereArgs: [location.id],
+    );
+
     state = state.where((l) => l.id != location.id).toList();
   }
 
-  int indexOfLocation(AssetLocation location) {
-    return state.indexOf(location);
+  Future<int> indexOfLocation(AssetLocation location) async {
+    // Load the locations from the database without updating the state
+    final db = await _getDatabase();
+    final data = await db.query(dbName);
+    final locations = data.map((row) => AssetLocation.fromMap(row)).toList();
+
+    // Now find the index of the location in the list
+    return locations.indexOf(location);
   }
 
-  void insetLocation(AssetLocation location, int index) {
+  Future<void> insetLocation(AssetLocation location, int index) async {
+    final db = await _getDatabase();
+    // Assuming you want to update an existing location by ID
+    await db.update(
+      dbName,
+      location.toMap(),
+      where: 'id = ?',
+      whereArgs: [location.id],
+    );
+
     final newList = [...state];
     newList[index] = location;
     state = newList;
   }
 
-  AssetLocation? findLocationById(String id) {
-    try {
-      return state.firstWhere((location) => location.id == id);
-    } catch (e) {
-      return null; // Return null if no location is found with the given ID
+  Future<AssetLocation?> findLocationById(String id) async {
+    final db = await _getDatabase();
+    final data = await db.query(
+      dbName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (data.isNotEmpty) {
+      return AssetLocation.fromMap(data.first);
+    } else {
+      return null;
     }
   }
 }

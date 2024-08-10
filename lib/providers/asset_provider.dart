@@ -48,6 +48,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
 
     final db = await _getDatabase();
     db.insert(dbName, asset.toMap());
+    print(asset.toJson());
 
     state = [asset, ...state];
   }

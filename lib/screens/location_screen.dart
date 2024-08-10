@@ -40,10 +40,10 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
         content: const Text('Worker deleted.'),
         action: SnackBarAction(
           label: 'Undo',
-          onPressed: () {
-            ref
+          onPressed: () async {
+            await ref
                 .read(locationProvider.notifier)
-                .insetLocation(location, workerIndex);
+                .insetLocation(location, workerIndex as int);
           },
         ),
       ),

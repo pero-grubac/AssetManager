@@ -2,14 +2,16 @@ import 'dart:io';
 
 import 'package:asset_manager/models/asset.dart';
 import 'package:asset_manager/models/asset_location.dart';
+import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/widgets/image/image_input.dart';
 import 'package:asset_manager/widgets/location/location_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
 
-class AssetDetailsScreen extends StatefulWidget {
+class AssetDetailsScreen extends ConsumerStatefulWidget {
   const AssetDetailsScreen({
     super.key,
     this.onSaveAsset,
@@ -21,28 +23,41 @@ class AssetDetailsScreen extends StatefulWidget {
   final bool isEditable;
 
   @override
-  State<AssetDetailsScreen> createState() => _AssetDetailsScreenState();
+  ConsumerState<AssetDetailsScreen> createState() => _AssetDetailsScreenState();
 }
 
-class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
+class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _barcodeController = TextEditingController();
   final _priceController = TextEditingController();
   // TODO date picker
+  // TODO worker
   File? _selectedImage;
   AssetLocation? _selectedAssetLocation;
-
+  bool _isLoading = true;
   @override
   void initState() {
     super.initState();
+    _initializeAssetDetails();
+  }
+
+  Future<void> _initializeAssetDetails() async {
     if (widget.asset != null) {
+      // Editing an existing asset
       _nameController.text = widget.asset!.name;
       _descriptionController.text = widget.asset!.description;
       _barcodeController.text = widget.asset!.barcode.toString();
       _priceController.text = widget.asset!.price.toString();
       _selectedImage = widget.asset?.image;
-      // TODO _selectedAssetLocation = widget.asset?.assignedLocationId;
+
+      // Attempt to retrieve the location by its ID asynchronously
+      _selectedAssetLocation = await ref
+          .read(locationProvider.notifier)
+          .findLocationById(widget.asset!.assignedLocationId);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -155,13 +170,18 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       isEditable: widget.isEditable,
     );
     final barcodeRow = widget.isEditable ? barcodeIcon : barcodeTextField;
-    final locationWidget = LocationInput(
-      onSelectedLocation: (assetLocation) {
-        _selectedAssetLocation = assetLocation;
-      },
-      assetLocation: _selectedAssetLocation,
-      isEditable: widget.isEditable,
-    );
+    final Widget locationWidget;
+    if (_isLoading) {
+      locationWidget = const Center(child: CircularProgressIndicator());
+    } else {
+      locationWidget = LocationInput(
+        onSelectedLocation: (assetLocation) {
+          _selectedAssetLocation = assetLocation;
+        },
+        assetLocation: _selectedAssetLocation,
+        isEditable: widget.isEditable,
+      );
+    }
     if (isWideScreen) {
       // TODO
       return [];

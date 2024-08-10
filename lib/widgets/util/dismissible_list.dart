@@ -8,6 +8,7 @@ class DismissibleList<T> extends ConsumerWidget {
   final bool isEditable;
   final Provider<List<T>> provider;
   final String emptyMessage;
+
   const DismissibleList({
     super.key,
     required this.onRemoveItem,
