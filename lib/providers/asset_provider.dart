@@ -35,12 +35,12 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
       where: 'id = ?',
       whereArgs: [asset.id],
     );
-    final locationDb = await getLocationDatabase();
+    /*  final locationDb = await getLocationDatabase();
     await locationDb.delete(
       'locations',
       where: 'id = ?',
       whereArgs: [asset.assignedLocationId],
-    );
+    );*/
     if (await asset.image.exists()) {
       await asset.image.delete();
     }
@@ -77,6 +77,20 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     List<Asset> temp = state;
     temp[index] = updatedAsset;
     state = [...temp];
+  }
+
+  Future<Asset?> findAssetById(String id) async {
+    final db = await getLocationDatabase();
+    final data = await db.query(
+      Asset.dbName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (data.isNotEmpty) {
+      return Asset.fromMap(data.first);
+    } else {
+      return null;
+    }
   }
 }
 
