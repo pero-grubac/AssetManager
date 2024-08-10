@@ -1,4 +1,6 @@
+import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/providers/asset_provider.dart';
+import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/asset/asset_card.dart';
@@ -19,14 +21,20 @@ class AssetScreen extends ConsumerStatefulWidget {
 
 class _AssetScreenState extends ConsumerState<AssetScreen> {
   final _searchController = TextEditingController();
+  late Future<void> _assetsFuture;
+  @override
+  void initState() {
+    super.initState();
+    _assetsFuture = ref.read(assetProvider.notifier).loadAssets();
+  }
 
   void _searchAssets(String query) {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
-  void _addAsset(Asset asset) {
+  void _addAsset(Asset asset, AssetLocation location) {
     ref.read(assetProvider.notifier).addAsset(asset);
-    // TODO save asset.image
+    ref.read(locationProvider.notifier).addLocation(location);
   }
 
   void _removeAsset(Asset asset) {
@@ -53,7 +61,8 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
       isScrollControlled: true,
       context: context,
       builder: (ctx) => AssetDetailsScreen(
-        onSaveAsset: (updatedAsset) {
+        onSaveAsset: (updatedAsset, location) {
+          //TODO
           ref.read(assetProvider.notifier).updateAsset(updatedAsset);
         },
         asset: asset,
@@ -66,15 +75,21 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
     return Screen(
         searchController: _searchController,
         onSearchChanged: _searchAssets,
-        body: DismissibleList(
-          onRemoveItem: _removeAsset,
-          onEditItem: _editAsset,
-          isEditable: true,
-          itemBuilder: (context, asset) => AssetCard(
-            asset: asset,
-          ),
-          provider: filteredAssetsProvider,
-          emptyMessage: 'No assets found',
+        body: FutureBuilder(
+          future: _assetsFuture,
+          builder: (context, snapshot) =>
+              snapshot.connectionState == ConnectionState.waiting
+                  ? const Center(child: CircularProgressIndicator())
+                  : DismissibleList(
+                      onRemoveItem: _removeAsset,
+                      onEditItem: _editAsset,
+                      isEditable: true,
+                      itemBuilder: (context, asset) => AssetCard(
+                        asset: asset,
+                      ),
+                      provider: filteredAssetsProvider,
+                      emptyMessage: 'No assets found',
+                    ),
         ),
         overlay: AssetDetailsScreen(
           onSaveAsset: _addAsset,

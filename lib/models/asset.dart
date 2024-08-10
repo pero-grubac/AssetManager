@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:asset_manager/models/asset_location.dart';
 import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
@@ -14,8 +13,8 @@ class Asset {
   final double price;
   final DateTime creationDate;
   final String assignedPersonId;
-  final AssetLocation assignedLocation;
-  final File image;
+  final String assignedLocationId;
+  late File image;
 
   Asset({
     String? id,
@@ -25,7 +24,7 @@ class Asset {
     required this.price,
     required this.creationDate,
     required this.assignedPersonId,
-    required this.assignedLocation,
+    required this.assignedLocationId,
     required this.image,
   }) : id = id ?? uuid.v4() {
     // Basic validation
@@ -36,7 +35,7 @@ class Asset {
     if (assignedPersonId.isEmpty) {
       throw ArgumentError('Assigned person id must be a positive number');
     }
-    if (assignedLocation == null) {
+    if (assignedLocationId.isEmpty) {
       throw ArgumentError('Assigned location id cannot be empty');
     }
     if (image == null) throw ArgumentError('Image  cannot be empty');
@@ -52,7 +51,7 @@ class Asset {
       'price': price,
       'creationDate': creationDate.toIso8601String(),
       'assignedPersonId': assignedPersonId,
-      'assignedLocation': assignedLocation,
+      'assignedLocationId': assignedLocationId,
       'image': image.path,
     };
   }
@@ -67,7 +66,7 @@ class Asset {
       price: map['price'],
       creationDate: DateTime.parse(map['creationDate']),
       assignedPersonId: map['assignedPersonId'],
-      assignedLocation: map['assignedLocation'],
+      assignedLocationId: map['assignedLocationId'],
       image: File(map['imagePath']),
     );
   }

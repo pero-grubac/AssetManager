@@ -17,7 +17,7 @@ class AssetDetailsScreen extends StatefulWidget {
     this.isEditable = true,
   });
   final Asset? asset;
-  final void Function(Asset worker)? onSaveAsset;
+  final void Function(Asset asset, AssetLocation location)? onSaveAsset;
   final bool isEditable;
 
   @override
@@ -42,7 +42,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       _barcodeController.text = widget.asset!.barcode.toString();
       _priceController.text = widget.asset!.price.toString();
       _selectedImage = widget.asset?.image;
-      _selectedAssetLocation = widget.asset?.assignedLocation;
+      // TODO _selectedAssetLocation = widget.asset?.assignedLocationId;
     }
   }
 
@@ -86,7 +86,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           price: enteredPrice,
           creationDate: DateTime.now(),
           assignedPersonId: 'assignedPersonId',
-          assignedLocation: _selectedAssetLocation!,
+          assignedLocationId: _selectedAssetLocation!.id,
           image: _selectedImage!,
         );
       } else {
@@ -98,11 +98,11 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           price: enteredPrice,
           creationDate: DateTime.now(),
           assignedPersonId: 'assignedPersonId',
-          assignedLocation: _selectedAssetLocation!,
+          assignedLocationId: _selectedAssetLocation!.id,
           image: _selectedImage!,
         );
       }
-      widget.onSaveAsset!(asset);
+      widget.onSaveAsset!(asset, _selectedAssetLocation!);
       Navigator.pop(context);
     } catch (e) {
       if (e is ArgumentError) {

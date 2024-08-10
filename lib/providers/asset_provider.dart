@@ -1,10 +1,54 @@
 import 'package:asset_manager/models/asset.dart';
 import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart' as syspaths;
+import 'package:path/path.dart' as path;
+import 'package:sqflite/sqflite.dart' as sql;
+import 'package:sqflite/sqlite_api.dart' as sql_api;
+
+Future<sql_api.Database> _getDatabase() async {
+  final dbPath = await sql.getDatabasesPath();
+  final db = await sql.openDatabase(
+    path.join(dbPath, 'assets.db'),
+    onCreate: (db, version) {
+      return db.execute('''
+        CREATE TABLE assets(
+          id TEXT PRIMARY KEY, 
+          name TEXT,
+           description TEXT,
+           barcode INTEGER, 
+           price REAL,
+           creationDate TEXT, 
+           assignedPersonId TEXT,
+           assignedLocationId TEXT, 
+           imagePath TEXT)
+         ''');
+    },
+    version: 1,
+  );
+  return db;
+}
 
 class AssetNotifier extends StateNotifier<List<Asset>> {
   AssetNotifier() : super([]);
-  void addAsset(Asset asset) {
+  final dbName = 'assets';
+
+  Future<void> loadAssets() async {
+    final db = await _getDatabase();
+    final data = await db.query(dbName);
+    final assets = data.map((row) => Asset.fromMap(row)).toList();
+    state = assets;
+  }
+
+  void addAsset(Asset asset) async {
+    final appDir = await syspaths.getApplicationDocumentsDirectory();
+    final fileName = path.basename(asset.image.path);
+    final copiedImage = await asset.image.copy('${appDir.path}/$fileName');
+    asset.image = copiedImage;
+
+    final db = await _getDatabase();
+    db.insert(dbName, asset.toMap());
+
     state = [asset, ...state];
   }
 
