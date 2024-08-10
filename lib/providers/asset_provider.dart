@@ -10,7 +10,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   AssetNotifier() : super([]);
 
   Future<void> loadAssets() async {
-    final db = await getAssetDatabase();
+    final db = await getWorkerDatabase();
     final data = await db.query(Asset.dbName);
     final assets = data.map((row) => Asset.fromMap(row)).toList();
     state = assets;
@@ -22,14 +22,14 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     final copiedImage = await asset.image.copy('${appDir.path}/$fileName');
     asset.image = copiedImage;
 
-    final db = await getAssetDatabase();
+    final db = await getWorkerDatabase();
     db.insert(Asset.dbName, asset.toMap());
 
     state = [asset, ...state];
   }
 
   Future<void> removeAsset(Asset asset) async {
-    final db = await getAssetDatabase();
+    final db = await getWorkerDatabase();
     await db.delete(
       Asset.dbName,
       where: 'id = ?',
@@ -52,7 +52,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<void> insetAsset(Asset asset, int index) async {
-    final db = await getAssetDatabase();
+    final db = await getWorkerDatabase();
     await db.update(
       Asset.dbName,
       asset.toMap(),
@@ -65,7 +65,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<void> updateAsset(Asset updatedAsset) async {
-    final db = await getAssetDatabase();
+    final db = await getWorkerDatabase();
     await db.update(
       Asset.dbName,
       updatedAsset.toMap(),

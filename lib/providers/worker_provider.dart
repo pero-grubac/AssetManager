@@ -2,6 +2,8 @@ import 'package:asset_manager/models/worker.dart';
 import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'database.dart';
+
 class WorkerNotifier extends StateNotifier<List<Worker>> {
   WorkerNotifier()
       : super([
@@ -18,32 +20,29 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
           ),
         ]);
 
+  Future<void> loadAssets() async {
+    final db = await getWorkerDatabase();
+    final data = await db.query(Worker.dbName);
+    final workers = data.map((row) => Worker.fromMap(row)).toList();
+    state = workers;
+  }
+
   List<Worker> get allWorkers => state;
 
-  void addWorker(Worker worker) {
+  Future<void> addWorker(Worker worker) async {
+    final db = await getWorkerDatabase();
+    db.insert(Worker.dbName, worker.toMap());
+
     state = [worker, ...state];
   }
 
-  void searchWorker(String query) {
-    List<Worker> results;
-    if (query.isEmpty) {
-      results = state;
-    } else {
-      final queryLower = query.toLowerCase();
-      results = state.where((worker) {
-        final firstNameLower = worker.firstName.toLowerCase();
-        final lastNameLower = worker.lastName.toLowerCase();
-        final emailLower = worker.email.toLowerCase();
-
-        return firstNameLower.contains(queryLower) ||
-            lastNameLower.contains(queryLower) ||
-            emailLower.contains(queryLower);
-      }).toList();
-    }
-    state = results;
-  }
-
-  void removeWorker(Worker worker) {
+  Future<void> removeWorker(Worker worker) async {
+    final db = await getWorkerDatabase();
+    await db.delete(
+      Worker.dbName,
+      where: 'id = ?',
+      whereArgs: [worker.id],
+    );
     state = state.where((w) => w.id != worker.id).toList();
   }
 
@@ -51,13 +50,28 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
     return state.indexOf(worker);
   }
 
-  void insertWorker(Worker worker, int index) {
+  Future<void> insertWorker(Worker worker, int index) async {
+    final db = await getWorkerDatabase();
+    await db.update(
+      Worker.dbName,
+      worker.toMap(),
+      where: 'id = ?',
+      whereArgs: [worker.id],
+    );
     final newList = [...state];
     newList.insert(index, worker);
     state = newList;
   }
 
-  void updateWorker(Worker updatedWorker) {
+  Future<void> updateWorker(Worker updatedWorker) async {
+    final db = await getWorkerDatabase();
+    await db.update(
+      Worker.dbName,
+      updatedWorker.toMap(),
+      where: 'id = ?',
+      whereArgs: [updatedWorker.id],
+    );
+
     final index = state.indexWhere((worker) => worker.id == updatedWorker.id);
     List<Worker> temp = state;
     temp[index] = updatedWorker;

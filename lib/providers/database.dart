@@ -24,7 +24,7 @@ Future<sql_api.Database> getLocationDatabase() async {
   return db;
 }
 
-Future<sql_api.Database> getAssetDatabase() async {
+Future<sql_api.Database> getWorkerDatabase() async {
   final dbPath = await sql.getDatabasesPath();
   final db = await sql.openDatabase(
     path.join(dbPath, Asset.dbFullName),
