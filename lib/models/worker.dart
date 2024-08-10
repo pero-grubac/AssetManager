@@ -4,6 +4,9 @@ import 'package:uuid/uuid.dart';
 const uuid = Uuid();
 
 class Worker {
+  static const String dbName = 'workers';
+  static const String dbFullName = 'workers.db';
+
   final String id;
   final String firstName;
   final String lastName;
