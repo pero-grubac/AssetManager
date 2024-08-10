@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
@@ -42,6 +43,9 @@ class Asset {
       throw ArgumentError('Assigned location id cannot be empty');
     }
     if (image == null) throw ArgumentError('Image  cannot be empty');
+  }
+  String get formatedDate {
+    return DateFormat('dd.MM.yyyy').format(creationDate);
   }
 
   // Convert an Asset object into a Map object

@@ -7,6 +7,7 @@ import 'package:asset_manager/widgets/image/image_input.dart';
 import 'package:asset_manager/widgets/location/location_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
@@ -36,6 +37,8 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
   File? _selectedImage;
   AssetLocation? _selectedAssetLocation;
   bool _isLoading = true;
+  DateTime? _selectedDate;
+  String? _pickedDate;
   @override
   void initState() {
     super.initState();
@@ -50,7 +53,8 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       _barcodeController.text = widget.asset!.barcode.toString();
       _priceController.text = widget.asset!.price.toString();
       _selectedImage = widget.asset?.image;
-
+      _selectedDate = widget.asset?.creationDate;
+      _pickedDate = widget.asset?.formatedDate;
       // Attempt to retrieve the location by its ID asynchronously
       _selectedAssetLocation = await ref
           .read(locationProvider.notifier)
@@ -91,6 +95,10 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       ErrorDialog.show(context, 'Location  can not be empty');
       return;
     }
+    if (_selectedDate == null) {
+      ErrorDialog.show(context, 'Date  can not be empty');
+      return;
+    }
     try {
       Asset asset;
       if (widget.asset == null) {
@@ -99,9 +107,9 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
           description: enteredDescription,
           barcode: enteredBarcode,
           price: enteredPrice,
-          creationDate: DateTime.now(),
           assignedPersonId: 'assignedPersonId',
           assignedLocationId: _selectedAssetLocation!.id,
+          creationDate: _selectedDate!,
           image: _selectedImage!,
         );
       } else {
@@ -111,7 +119,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
           description: enteredDescription,
           barcode: enteredBarcode,
           price: enteredPrice,
-          creationDate: DateTime.now(),
+          creationDate: _selectedDate!,
           assignedPersonId: 'assignedPersonId',
           assignedLocationId: _selectedAssetLocation!.id,
           image: _selectedImage!,
@@ -126,6 +134,26 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
         ErrorDialog.show(context, 'An unknown error occurred');
       }
     }
+  }
+
+  void _presentDatePicker() {
+    final now = DateTime.now();
+    final firstDate = DateTime(1900);
+    final lastDate = now;
+    showDatePicker(
+      context: context,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      initialDate: now,
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+        _pickedDate = DateFormat('dd.MM.yyyy').format(_selectedDate!);
+      });
+    });
   }
 
   List<Widget> _buildTextFields({required bool isWideScreen}) {
@@ -150,6 +178,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       isEditable: !widget.isEditable,
     );
     final barcodeIcon = Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(child: barcodeTextField),
         const SizedBox(width: 8),
@@ -161,7 +190,28 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
         ),
       ],
     );
-
+    final priceDateRow = Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Expanded(child: priceTextField),
+        const SizedBox(width: 16),
+        Expanded(
+          child: GestureDetector(
+            onTap: widget.isEditable ? _presentDatePicker : null,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  _pickedDate ?? 'Select date',
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.calendar_month),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
     final imageWidget = ImageInput(
       onPickImage: (image) {
         _selectedImage = image;
@@ -188,7 +238,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
     } else {
       return [
         nameTextField,
-        priceTextField,
+        priceDateRow,
         descriptionTextField,
         barcodeRow,
         const SizedBox(
