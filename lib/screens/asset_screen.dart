@@ -33,8 +33,8 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   }
 
   void _addAsset(Asset asset, AssetLocation location) {
-    ref.read(assetProvider.notifier).addAsset(asset);
     ref.read(locationProvider.notifier).addLocation(location);
+    ref.read(assetProvider.notifier).addAsset(asset);
   }
 
   void _removeAsset(Asset asset) {
