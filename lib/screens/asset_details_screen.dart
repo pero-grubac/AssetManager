@@ -55,10 +55,10 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       _selectedAssetLocation = await ref
           .read(locationProvider.notifier)
           .findLocationById(widget.asset!.assignedLocationId);
-      setState(() {
-        _isLoading = false;
-      });
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override

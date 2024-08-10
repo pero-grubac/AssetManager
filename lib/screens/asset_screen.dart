@@ -56,16 +56,12 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   }
 
   void _editAsset(Asset asset) {
-    showModalBottomSheet(
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: context,
-      builder: (ctx) => AssetDetailsScreen(
-        onSaveAsset: (updatedAsset, location) {
-          //TODO
-          ref.read(assetProvider.notifier).updateAsset(updatedAsset);
-        },
-        asset: asset,
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AssetDetailsScreen(
+          asset: asset,
+        ),
       ),
     );
   }

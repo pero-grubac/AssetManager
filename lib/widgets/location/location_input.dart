@@ -119,18 +119,38 @@ class _LocationInputState extends State<LocationInput> {
     _savePlace(pickedLocation.latitude, pickedLocation.longitude);
   }
 
+  Image _locationImage(AssetLocation location) {
+    return Image.network(
+      locationImage(location),
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget previewContent = const Text(
       'No location chosen',
       textAlign: TextAlign.center,
     );
+
     if (_pickedLocation != null) {
-      previewContent = Image.network(
-        locationImage(_pickedLocation),
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
+      previewContent = _locationImage(_pickedLocation!);
+    }
+    if (widget.assetLocation != null) {
+      previewContent = GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => MapScreen(
+                assetLocation: widget.assetLocation,
+                isSelecting: false,
+              ),
+            ),
+          );
+        },
+        child: _locationImage(widget.assetLocation!),
       );
     }
     if (_isGettingLocation) {
@@ -175,12 +195,7 @@ class _LocationInputState extends State<LocationInput> {
             ),
           );
         },
-        child: Image.network(
-          locationImage(widget.assetLocation),
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-        ),
+        child: _locationImage(widget.assetLocation!),
       );
     }
     return Column(
