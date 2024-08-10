@@ -49,7 +49,10 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
   Future<void> _removeAsset(Asset asset) async {
     final assetIndex = ref.read(assetProvider.notifier).indexOfAsset(asset);
+    setIsLoading(true);
     ref.read(assetProvider.notifier).removeAsset(asset);
+    setIsLoading(false);
+
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

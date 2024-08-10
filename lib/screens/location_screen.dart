@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/asset_location.dart';
 import '../providers/search_provider.dart';
+import '../widgets/util/centered_circular_loading.dart';
 import '../widgets/util/dismissible_list.dart';
 
 class LocationScreen extends ConsumerStatefulWidget {
@@ -20,10 +21,18 @@ class LocationScreen extends ConsumerStatefulWidget {
 class _LocationScreenState extends ConsumerState<LocationScreen> {
   final _searchController = TextEditingController();
   late Future<void> _locationFuture;
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
     _locationFuture = ref.read(locationProvider.notifier).loadAssetLocations();
+  }
+
+  void setIsLoading(bool load) {
+    setState(() {
+      _isLoading = load;
+    });
   }
 
   void _searchLocation(String query) {
@@ -31,13 +40,17 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   }
 
   Future<void> _addLocation(AssetLocation location) async {
-    ref.read(locationProvider.notifier).addLocation(location);
+    setIsLoading(true);
+    await ref.read(locationProvider.notifier).addLocation(location);
+    setIsLoading(false);
   }
 
   Future<void> _removeLocation(AssetLocation location) async {
     final workerIndex =
         ref.read(locationProvider.notifier).indexOfLocation(location);
+    setIsLoading(true);
     ref.read(locationProvider.notifier).removeLocation(location);
+    setIsLoading(false);
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -47,9 +60,12 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () async {
+            setIsLoading(true);
+
             await ref
                 .read(locationProvider.notifier)
-                .insetLocation(location, workerIndex as int);
+                .insetLocation(location, workerIndex);
+            setIsLoading(false);
           },
         ),
       ),
@@ -58,27 +74,29 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Screen(
-      searchController: _searchController,
-      onSearchChanged: _searchLocation,
-      body: FutureBuilder(
-        future: _locationFuture,
-        builder: (context, snapshot) =>
-            snapshot.connectionState == ConnectionState.waiting
-                ? const Center(child: CircularProgressIndicator())
-                : DismissibleList<AssetLocation>(
-                    onRemoveItem: _removeLocation,
-                    itemBuilder: (context, location) => LocationCard(
-                      location: location,
-                    ),
-                    isEditable: false,
-                    provider: filteredLocationsProvider,
-                    emptyMessage: 'No locations found.',
-                  ),
-      ),
-      overlay: LocationOverlay(
-        onAddLocation: _addLocation,
-      ),
-    );
+    return _isLoading
+        ? const CenteredCircularLoading()
+        : Screen(
+            searchController: _searchController,
+            onSearchChanged: _searchLocation,
+            body: FutureBuilder(
+              future: _locationFuture,
+              builder: (context, snapshot) =>
+                  snapshot.connectionState == ConnectionState.waiting
+                      ? const Center(child: CircularProgressIndicator())
+                      : DismissibleList<AssetLocation>(
+                          onRemoveItem: _removeLocation,
+                          itemBuilder: (context, location) => LocationCard(
+                            location: location,
+                          ),
+                          isEditable: false,
+                          provider: filteredLocationsProvider,
+                          emptyMessage: 'No locations found.',
+                        ),
+            ),
+            overlay: LocationOverlay(
+              onAddLocation: _addLocation,
+            ),
+          );
   }
 }

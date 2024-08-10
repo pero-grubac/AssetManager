@@ -1,5 +1,5 @@
 import 'package:asset_manager/models/asset_location.dart';
-import 'package:asset_manager/widgets/util/error_dialog.dart';
+import 'package:asset_manager/widgets/location/location_input.dart';
 import 'package:flutter/material.dart';
 
 class LocationOverlay extends StatefulWidget {
@@ -16,100 +16,36 @@ class LocationOverlay extends StatefulWidget {
 }
 
 class _LocationOverlayState extends State<LocationOverlay> {
-  final _nameController = TextEditingController();
-  final _latitudeController = TextEditingController();
-  final _longitudeController = TextEditingController();
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _latitudeController.dispose();
-    _longitudeController.dispose();
-    super.dispose();
-  }
+  AssetLocation? _selectedLocation;
 
   void _submitData() {
-    final enteredName = _nameController.text;
-    final enteredLatitude = _latitudeController.text;
-    final enteredLongitude = _longitudeController.text;
-
-    try {
-      // TODO worker_overlay
-      /*  final newLocation = AssetLocation.fromStrings(
-        latitude: enteredLatitude,
-        longitude: enteredLongitude,
-        address: enteredName,
-      );
-
-      widget.onAddLocation(newLocation);
-      Navigator.pop(context);*/
-    } catch (e) {
-      if (e is ArgumentError) {
-        ErrorDialog.show(context, e.message);
-      } else {
-        ErrorDialog.show(context, 'An unknown error occurred');
-      }
+    if (_selectedLocation != null) {
+      widget.onAddLocation(_selectedLocation!);
+      Navigator.pop(context);
     }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Invalid input'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-            },
-            child: const Text('Okay'),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
-    return LayoutBuilder(
-      builder: (ctx, constraints) {
-        // final isWideScreen = constraints.maxWidth > 600;
-
-        return SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: keyboardSpace),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ..._buildTextFields(isWideScreen: isWideScreen),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: _submitData,
-                        child: const Text('Save'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Location'),
+        actions: widget.isEditable
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.save),
+                  onPressed: _submitData,
+                ),
+              ]
+            : null,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: LocationInput(
+          onSelectedLocation: (location) => _selectedLocation = location,
+        ),
+      ),
     );
   }
 }
