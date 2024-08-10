@@ -1,6 +1,5 @@
 import 'package:asset_manager/screens/asset_screen.dart';
 import 'package:asset_manager/screens/home_screen.dart';
-import 'package:asset_manager/screens/loading_screen.dart';
 import 'package:asset_manager/screens/location_screen.dart';
 import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:asset_manager/theme/theme_constants.dart';
@@ -33,10 +32,9 @@ class AssetManager extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: AssetScreen.id,
+      initialRoute: LocationScreen.id,
       routes: {
         HomeScreen.id: (context) => const HomeScreen(),
-        LoadingScreen.id: (context) => const LoadingScreen(),
         WorkersScreen.id: (context) => const WorkersScreen(),
         LocationScreen.id: (context) => const LocationScreen(),
         AssetScreen.id: (context) => const AssetScreen(),

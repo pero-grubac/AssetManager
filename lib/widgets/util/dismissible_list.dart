@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DismissibleList<T> extends ConsumerWidget {
-  final void Function(T item) onRemoveItem;
+  final Future<void> Function(T item) onRemoveItem;
   final Widget Function(BuildContext context, T item) itemBuilder;
-  final void Function(T item)? onEditItem;
+  final Future<void> Function(T item)? onEditItem;
   final bool isEditable;
   final Provider<List<T>> provider;
   final String emptyMessage;

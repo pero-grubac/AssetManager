@@ -20,7 +20,7 @@ class LocationCard extends StatelessWidget {
         onTap: onTap,
         title: CenterRowIconText(
           icon: Icons.location_city,
-          widget: Text(location.address),
+          widget: Expanded(child: Text(location.address)),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0),

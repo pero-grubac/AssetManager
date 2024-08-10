@@ -4,6 +4,7 @@ import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/asset/asset_card.dart';
+import 'package:asset_manager/widgets/util/centered_circular_loading.dart';
 import 'package:asset_manager/widgets/util/dismissible_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,22 +23,31 @@ class AssetScreen extends ConsumerStatefulWidget {
 class _AssetScreenState extends ConsumerState<AssetScreen> {
   final _searchController = TextEditingController();
   late Future<void> _assetsFuture;
+  bool _isLoading = false;
   @override
   void initState() {
     super.initState();
     _assetsFuture = ref.read(assetProvider.notifier).loadAssets();
   }
 
+  void setIsLoading(bool load) {
+    setState(() {
+      _isLoading = load;
+    });
+  }
+
   void _searchAssets(String query) {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
-  void _addAsset(Asset asset, AssetLocation location) {
-    ref.read(locationProvider.notifier).addLocation(location);
-    ref.read(assetProvider.notifier).addAsset(asset);
+  Future<void> _addAsset(Asset asset, AssetLocation location) async {
+    setIsLoading(true);
+    await ref.read(locationProvider.notifier).addLocation(location);
+    await ref.read(assetProvider.notifier).addAsset(asset);
+    setIsLoading(false);
   }
 
-  void _removeAsset(Asset asset) {
+  Future<void> _removeAsset(Asset asset) async {
     final assetIndex = ref.read(assetProvider.notifier).indexOfAsset(asset);
     ref.read(assetProvider.notifier).removeAsset(asset);
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -47,28 +57,36 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
         content: const Text('Worker deleted.'),
         action: SnackBarAction(
           label: 'Undo',
-          onPressed: () {
-            ref.read(assetProvider.notifier).insetAsset(asset, assetIndex);
+          onPressed: () async {
+            setIsLoading(true);
+            await ref
+                .read(assetProvider.notifier)
+                .insetAsset(asset, assetIndex);
+            setIsLoading(false);
           },
         ),
       ),
     );
   }
 
-  void _editAsset(Asset asset) {
+  Future<void> _editAsset(Asset asset) async {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => AssetDetailsScreen(
           onSaveAsset: (updatedAsset, location) async {
+            setIsLoading(true);
+
             final oldAsset = await ref
                 .read(assetProvider.notifier)
                 .findAssetById(updatedAsset.id);
+
             if (location.id != oldAsset?.assignedLocationId) {
-              ref.read(locationProvider.notifier).addLocation(location);
+              await ref.read(locationProvider.notifier).addLocation(location);
             }
 
-            ref.read(assetProvider.notifier).updateAsset(updatedAsset);
+            await ref.read(assetProvider.notifier).updateAsset(updatedAsset);
+            setIsLoading(false);
           },
           asset: asset,
         ),
@@ -78,27 +96,29 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Screen(
-        searchController: _searchController,
-        onSearchChanged: _searchAssets,
-        body: FutureBuilder(
-          future: _assetsFuture,
-          builder: (context, snapshot) =>
-              snapshot.connectionState == ConnectionState.waiting
-                  ? const Center(child: CircularProgressIndicator())
-                  : DismissibleList(
-                      onRemoveItem: _removeAsset,
-                      onEditItem: _editAsset,
-                      isEditable: true,
-                      itemBuilder: (context, asset) => AssetCard(
-                        asset: asset,
-                      ),
-                      provider: filteredAssetsProvider,
-                      emptyMessage: 'No assets found',
-                    ),
-        ),
-        overlay: AssetDetailsScreen(
-          onSaveAsset: _addAsset,
-        ));
+    return _isLoading
+        ? const CenteredCircularLoading()
+        : Screen(
+            searchController: _searchController,
+            onSearchChanged: _searchAssets,
+            body: FutureBuilder(
+              future: _assetsFuture,
+              builder: (context, snapshot) =>
+                  snapshot.connectionState == ConnectionState.waiting
+                      ? const CenteredCircularLoading()
+                      : DismissibleList(
+                          onRemoveItem: _removeAsset,
+                          onEditItem: _editAsset,
+                          isEditable: true,
+                          itemBuilder: (context, asset) => AssetCard(
+                            asset: asset,
+                          ),
+                          provider: filteredAssetsProvider,
+                          emptyMessage: 'No assets found',
+                        ),
+            ),
+            overlay: AssetDetailsScreen(
+              onSaveAsset: _addAsset,
+            ));
   }
 }

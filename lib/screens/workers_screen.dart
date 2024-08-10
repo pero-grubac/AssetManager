@@ -24,11 +24,11 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
-  void _addWorker(Worker worker) {
+  Future<void> _addWorker(Worker worker) async {
     ref.read(workerProvider.notifier).addWorker(worker);
   }
 
-  void _removeWorker(Worker worker) {
+  Future<void> _removeWorker(Worker worker) async {
     final workerIndex = ref.read(workerProvider.notifier).indexOfWorker(worker);
     ref.read(workerProvider.notifier).removeWorker(worker);
 
@@ -47,7 +47,7 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
     );
   }
 
-  void _editWorker(Worker worker) {
+  Future<void> _editWorker(Worker worker) async {
     showModalBottomSheet(
       useSafeArea: true,
       isScrollControlled: true,

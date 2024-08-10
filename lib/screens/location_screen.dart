@@ -19,16 +19,22 @@ class LocationScreen extends ConsumerStatefulWidget {
 
 class _LocationScreenState extends ConsumerState<LocationScreen> {
   final _searchController = TextEditingController();
+  late Future<void> _locationFuture;
+  @override
+  void initState() {
+    super.initState();
+    _locationFuture = ref.read(locationProvider.notifier).loadAssetLocations();
+  }
 
   void _searchLocation(String query) {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
-  void _addLocation(AssetLocation location) {
+  Future<void> _addLocation(AssetLocation location) async {
     ref.read(locationProvider.notifier).addLocation(location);
   }
 
-  void _removeLocation(AssetLocation location) {
+  Future<void> _removeLocation(AssetLocation location) async {
     final workerIndex =
         ref.read(locationProvider.notifier).indexOfLocation(location);
     ref.read(locationProvider.notifier).removeLocation(location);
@@ -55,14 +61,20 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
     return Screen(
       searchController: _searchController,
       onSearchChanged: _searchLocation,
-      body: DismissibleList<AssetLocation>(
-        onRemoveItem: _removeLocation,
-        itemBuilder: (context, location) => LocationCard(
-          location: location,
-        ),
-        isEditable: false,
-        provider: filteredLocationsProvider,
-        emptyMessage: 'No locations found.',
+      body: FutureBuilder(
+        future: _locationFuture,
+        builder: (context, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const Center(child: CircularProgressIndicator())
+                : DismissibleList<AssetLocation>(
+                    onRemoveItem: _removeLocation,
+                    itemBuilder: (context, location) => LocationCard(
+                      location: location,
+                    ),
+                    isEditable: false,
+                    provider: filteredLocationsProvider,
+                    emptyMessage: 'No locations found.',
+                  ),
       ),
       overlay: LocationOverlay(
         onAddLocation: _addLocation,

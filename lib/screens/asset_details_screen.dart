@@ -20,7 +20,7 @@ class AssetDetailsScreen extends ConsumerStatefulWidget {
     this.isEditable = true,
   });
   final Asset? asset;
-  final void Function(Asset asset, AssetLocation location)? onSaveAsset;
+  final Future<void> Function(Asset asset, AssetLocation location)? onSaveAsset;
   final bool isEditable;
 
   @override
