@@ -3,12 +3,17 @@ import 'dart:io';
 import 'package:asset_manager/models/asset.dart';
 import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/providers/location_provider.dart';
+import 'package:asset_manager/providers/worker_provider.dart';
+import 'package:asset_manager/screens/screen.dart';
+import 'package:asset_manager/screens/selection_screen.dart';
 import 'package:asset_manager/widgets/image/image_input.dart';
 import 'package:asset_manager/widgets/location/location_input.dart';
+import 'package:asset_manager/widgets/worker/worker_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../models/worker.dart';
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
 
@@ -32,10 +37,11 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
   final _descriptionController = TextEditingController();
   final _barcodeController = TextEditingController();
   final _priceController = TextEditingController();
-  // TODO date picker
-  // TODO worker
+  final _workerController = TextEditingController();
+
   File? _selectedImage;
   AssetLocation? _selectedAssetLocation;
+  Worker? _selectedWorker;
   bool _isLoading = true;
   DateTime? _selectedDate;
   String? _pickedDate;
@@ -59,6 +65,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       _selectedAssetLocation = await ref
           .read(locationProvider.notifier)
           .findLocationById(widget.asset!.assignedLocationId);
+      // wind worker by id and assign  it to _workerController
     }
     setState(() {
       _isLoading = false;
@@ -71,6 +78,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
     _descriptionController.dispose();
     _barcodeController.dispose();
     _priceController.dispose();
+    _workerController.dispose();
     super.dispose();
   }
 
@@ -156,6 +164,37 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
     });
   }
 
+  void _existingWorkers() async {
+    setState(() {
+      _workerController.text = '';
+    });
+    final selectedWorker = await Navigator.push<Worker>(
+      context,
+      MaterialPageRoute(
+          builder: (ctx) => SelectionScreen<Worker>(
+                provider: workerProvider,
+                onConfirmSelection: (selectedItem) {},
+                cardBuilder:
+                    (Worker item, bool isSelected, void Function() onTap) {
+                  return WorkerCard(
+                    worker: item,
+                    onTap: onTap,
+                    isSelected: isSelected,
+                  );
+                },
+                title: 'Select worker',
+              )),
+    );
+    if (selectedWorker != null) {
+      setState(() {
+        _workerController.text = selectedWorker.fullName;
+        _selectedWorker = selectedWorker;
+      });
+    } else {
+      return;
+    }
+  }
+
   List<Widget> _buildTextFields({required bool isWideScreen}) {
     final nameTextField = BuildTextField(
       controller: _nameController,
@@ -220,18 +259,17 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       isEditable: widget.isEditable,
     );
     final workerWidget = BuildTextField(
-      controller: _nameController,
+      controller: _workerController,
       label: 'Worker',
-      isEditable: false,
+      isEditable: true,
     );
-
     final workerRow = Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(child: workerWidget),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: () {},
+          onPressed: _existingWorkers,
           icon: const Icon(Icons.supervised_user_circle),
         ),
       ],
