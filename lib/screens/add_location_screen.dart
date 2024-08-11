@@ -2,8 +2,8 @@ import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/widgets/location/location_input.dart';
 import 'package:flutter/material.dart';
 
-class LocationOverlay extends StatefulWidget {
-  const LocationOverlay({
+class AddLocationScreen extends StatefulWidget {
+  const AddLocationScreen({
     super.key,
     required this.onAddLocation,
     this.isEditable = true,
@@ -15,10 +15,10 @@ class LocationOverlay extends StatefulWidget {
   final bool isExistingLocation;
   final AssetLocation? location;
   @override
-  State<LocationOverlay> createState() => _LocationOverlayState();
+  State<AddLocationScreen> createState() => _AddLocationScreenState();
 }
 
-class _LocationOverlayState extends State<LocationOverlay> {
+class _AddLocationScreenState extends State<AddLocationScreen> {
   AssetLocation? _selectedLocation;
 
   @override

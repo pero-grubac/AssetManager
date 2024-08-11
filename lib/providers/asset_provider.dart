@@ -9,7 +9,7 @@ import 'database.dart';
 class AssetNotifier extends StateNotifier<List<Asset>> {
   AssetNotifier() : super([]);
 
-  Future<void> loadAssets() async {
+  Future<void> loadItems() async {
     final db = await getAssetDatabase();
     final data = await db.query(Asset.dbName);
     final assets = data.map((row) => Asset.fromMap(row)).toList();

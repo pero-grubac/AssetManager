@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
+import 'identifiable.dart';
+
 const uuid = Uuid();
 
-class Worker {
+class Worker implements Identifiable {
   static const String dbName = 'workers';
   static const String dbFullName = 'workers.db';
 
+  @override
   final String id;
   final String firstName;
   final String lastName;

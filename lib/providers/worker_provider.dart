@@ -7,7 +7,7 @@ import 'database.dart';
 class WorkerNotifier extends StateNotifier<List<Worker>> {
   WorkerNotifier() : super(const []);
 
-  Future<void> loadAssets() async {
+  Future<void> loadItems() async {
     final db = await getWorkerDatabase();
     final data = await db.query(Worker.dbName);
     final workers = data.map((row) => Worker.fromMap(row)).toList();

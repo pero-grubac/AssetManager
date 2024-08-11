@@ -1,11 +1,15 @@
 import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
+import 'identifiable.dart';
+
 const uuid = Uuid();
 
-class AssetLocation {
+class AssetLocation implements Identifiable {
   static const String dbName = 'locations';
   static const String dbFullName = 'locations.db';
+
+  @override
   final String id;
   final double latitude;
   final double longitude;

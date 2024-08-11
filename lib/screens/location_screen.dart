@@ -1,7 +1,7 @@
 import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/location/location_card.dart';
-import 'package:asset_manager/widgets/location/location_overlay.dart';
+import 'package:asset_manager/screens/add_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,7 +26,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   @override
   void initState() {
     super.initState();
-    _locationFuture = ref.read(locationProvider.notifier).loadAssetLocations();
+    _locationFuture = ref.read(locationProvider.notifier).loadItems();
   }
 
   void setIsLoading(bool load) {
@@ -94,7 +94,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
                           emptyMessage: 'No locations found.',
                         ),
             ),
-            overlay: LocationOverlay(
+            overlay: AddLocationScreen(
               onAddLocation: _addLocation,
               isExistingLocation: false,
             ),

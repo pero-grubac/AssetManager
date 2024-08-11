@@ -4,12 +4,15 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
+import 'identifiable.dart';
+
 const uuid = Uuid();
 
-class Asset {
+class Asset implements Identifiable {
   static const String dbName = 'assets';
   static const String dbFullName = 'assets.db';
 
+  @override
   final String id;
   final String name;
   final String description;

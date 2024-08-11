@@ -27,7 +27,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   @override
   void initState() {
     super.initState();
-    _assetsFuture = ref.read(assetProvider.notifier).loadAssets();
+    _assetsFuture = ref.read(assetProvider.notifier).loadItems();
   }
 
   void setIsLoading(bool load) {

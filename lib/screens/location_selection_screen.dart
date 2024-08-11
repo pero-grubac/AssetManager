@@ -1,4 +1,5 @@
 import 'package:asset_manager/providers/location_provider.dart';
+import 'package:asset_manager/widgets/location/location_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,8 +21,7 @@ class _LocationSelectionScreenState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Load the locations asynchronously
-    _locationFuture = ref.read(locationProvider.notifier).loadAssetLocations();
+    _locationFuture = ref.read(locationProvider.notifier).loadItems();
   }
 
   void _selectLocation(String locationId) {
@@ -66,17 +66,10 @@ class _LocationSelectionScreenState
                           final location = locations[index];
                           final isSelected = location.id == _selectedLocationId;
 
-                          return Card(
-                            child: ListTile(
-                              leading: isSelected
-                                  ? const Icon(Icons.check_circle,
-                                      color: Colors.green)
-                                  : const Icon(Icons.circle_outlined),
-                              title: Text(location.address),
-                              subtitle: Text(
-                                  '(${location.latitude.toStringAsFixed(6)},  ${location.longitude.toStringAsFixed(6)})'),
-                              onTap: () => _selectLocation(location.id),
-                            ),
+                          return LocationCard(
+                            location: location,
+                            isSelected: isSelected,
+                            onTap: () => _selectLocation(location.id),
                           );
                         },
                       );

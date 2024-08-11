@@ -1,5 +1,5 @@
 import 'package:asset_manager/models/asset_location.dart';
-import 'package:asset_manager/widgets/location/location_overlay.dart';
+import 'package:asset_manager/screens/add_location_screen.dart';
 import 'package:asset_manager/widgets/util/center_row_icon_widget.dart';
 import 'package:asset_manager/widgets/util/row_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +8,13 @@ class LocationCard extends StatelessWidget {
   const LocationCard({
     super.key,
     required this.location,
+    this.onTap,
+    this.isSelected = false,
   });
 
   final AssetLocation location;
+  final VoidCallback? onTap;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,7 @@ class LocationCard extends StatelessWidget {
         useSafeArea: true,
         isScrollControlled: true,
         context: context,
-        builder: (ctx) => LocationOverlay(
+        builder: (ctx) => AddLocationScreen(
           isEditable: false,
           onAddLocation: (AssetLocation location) {},
           location: location,
@@ -29,7 +33,10 @@ class LocationCard extends StatelessWidget {
 
     return Card(
       child: ListTile(
-        onTap: openOverlay,
+        leading: isSelected
+            ? const Icon(Icons.check_circle)
+            : const Icon(Icons.circle_outlined),
+        onTap: onTap ?? openOverlay,
         title: CenterRowIconText(
           icon: Icons.location_city,
           widget: Expanded(child: Text(location.address)),

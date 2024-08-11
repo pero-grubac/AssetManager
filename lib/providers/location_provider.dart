@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart' as sql;
 class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   LocationNotifier() : super(const []);
 
-  Future<void> loadAssetLocations() async {
+  Future<void> loadItems() async {
     final db = await getLocationDatabase();
     final data = await db.query(AssetLocation.dbName);
     final locations = data.map((row) => AssetLocation.fromMap(row)).toList();

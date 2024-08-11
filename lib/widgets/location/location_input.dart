@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:asset_manager/models/asset_location.dart';
+import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/screens/location_selection_screen.dart';
 import 'package:asset_manager/screens/map_screen.dart';
+import 'package:asset_manager/screens/selection_screen.dart';
 import 'package:asset_manager/widgets/util/row_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -10,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../util/error_dialog.dart';
+import 'location_card.dart';
 
 const API_KEY = 'AIzaSyD06o4maRDfYNUvDtzb0xQu9b_Gmo23HCQ';
 
@@ -130,13 +133,36 @@ class _LocationInputState extends State<LocationInput> {
     );
   }
 
-  void _existingLocation() {
-    Navigator.push(
+  void _existingLocation() async {
+    setState(() {
+      _isGettingLocation = true;
+    });
+    final selectedLocation = await Navigator.push<AssetLocation>(
       context,
       MaterialPageRoute(
-        builder: (context) => const LocationSelectionScreen(),
+        builder: (context) => SelectionScreen<AssetLocation>(
+          provider: locationProvider,
+          onConfirmSelection: (AssetLocation selectedItem) {
+            // Only return the selected location, don't pop here
+          },
+          cardBuilder:
+              (AssetLocation item, bool isSelected, void Function() onTap) {
+            return LocationCard(
+              location: item,
+              isSelected: isSelected,
+              onTap: onTap,
+            );
+          },
+          title: 'Select Location',
+        ),
       ),
     );
+    if (selectedLocation != null) {
+      _pickedLocation = selectedLocation;
+    }
+    setState(() {
+      _isGettingLocation = false;
+    });
   }
 
   @override

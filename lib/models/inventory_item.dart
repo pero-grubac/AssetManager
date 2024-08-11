@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
+import 'identifiable.dart';
+
 const uuid = Uuid();
 
-class InventoryItem {
+class InventoryItem implements Identifiable {
+  @override
   final String id;
   final String assetListId;
   final String assetId;
