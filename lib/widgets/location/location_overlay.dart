@@ -7,16 +7,25 @@ class LocationOverlay extends StatefulWidget {
     super.key,
     required this.onAddLocation,
     this.isEditable = true,
+    this.location,
   });
   final void Function(AssetLocation location) onAddLocation;
   final bool isEditable;
-
+  final AssetLocation? location;
   @override
   State<LocationOverlay> createState() => _LocationOverlayState();
 }
 
 class _LocationOverlayState extends State<LocationOverlay> {
   AssetLocation? _selectedLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.location != null) {
+      _selectedLocation = widget.location;
+    }
+  }
 
   void _submitData() {
     if (_selectedLocation != null) {
@@ -30,7 +39,9 @@ class _LocationOverlayState extends State<LocationOverlay> {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Location'),
+        title: widget.isEditable
+            ? const Text('Add Location')
+            : const Text('Your Location'),
         actions: widget.isEditable
             ? [
                 IconButton(
@@ -44,6 +55,8 @@ class _LocationOverlayState extends State<LocationOverlay> {
         padding: const EdgeInsets.all(16),
         child: LocationInput(
           onSelectedLocation: (location) => _selectedLocation = location,
+          isEditable: widget.isEditable,
+          assetLocation: _selectedLocation,
         ),
       ),
     );

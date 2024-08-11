@@ -86,6 +86,8 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
                       ? const Center(child: CircularProgressIndicator())
                       : DismissibleList<AssetLocation>(
                           onRemoveItem: _removeLocation,
+                          // TODO kada se klikne na location da se prebaci na ucita mapa
+                          // poslati onTap funkciju
                           itemBuilder: (context, location) => LocationCard(
                             location: location,
                           ),
