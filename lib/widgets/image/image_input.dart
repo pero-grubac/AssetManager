@@ -111,7 +111,11 @@ class _ImageInputState extends State<ImageInput> {
           ),
           child: content,
         ),
-        if (_selectedImage != null && widget.isEditable) buttonsRow
+        if (_selectedImage != null && widget.isEditable)
+          const SizedBox(
+            height: 10,
+          ),
+        if (_selectedImage != null && widget.isEditable) buttonsRow,
       ],
     );
   }

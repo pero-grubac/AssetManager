@@ -219,6 +219,23 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       image: _selectedImage,
       isEditable: widget.isEditable,
     );
+    final workerWidget = BuildTextField(
+      controller: _nameController,
+      label: 'Worker',
+      isEditable: false,
+    );
+
+    final workerRow = Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Expanded(child: workerWidget),
+        const SizedBox(width: 8),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.supervised_user_circle),
+        ),
+      ],
+    );
     final barcodeRow = widget.isEditable ? barcodeIcon : barcodeTextField;
     final Widget locationWidget;
     if (_isLoading) {
@@ -241,6 +258,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
         priceDateRow,
         descriptionTextField,
         barcodeRow,
+        workerRow,
         const SizedBox(
           height: 10,
         ),

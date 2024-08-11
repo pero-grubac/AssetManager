@@ -99,29 +99,39 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? const CenteredCircularLoading()
-        : Screen(
-            searchController: _searchController,
-            onSearchChanged: _searchAssets,
-            body: FutureBuilder(
-              future: _assetsFuture,
-              builder: (context, snapshot) =>
-                  snapshot.connectionState == ConnectionState.waiting
-                      ? const CenteredCircularLoading()
-                      : DismissibleList(
-                          onRemoveItem: _removeAsset,
-                          onEditItem: _editAsset,
-                          isEditable: true,
-                          itemBuilder: (context, asset) => AssetCard(
-                            asset: asset,
-                          ),
-                          provider: filteredAssetsProvider,
-                          emptyMessage: 'No assets found',
-                        ),
-            ),
-            overlay: AssetDetailsScreen(
-              onSaveAsset: _addAsset,
-            ));
+    return Stack(
+      children: [
+        Screen(
+          searchController: _searchController,
+          onSearchChanged: _searchAssets,
+          body: FutureBuilder(
+            future: _assetsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CenteredCircularLoading();
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                return DismissibleList<Asset>(
+                  onRemoveItem: _removeAsset,
+                  onEditItem: _editAsset,
+                  isEditable: true,
+                  itemBuilder: (context, asset) => AssetCard(
+                    asset: asset,
+                  ),
+                  provider: filteredAssetsProvider,
+                  emptyMessage: 'No assets found',
+                );
+              }
+            },
+          ),
+          overlay: AssetDetailsScreen(
+            onSaveAsset: _addAsset,
+          ),
+        ),
+        if (_isLoading)
+          const CenteredCircularLoading(), // Overlay a loading indicator during operations
+      ],
+    );
   }
 }
