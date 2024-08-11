@@ -96,6 +96,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
             ),
             overlay: LocationOverlay(
               onAddLocation: _addLocation,
+              isExistingLocation: false,
             ),
           );
   }

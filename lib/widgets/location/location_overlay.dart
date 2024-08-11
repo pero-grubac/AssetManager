@@ -7,10 +7,12 @@ class LocationOverlay extends StatefulWidget {
     super.key,
     required this.onAddLocation,
     this.isEditable = true,
+    this.isExistingLocation = true,
     this.location,
   });
   final void Function(AssetLocation location) onAddLocation;
   final bool isEditable;
+  final bool isExistingLocation;
   final AssetLocation? location;
   @override
   State<LocationOverlay> createState() => _LocationOverlayState();
@@ -57,6 +59,7 @@ class _LocationOverlayState extends State<LocationOverlay> {
           onSelectedLocation: (location) => _selectedLocation = location,
           isEditable: widget.isEditable,
           assetLocation: _selectedLocation,
+          isExistingLocation: widget.isExistingLocation,
         ),
       ),
     );

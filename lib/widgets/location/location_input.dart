@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/screens/location_selection_screen.dart';
@@ -19,10 +18,12 @@ class LocationInput extends StatefulWidget {
     super.key,
     required this.onSelectedLocation,
     this.isEditable = true,
+    this.isExistingLocation = true,
     this.assetLocation,
   });
   final void Function(AssetLocation assetLocation) onSelectedLocation;
   final bool isEditable;
+  final bool isExistingLocation;
   final AssetLocation? assetLocation;
   @override
   State<LocationInput> createState() => _LocationInputState();
@@ -181,11 +182,12 @@ class _LocationInputState extends State<LocationInput> {
           icon: const Icon(Icons.map),
           label: const Text('Select on map'),
         ),
-        TextButton.icon(
-          onPressed: _existingLocation,
-          icon: const Icon(Icons.location_city),
-          label: const Text('Existing location'),
-        ),
+        if (widget.isExistingLocation)
+          TextButton.icon(
+            onPressed: _existingLocation,
+            icon: const Icon(Icons.location_city),
+            label: const Text('Existing location'),
+          ),
       ],
     );
     if (!widget.isEditable) {
