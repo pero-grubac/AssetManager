@@ -35,12 +35,6 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
       where: 'id = ?',
       whereArgs: [asset.id],
     );
-    /*  final locationDb = await getLocationDatabase();
-    await locationDb.delete(
-      'locations',
-      where: 'id = ?',
-      whereArgs: [asset.assignedLocationId],
-    );*/
     if (await asset.image.exists()) {
       await asset.image.delete();
     }

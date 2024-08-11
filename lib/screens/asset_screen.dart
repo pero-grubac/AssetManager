@@ -1,6 +1,7 @@
 import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/providers/asset_provider.dart';
 import 'package:asset_manager/providers/location_provider.dart';
+import 'package:asset_manager/providers/worker_provider.dart';
 import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/asset/asset_card.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/asset.dart';
+import '../models/worker.dart';
 import '../providers/search_provider.dart';
 
 class AssetScreen extends ConsumerStatefulWidget {
@@ -40,17 +42,19 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
-  Future<void> _addAsset(Asset asset, AssetLocation location) async {
+  Future<void> _addAsset(
+      Asset asset, AssetLocation location, Worker worker) async {
     setIsLoading(true);
     await ref.read(locationProvider.notifier).addLocation(location);
     await ref.read(assetProvider.notifier).addAsset(asset);
+    await ref.read(workerProvider.notifier).addWorker(worker);
     setIsLoading(false);
   }
 
   Future<void> _removeAsset(Asset asset) async {
     final assetIndex = ref.read(assetProvider.notifier).indexOfAsset(asset);
     setIsLoading(true);
-    ref.read(assetProvider.notifier).removeAsset(asset);
+    await ref.read(assetProvider.notifier).removeAsset(asset);
     setIsLoading(false);
 
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -77,7 +81,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AssetDetailsScreen(
-          onSaveAsset: (updatedAsset, location) async {
+          onSaveAsset: (updatedAsset, location, worker) async {
             setIsLoading(true);
 
             final oldAsset = await ref
@@ -87,7 +91,12 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
             if (location.id != oldAsset?.assignedLocationId) {
               await ref.read(locationProvider.notifier).addLocation(location);
             }
-
+            final oldWorker = await ref
+                .read(workerProvider.notifier)
+                .findWorkerById(updatedAsset.assignedPersonId);
+            if (worker.id != oldWorker?.id) {
+              await ref.read(workerProvider.notifier).addWorker(worker);
+            }
             await ref.read(assetProvider.notifier).updateAsset(updatedAsset);
             setIsLoading(false);
           },
@@ -99,39 +108,29 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Screen(
-          searchController: _searchController,
-          onSearchChanged: _searchAssets,
-          body: FutureBuilder(
-            future: _assetsFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CenteredCircularLoading();
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                return DismissibleList<Asset>(
-                  onRemoveItem: _removeAsset,
-                  onEditItem: _editAsset,
-                  isEditable: true,
-                  itemBuilder: (context, asset) => AssetCard(
-                    asset: asset,
-                  ),
-                  provider: filteredAssetsProvider,
-                  emptyMessage: 'No assets found',
-                );
-              }
-            },
-          ),
-          overlay: AssetDetailsScreen(
-            onSaveAsset: _addAsset,
-          ),
-        ),
-        if (_isLoading)
-          const CenteredCircularLoading(), // Overlay a loading indicator during operations
-      ],
-    );
+    return _isLoading
+        ? const CenteredCircularLoading()
+        : Screen(
+            searchController: _searchController,
+            onSearchChanged: _searchAssets,
+            body: FutureBuilder(
+              future: _assetsFuture,
+              builder: (context, snapshot) =>
+                  snapshot.connectionState == ConnectionState.waiting
+                      ? const CenteredCircularLoading()
+                      : DismissibleList(
+                          onRemoveItem: _removeAsset,
+                          onEditItem: _editAsset,
+                          isEditable: true,
+                          itemBuilder: (context, asset) => AssetCard(
+                            asset: asset,
+                          ),
+                          provider: filteredAssetsProvider,
+                          emptyMessage: 'No assets found',
+                        ),
+            ),
+            overlay: AssetDetailsScreen(
+              onSaveAsset: _addAsset,
+            ));
   }
 }

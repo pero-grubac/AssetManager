@@ -43,9 +43,9 @@ class DismissibleList<T> extends ConsumerWidget {
               }
               return false;
             },
-            onDismissed: (direction) {
+            onDismissed: (direction) async {
               if (direction == DismissDirection.startToEnd) {
-                onRemoveItem(item);
+                await onRemoveItem(item);
               }
             },
             direction: isEditable

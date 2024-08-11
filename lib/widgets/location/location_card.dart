@@ -10,12 +10,13 @@ class LocationCard extends StatelessWidget {
     required this.location,
     this.onTap,
     this.isSelected = false,
+    this.isSelectable = true,
   });
 
   final AssetLocation location;
   final VoidCallback? onTap;
   final bool isSelected;
-
+  final bool isSelectable;
   @override
   Widget build(BuildContext context) {
     void openOverlay() {
@@ -33,9 +34,11 @@ class LocationCard extends StatelessWidget {
 
     return Card(
       child: ListTile(
-        leading: isSelected
-            ? const Icon(Icons.check_circle)
-            : const Icon(Icons.circle_outlined),
+        leading: isSelectable
+            ? isSelected
+                ? const Icon(Icons.check_circle)
+                : const Icon(Icons.circle_outlined)
+            : null,
         onTap: onTap ?? openOverlay,
         title: CenterRowIconText(
           icon: Icons.location_city,

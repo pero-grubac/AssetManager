@@ -64,6 +64,20 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
     temp[index] = updatedWorker;
     state = [...temp];
   }
+
+  Future<Worker?> findWorkerById(String id) async {
+    final db = await getWorkerDatabase();
+    final data = await db.query(
+      Worker.dbName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (data.isNotEmpty) {
+      return Worker.fromMap(data.first);
+    } else {
+      return null;
+    }
+  }
 }
 
 final workerProvider = StateNotifierProvider<WorkerNotifier, List<Worker>>(

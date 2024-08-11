@@ -10,12 +10,13 @@ class WorkerCard extends StatelessWidget {
     required this.worker,
     this.onTap,
     this.isSelected = false,
+    this.isSelectable = true,
   });
 
   final Worker worker;
   final VoidCallback? onTap;
   final bool isSelected;
-
+  final bool isSelectable;
   @override
   Widget build(BuildContext context) {
     void openOverlay() {
@@ -33,9 +34,11 @@ class WorkerCard extends StatelessWidget {
     return Card(
       child: ListTile(
         onTap: onTap ?? openOverlay,
-        leading: isSelected
-            ? const Icon(Icons.check_circle)
-            : const Icon(Icons.circle_outlined),
+        leading: isSelectable
+            ? isSelected
+                ? const Icon(Icons.check_circle)
+                : const Icon(Icons.circle_outlined)
+            : null,
         title: CenterRowIconText(
           icon: Icons.person_2,
           widget: Text(worker.fullName),

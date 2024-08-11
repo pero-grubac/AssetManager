@@ -96,6 +96,7 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
             onRemoveItem: _removeWorker,
             onEditItem: _editWorker,
             itemBuilder: (context, worker) => WorkerCard(
+              isSelectable: false,
               worker: worker,
             ),
             isEditable: true,

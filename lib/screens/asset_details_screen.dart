@@ -25,7 +25,8 @@ class AssetDetailsScreen extends ConsumerStatefulWidget {
     this.isEditable = true,
   });
   final Asset? asset;
-  final Future<void> Function(Asset asset, AssetLocation location)? onSaveAsset;
+  final Future<void> Function(
+      Asset asset, AssetLocation location, Worker worker)? onSaveAsset;
   final bool isEditable;
 
   @override
@@ -66,6 +67,9 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
           .read(locationProvider.notifier)
           .findLocationById(widget.asset!.assignedLocationId);
       // wind worker by id and assign  it to _workerController
+      _selectedWorker = await ref
+          .read(workerProvider.notifier)
+          .findWorkerById(widget.asset!.assignedPersonId);
     }
     setState(() {
       _isLoading = false;
@@ -107,6 +111,11 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       ErrorDialog.show(context, 'Date  can not be empty');
       return;
     }
+    if (_selectedWorker == null) {
+      ErrorDialog.show(context, 'Worker  can not be empty');
+      return;
+    }
+
     try {
       Asset asset;
       if (widget.asset == null) {
@@ -115,7 +124,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
           description: enteredDescription,
           barcode: enteredBarcode,
           price: enteredPrice,
-          assignedPersonId: 'assignedPersonId',
+          assignedPersonId: _selectedWorker!.id,
           assignedLocationId: _selectedAssetLocation!.id,
           creationDate: _selectedDate!,
           image: _selectedImage!,
@@ -128,12 +137,12 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
           barcode: enteredBarcode,
           price: enteredPrice,
           creationDate: _selectedDate!,
-          assignedPersonId: 'assignedPersonId',
+          assignedPersonId: _selectedWorker!.id,
           assignedLocationId: _selectedAssetLocation!.id,
           image: _selectedImage!,
         );
       }
-      widget.onSaveAsset!(asset, _selectedAssetLocation!);
+      widget.onSaveAsset!(asset, _selectedAssetLocation!, _selectedWorker!);
       Navigator.pop(context);
     } catch (e) {
       if (e is ArgumentError) {
@@ -267,6 +276,13 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(child: workerWidget),
+        const SizedBox(width: 8),
+        IconButton(
+          onPressed: () {
+            // TODO add new
+          },
+          icon: const Icon(Icons.add),
+        ),
         const SizedBox(width: 8),
         IconButton(
           onPressed: _existingWorkers,
