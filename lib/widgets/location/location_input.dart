@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/providers/location_provider.dart';
-import 'package:asset_manager/screens/location_selection_screen.dart';
 import 'package:asset_manager/screens/map_screen.dart';
 import 'package:asset_manager/screens/selection_screen.dart';
 import 'package:asset_manager/widgets/util/row_icon_widget.dart';
@@ -157,12 +156,15 @@ class _LocationInputState extends State<LocationInput> {
         ),
       ),
     );
-    if (selectedLocation != null) {
-      _pickedLocation = selectedLocation;
-    }
     setState(() {
       _isGettingLocation = false;
     });
+    if (selectedLocation != null) {
+      _pickedLocation = selectedLocation;
+    } else {
+      return;
+    }
+    widget.onSelectedLocation(_pickedLocation!);
   }
 
   @override
