@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:asset_manager/models/asset_location.dart';
+import 'package:asset_manager/screens/location_selection_screen.dart';
 import 'package:asset_manager/screens/map_screen.dart';
 import 'package:asset_manager/widgets/util/row_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +129,15 @@ class _LocationInputState extends State<LocationInput> {
     );
   }
 
+  void _existingLocation() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LocationSelectionScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget previewContent = const Text(
@@ -172,7 +182,7 @@ class _LocationInputState extends State<LocationInput> {
           label: const Text('Select on map'),
         ),
         TextButton.icon(
-          onPressed: () {},
+          onPressed: _existingLocation,
           icon: const Icon(Icons.location_city),
           label: const Text('Existing location'),
         ),

@@ -40,12 +40,12 @@ class LocationCard extends StatelessWidget {
             children: [
               RowIconWidget(
                 icon: Icons.navigation,
-                widget: Text(location.longitude.toStringAsFixed(6)),
+                widget: Text(location.latitude.toStringAsFixed(6)),
               ),
               const Spacer(),
               RowIconWidget(
                 icon: Icons.navigation,
-                widget: Text(location.latitude.toStringAsFixed(6)),
+                widget: Text(location.longitude.toStringAsFixed(6)),
               ),
             ],
           ),
