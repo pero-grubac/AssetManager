@@ -192,6 +192,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
                   );
                 },
                 title: 'Select worker',
+                emptyMessage: 'No workers found',
               )),
     );
     if (selectedWorker != null) {

@@ -153,6 +153,7 @@ class _LocationInputState extends State<LocationInput> {
             );
           },
           title: 'Select Location',
+          emptyMessage: 'No locations found',
         ),
       ),
     );

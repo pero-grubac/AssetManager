@@ -10,6 +10,7 @@ class SelectionScreen<T extends Identifiable> extends ConsumerStatefulWidget {
     required this.onConfirmSelection,
     required this.cardBuilder,
     required this.title,
+    required this.emptyMessage,
   });
 
   final StateNotifierProvider<dynamic, List<T>> provider;
@@ -17,6 +18,7 @@ class SelectionScreen<T extends Identifiable> extends ConsumerStatefulWidget {
   final Widget Function(T item, bool isSelected, VoidCallback onTap)
       cardBuilder;
   final String title;
+  final String emptyMessage;
 
   @override
   ConsumerState<SelectionScreen<T>> createState() => _SelectionScreenState<T>();
@@ -69,6 +71,11 @@ class _SelectionScreenState<T extends Identifiable>
                   body: Consumer(
                     builder: (context, ref, child) {
                       final items = ref.watch(widget.provider);
+                      if (items == null || items.isEmpty) {
+                        return Center(
+                          child: Text(widget.emptyMessage),
+                        );
+                      }
                       return ListView.builder(
                         itemCount: items.length,
                         itemBuilder: (ctx, index) {
