@@ -50,6 +50,7 @@ class _SelectionScreenState<T extends Identifiable>
     Navigator.pop(context, selectedItem);
   }
 
+// TODO future builder replace with Stack and isLoading
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
