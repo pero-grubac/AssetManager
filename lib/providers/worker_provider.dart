@@ -2,6 +2,7 @@ import 'package:asset_manager/models/worker.dart';
 import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/asset.dart';
 import 'database.dart';
 
 class WorkerNotifier extends StateNotifier<List<Worker>> {
@@ -29,14 +30,25 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
     }
   }
 
-  Future<void> removeWorker(Worker worker) async {
+  Future<bool> removeWorker(Worker worker) async {
     final db = await DatabaseHelper().getWorkerDatabase();
+    final assetDb = await DatabaseHelper().getAssetDatabase();
+
+    final result = await assetDb.query(
+      Asset.dbName,
+      where: 'assignedPersonId = ?',
+      whereArgs: [worker.id],
+    );
+    if (result.isNotEmpty) {
+      return false;
+    }
     await db.delete(
       Worker.dbName,
       where: 'id = ?',
       whereArgs: [worker.id],
     );
     state = state.where((w) => w.id != worker.id).toList();
+    return true;
   }
 
   int indexOfWorker(Worker worker) {

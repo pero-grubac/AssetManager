@@ -48,14 +48,12 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   Future<void> _removeLocation(AssetLocation location) async {
     final locationNotifier = ref.read(locationProvider.notifier);
 
-    final locationIndex =
-        ref.read(locationProvider.notifier).indexOfLocation(location);
+    final locationIndex = locationNotifier.indexOfLocation(location);
     final updatedState =
         locationNotifier.state.where((l) => l.id != location.id).toList();
     locationNotifier.state = updatedState;
 
-    final shouldDelete =
-        await ref.read(locationProvider.notifier).removeLocation(location);
+    final shouldDelete = await locationNotifier.removeLocation(location);
     if (!shouldDelete) {
       // Reinstate the location back to the list if deletion is not allowed
       locationNotifier.state = [
