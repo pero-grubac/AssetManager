@@ -46,9 +46,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
       whereArgs: [location.id],
     );
 
-    final newList = [...state];
-    newList[index] = location;
-    state = newList;
+    state = [location, ...state];
   }
 
   Future<AssetLocation?> findLocationById(String id) async {

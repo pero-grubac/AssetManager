@@ -46,24 +46,25 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   }
 
   Future<void> _removeLocation(AssetLocation location) async {
-    final workerIndex =
+    final locationIndex =
         ref.read(locationProvider.notifier).indexOfLocation(location);
-    setIsLoading(true);
-    ref.read(locationProvider.notifier).removeLocation(location);
-    setIsLoading(false);
+    await ref.read(locationProvider.notifier).removeLocation(location);
+    _showUndoSnackBar(location, locationIndex);
+  }
 
+  void _showUndoSnackBar(AssetLocation location, int locationIndex) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 3),
-        content: const Text('Worker deleted.'),
+        content: const Text('Location deleted.'),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () async {
             setIsLoading(true);
             await ref
                 .read(locationProvider.notifier)
-                .insetLocation(location, workerIndex);
+                .insetLocation(location, locationIndex);
             setIsLoading(false);
           },
         ),
@@ -88,6 +89,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
                 onRemoveItem: _removeLocation,
                 itemBuilder: (context, location) => LocationCard(
                   location: location,
+                  isSelectable: false,
                 ),
                 isEditable: false,
                 provider: filteredLocationsProvider,

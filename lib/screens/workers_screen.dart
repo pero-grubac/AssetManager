@@ -47,21 +47,25 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
   }
 
   Future<void> _removeWorker(Worker worker) async {
-    setIsLoading(true);
     final workerIndex = ref.read(workerProvider.notifier).indexOfWorker(worker);
-    ref.read(workerProvider.notifier).removeWorker(worker);
-    setIsLoading(false);
+    await ref.read(workerProvider.notifier).removeWorker(worker);
 
+    _showUndoSnackBar(worker, workerIndex);
+  }
+
+  void _showUndoSnackBar(Worker worker, int workerIndex) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 3),
-        content: const Text('Worker deleted.'),
+        content: const Text('Location deleted.'),
         action: SnackBarAction(
           label: 'Undo',
-          onPressed: () {
+          onPressed: () async {
             setIsLoading(true);
-            ref.read(workerProvider.notifier).insertWorker(worker, workerIndex);
+            await ref
+                .read(workerProvider.notifier)
+                .insertWorker(worker, workerIndex);
             setIsLoading(false);
           },
         ),

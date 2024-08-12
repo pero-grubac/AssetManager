@@ -53,15 +53,17 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
   Future<void> _removeAsset(Asset asset) async {
     final assetIndex = ref.read(assetProvider.notifier).indexOfAsset(asset);
-    setIsLoading(true);
     await ref.read(assetProvider.notifier).removeAsset(asset);
-    setIsLoading(false);
 
+    _showUndoSnackBar(asset, assetIndex);
+  }
+
+  void _showUndoSnackBar(Asset asset, int assetIndex) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 3),
-        content: const Text('Worker deleted.'),
+        content: const Text('Location deleted.'),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () async {
