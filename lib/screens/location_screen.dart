@@ -46,30 +46,53 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   }
 
   Future<void> _removeLocation(AssetLocation location) async {
+    final locationNotifier = ref.read(locationProvider.notifier);
+
     final locationIndex =
         ref.read(locationProvider.notifier).indexOfLocation(location);
-    await ref.read(locationProvider.notifier).removeLocation(location);
-    _showUndoSnackBar(location, locationIndex);
+    final updatedState =
+        locationNotifier.state.where((l) => l.id != location.id).toList();
+    locationNotifier.state = updatedState;
+
+    final shouldDelete =
+        await ref.read(locationProvider.notifier).removeLocation(location);
+    if (!shouldDelete) {
+      // Reinstate the location back to the list if deletion is not allowed
+      locationNotifier.state = [
+        ...updatedState.sublist(0, locationIndex),
+        location,
+        ...updatedState.sublist(locationIndex)
+      ];
+    }
+    _showUndoSnackBar(location, locationIndex, shouldDelete);
   }
 
-  void _showUndoSnackBar(AssetLocation location, int locationIndex) {
+  void _showUndoSnackBar(
+      AssetLocation location, int locationIndex, bool shouldDelete) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 3),
-        content: const Text('Location deleted.'),
-        action: SnackBarAction(
-          label: 'Undo',
-          onPressed: () async {
-            setIsLoading(true);
-            await ref
-                .read(locationProvider.notifier)
-                .insetLocation(location, locationIndex);
-            setIsLoading(false);
-          },
+    if (shouldDelete) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 3),
+          content: const Text('Location deleted.'),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () async {
+              setIsLoading(true);
+              await ref
+                  .read(locationProvider.notifier)
+                  .insetLocation(location, locationIndex);
+              setIsLoading(false);
+            },
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        duration: Duration(seconds: 3),
+        content: Text('Location can not be deleted.'),
+      ));
+    }
   }
 
   @override

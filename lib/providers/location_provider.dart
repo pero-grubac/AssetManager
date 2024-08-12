@@ -4,6 +4,8 @@ import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
+import '../models/asset.dart';
+
 class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   LocationNotifier() : super(const []);
 
@@ -22,8 +24,19 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     state = [location, ...state];
   }
 
-  Future<void> removeLocation(AssetLocation location) async {
+  Future<bool> removeLocation(AssetLocation location) async {
     final db = await getLocationDatabase();
+    final assetDb = await getAssetDatabase();
+
+    final result = await assetDb.query(
+      Asset.dbName,
+      where: 'assignedLocationId = ?',
+      whereArgs: [location.id],
+    );
+
+    if (result.isNotEmpty) {
+      return false;
+    }
     await db.delete(
       AssetLocation.dbName,
       where: 'id = ?',
@@ -31,6 +44,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     );
 
     state = state.where((l) => l.id != location.id).toList();
+    return true;
   }
 
   int indexOfLocation(AssetLocation location) {

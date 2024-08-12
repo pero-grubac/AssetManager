@@ -28,7 +28,7 @@ Future<sql_api.Database> getAssetDatabase() async {
   final dbPath = await sql.getDatabasesPath();
   final db = await sql.openDatabase(
     path.join(dbPath, Asset.dbFullName),
-    onCreate: (db, version) {
+    onCreate: (db, version) async {
       return db.execute('''
         CREATE TABLE assets(
            id TEXT PRIMARY KEY, 
