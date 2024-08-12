@@ -94,14 +94,10 @@ class _LocationInputState extends State<LocationInput> {
       if (resultData['results'].isEmpty) {
         throw Exception('No address found');
       }
+
       final addressComponents = resultData['results'][0]['address_components'];
       String cityName = 'Unknown City';
-      for (var component in addressComponents) {
-        if (component['types'].contains('administrative_area_level_2')) {
-          cityName = component['long_name'];
-          break;
-        }
-      }
+
       if (cityName == 'Unknown City') {
         for (var component in addressComponents) {
           if (component['types'].contains('administrative_area_level_1')) {
@@ -110,9 +106,16 @@ class _LocationInputState extends State<LocationInput> {
           }
         }
       }
+      for (var component in addressComponents) {
+        if (component['types'].contains('administrative_area_level_2')) {
+          cityName = component['long_name'];
+          break;
+        }
+      }
       if (cityName == 'Unknown City') {
         cityName = resultData['results'][0]['formatted_address'];
       }
+
       setState(() {
         _pickedLocation = AssetLocation(
           latitude: latitude,
