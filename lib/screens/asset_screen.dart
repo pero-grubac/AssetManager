@@ -110,29 +110,33 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? const CenteredCircularLoading()
-        : Screen(
-            searchController: _searchController,
-            onSearchChanged: _searchAssets,
-            body: FutureBuilder(
-              future: _assetsFuture,
-              builder: (context, snapshot) =>
-                  snapshot.connectionState == ConnectionState.waiting
-                      ? const CenteredCircularLoading()
-                      : DismissibleList(
-                          onRemoveItem: _removeAsset,
-                          onEditItem: _editAsset,
-                          isEditable: true,
-                          itemBuilder: (context, asset) => AssetCard(
-                            asset: asset,
-                          ),
-                          provider: filteredAssetsProvider,
-                          emptyMessage: 'No assets found',
+    return Stack(
+      children: [
+        Screen(
+          searchController: _searchController,
+          onSearchChanged: _searchAssets,
+          body: FutureBuilder(
+            future: _assetsFuture,
+            builder: (context, snapshot) =>
+                snapshot.connectionState == ConnectionState.waiting
+                    ? const CenteredCircularLoading()
+                    : DismissibleList(
+                        onRemoveItem: _removeAsset,
+                        onEditItem: _editAsset,
+                        isEditable: true,
+                        itemBuilder: (context, asset) => AssetCard(
+                          asset: asset,
                         ),
-            ),
-            overlay: AssetDetailsScreen(
-              onSaveAsset: _addAsset,
-            ));
+                        provider: filteredAssetsProvider,
+                        emptyMessage: 'No assets found',
+                      ),
+          ),
+          overlay: AssetDetailsScreen(
+            onSaveAsset: _addAsset,
+          ),
+        ),
+        if (_isLoading) const CenteredCircularLoading(),
+      ],
+    );
   }
 }

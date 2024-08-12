@@ -24,8 +24,8 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   bool _isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _locationFuture = ref.read(locationProvider.notifier).loadItems();
   }
 
@@ -97,32 +97,25 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        FutureBuilder(
-          future: _locationFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return Screen(
-              searchController: _searchController,
-              onSearchChanged: _searchLocation,
-              body: DismissibleList<AssetLocation>(
-                onRemoveItem: _removeLocation,
-                itemBuilder: (context, location) => LocationCard(
-                  location: location,
-                  isSelectable: false,
-                ),
-                isEditable: false,
-                provider: filteredLocationsProvider,
-                emptyMessage: 'No locations found.',
-              ),
-              overlay: AddLocationScreen(
-                onAddLocation: _addLocation,
-                isExistingLocation: false,
-              ),
-            );
-          },
+        Screen(
+          searchController: _searchController,
+          onSearchChanged: _searchLocation,
+          body: DismissibleList<AssetLocation>(
+            onRemoveItem: _removeLocation,
+            itemBuilder: (context, location) => LocationCard(
+              location: location,
+              isSelectable: false,
+            ),
+            isEditable: false,
+            provider: filteredLocationsProvider,
+            emptyMessage: 'No locations found.',
+          ),
+          overlay: AddLocationScreen(
+            onAddLocation: _addLocation,
+            isExistingLocation: false,
+          ),
         ),
+
         if (_isLoading)
           const CenteredCircularLoading(), // Overlay a loading indicator while adding/removing items
       ],

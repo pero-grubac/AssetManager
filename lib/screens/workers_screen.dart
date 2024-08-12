@@ -25,8 +25,8 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
   bool _isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _workersFuture = ref.read(workerProvider.notifier).loadItems();
   }
 
