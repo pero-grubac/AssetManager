@@ -8,7 +8,8 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   WorkerNotifier() : super(const []);
 
   Future<void> loadItems() async {
-    final db = await getWorkerDatabase();
+    final db = await DatabaseHelper().getWorkerDatabase();
+
     final data = await db.query(Worker.dbName);
     final workers = data.map((row) => Worker.fromMap(row)).toList();
     state = workers;
@@ -17,14 +18,19 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   List<Worker> get allWorkers => state;
 
   Future<void> addWorker(Worker worker) async {
-    final db = await getWorkerDatabase();
-    db.insert(Worker.dbName, worker.toMap());
-
-    state = [worker, ...state];
+    final db = await DatabaseHelper().getWorkerDatabase();
+    final w = await findWorkerById(worker.id);
+    if (w == null) {
+      db.insert(
+        Worker.dbName,
+        worker.toMap(),
+      );
+      state = [worker, ...state];
+    }
   }
 
   Future<void> removeWorker(Worker worker) async {
-    final db = await getWorkerDatabase();
+    final db = await DatabaseHelper().getWorkerDatabase();
     await db.delete(
       Worker.dbName,
       where: 'id = ?',
@@ -38,7 +44,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   }
 
   Future<void> insertWorker(Worker worker, int index) async {
-    final db = await getWorkerDatabase();
+    final db = await DatabaseHelper().getWorkerDatabase();
     await db.update(
       Worker.dbName,
       worker.toMap(),
@@ -51,7 +57,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   }
 
   Future<void> updateWorker(Worker updatedWorker) async {
-    final db = await getWorkerDatabase();
+    final db = await DatabaseHelper().getWorkerDatabase();
     await db.update(
       Worker.dbName,
       updatedWorker.toMap(),
@@ -66,7 +72,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   }
 
   Future<Worker?> findWorkerById(String id) async {
-    final db = await getWorkerDatabase();
+    final db = await DatabaseHelper().getWorkerDatabase();
     final data = await db.query(
       Worker.dbName,
       where: 'id = ?',
@@ -77,6 +83,12 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
     } else {
       return null;
     }
+  }
+
+  @override
+  void dispose() async {
+    await DatabaseHelper().closeDatabases();
+    super.dispose();
   }
 }
 

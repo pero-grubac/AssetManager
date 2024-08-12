@@ -10,23 +10,27 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   LocationNotifier() : super(const []);
 
   Future<void> loadItems() async {
-    final db = await getLocationDatabase();
+    final db = await DatabaseHelper().getLocationDatabase();
     final data = await db.query(AssetLocation.dbName);
     final locations = data.map((row) => AssetLocation.fromMap(row)).toList();
     state = locations;
   }
 
   Future<void> addLocation(AssetLocation location) async {
-    final db = await getLocationDatabase();
-    await db.insert(AssetLocation.dbName, location.toMap(),
-        conflictAlgorithm: sql.ConflictAlgorithm.replace);
-
-    state = [location, ...state];
+    final db = await DatabaseHelper().getLocationDatabase();
+    final l = await findLocationById(location.id);
+    if (l == null) {
+      await db.insert(
+        AssetLocation.dbName,
+        location.toMap(),
+      );
+      state = [location, ...state];
+    }
   }
 
   Future<bool> removeLocation(AssetLocation location) async {
-    final db = await getLocationDatabase();
-    final assetDb = await getAssetDatabase();
+    final db = await DatabaseHelper().getLocationDatabase();
+    final assetDb = await DatabaseHelper().getAssetDatabase();
 
     final result = await assetDb.query(
       Asset.dbName,
@@ -52,7 +56,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   }
 
   Future<void> insetLocation(AssetLocation location, int index) async {
-    final db = await getLocationDatabase();
+    final db = await DatabaseHelper().getLocationDatabase();
     await db.update(
       AssetLocation.dbName,
       location.toMap(),
@@ -64,7 +68,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   }
 
   Future<AssetLocation?> findLocationById(String id) async {
-    final db = await getLocationDatabase();
+    final db = await DatabaseHelper().getLocationDatabase();
     final data = await db.query(
       AssetLocation.dbName,
       where: 'id = ?',
@@ -76,6 +80,12 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     } else {
       return null;
     }
+  }
+
+  @override
+  void dispose() async {
+    await DatabaseHelper().closeDatabases();
+    super.dispose();
   }
 }
 
