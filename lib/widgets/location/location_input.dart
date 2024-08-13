@@ -198,15 +198,11 @@ class _LocationInputState extends State<LocationInput> {
       'No location chosen',
       textAlign: TextAlign.center,
     );
-    Widget addressName = RowIconWidget(
-        icon: Icons.location_on,
-        widget: Expanded(
-          child: Text(
-              _pickedLocation?.address ?? widget.assetLocation?.address ?? ''),
-        ));
+
     if (_pickedLocation != null) {
       previewContent = _locationImage(_pickedLocation!);
     }
+
     if (widget.assetLocation != null) {
       previewContent = GestureDetector(
         onTap: () {
@@ -222,9 +218,11 @@ class _LocationInputState extends State<LocationInput> {
         child: _locationImage(widget.assetLocation!),
       );
     }
+
     if (_isGettingLocation) {
       previewContent = const CircularProgressIndicator();
     }
+
     Widget buttons = Wrap(
       spacing: 8.0, // Space between buttons horizontally
       runSpacing: 4.0, // Space between buttons vertically if they wrap
@@ -248,6 +246,16 @@ class _LocationInputState extends State<LocationInput> {
           ),
       ],
     );
+
+    // Adjusting when to display the address name
+    Widget addressName = RowIconWidget(
+      icon: Icons.location_on,
+      widget: Expanded(
+        child: Text(
+            _pickedLocation?.address ?? widget.assetLocation?.address ?? ''),
+      ),
+    );
+
     if (!widget.isEditable) {
       buttons = addressName;
       previewContent = GestureDetector(
@@ -264,6 +272,7 @@ class _LocationInputState extends State<LocationInput> {
         child: _locationImage(widget.assetLocation!),
       );
     }
+
     return Column(
       children: [
         Container(
@@ -286,7 +295,7 @@ class _LocationInputState extends State<LocationInput> {
         const SizedBox(
           height: 10,
         ),
-        buttons
+        if (widget.isEditable) buttons,
       ],
     );
   }
