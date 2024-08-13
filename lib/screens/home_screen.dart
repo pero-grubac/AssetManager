@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   static const id = 'home_screen';
   const HomeScreen({super.key});
   void _selectCategory(BuildContext context, Category category) {
-    Navigator.pushNamed(context, category.id);
+    Navigator.of(context).pushNamed(category.id);
   }
 
   @override

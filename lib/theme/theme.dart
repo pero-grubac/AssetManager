@@ -12,7 +12,7 @@ class AppTheme {
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
         iconTheme: IconThemeData(
-          color: colorScheme.onSurface, // Icon color for AppBar
+          color: colorScheme.onPrimary, // Icon color for AppBar
         ),
         titleTextStyle: GoogleFonts.lato(
           fontSize: 20,
@@ -22,7 +22,7 @@ class AppTheme {
       ),
       cardTheme: CardTheme(
         color: colorScheme.secondaryContainer,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -42,7 +42,7 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: TextStyle(
-          color: colorScheme.onSurface.withOpacity(0.6), // Hint text color
+          color: colorScheme.onPrimary.withOpacity(0.6), // Hint text color
         ),
       ),
       dialogTheme: DialogTheme(

@@ -268,6 +268,7 @@ class _LocationInputState extends State<LocationInput> {
           decoration: BoxDecoration(
             border: Border.all(
               width: 1,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           child: previewContent,

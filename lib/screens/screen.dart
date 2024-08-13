@@ -34,6 +34,7 @@ class Screen extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hintText,
             border: InputBorder.none,
+            hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
           ),
           onChanged: onSearchChanged,
         ),
