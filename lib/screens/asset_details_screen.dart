@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import '../models/worker.dart';
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
+import '../widgets/worker/worker_overlay.dart';
 
 class AssetDetailsScreen extends ConsumerStatefulWidget {
   const AssetDetailsScreen({
@@ -205,6 +206,18 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
     }
   }
 
+  void setIsLoading(bool load) {
+    setState(() {
+      _isLoading = load;
+    });
+  }
+
+  Future<void> _addWorker(Worker worker) async {
+    setIsLoading(true);
+    await ref.read(workerProvider.notifier).addWorker(worker);
+    setIsLoading(false);
+  }
+
   List<Widget> _buildTextFields({required bool isWideScreen}) {
     final nameTextField = BuildTextField(
       controller: _nameController,
@@ -280,7 +293,14 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
         const SizedBox(width: 8),
         IconButton(
           onPressed: () {
-            // TODO add new
+            showModalBottomSheet(
+              useSafeArea: true,
+              isScrollControlled: true,
+              context: context,
+              builder: (ctx) => WorkerOverlay(
+                onSaveWorker: _addWorker,
+              ),
+            );
           },
           icon: const Icon(Icons.add),
         ),

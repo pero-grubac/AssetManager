@@ -63,7 +63,10 @@ class _SelectionScreenState<T extends Identifiable>
                     title: Text(widget.title),
                     actions: [
                       IconButton(
-                        icon: const Icon(Icons.check),
+                        icon: Icon(
+                          Icons.check,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                         onPressed:
                             _selectedItemId == null ? null : _confirmSelection,
                       ),
