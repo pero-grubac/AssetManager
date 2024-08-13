@@ -34,7 +34,7 @@ class AppTheme {
         titleLarge: TextStyle(
           fontWeight: FontWeight.normal,
           color: colorScheme.onSurface,
-          fontSize: 16,
+          fontSize: 18,
         ),
         bodyLarge: TextStyle(color: colorScheme.onSurface),
         bodyMedium: TextStyle(color: colorScheme.onSurface),
@@ -74,7 +74,7 @@ class AppTheme {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
             boxShadow: const [
               BoxShadow(
                 color: Colors.black26,

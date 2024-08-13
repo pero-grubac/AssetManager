@@ -1,18 +1,17 @@
-import 'package:asset_manager/localization/locals.dart';
+import 'package:asset_manager/models/category/category.dart';
 import 'package:asset_manager/models/category/category_data.dart';
 import 'package:asset_manager/widgets/category/category_grid_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localization/flutter_localization.dart';
 
-class HomeScreen extends StatefulWidget {
+import 'location_screen.dart';
+
+class HomeScreen extends StatelessWidget {
   static const id = 'home_screen';
   const HomeScreen({super.key});
+  void _selectCategory(BuildContext context, Category category) {
+    Navigator.pushNamed(context, category.id);
+  }
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,11 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 3 / 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
           ),
-          children:
-              categories.map((cat) => CategoryGridItem(category: cat)).toList(),
+          children: categories
+              .map(
+                (cat) => CategoryGridItem(
+                  category: cat,
+                  onTap: () {
+                    _selectCategory(context, cat);
+                  },
+                ),
+              )
+              .toList(),
         ),
       ),
     );
