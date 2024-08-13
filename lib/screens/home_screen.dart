@@ -1,4 +1,6 @@
 import 'package:asset_manager/localization/locals.dart';
+import 'package:asset_manager/models/category/category_data.dart';
+import 'package:asset_manager/widgets/category/category_grid_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 
@@ -17,23 +19,18 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Center(child: Text('Asset manger')),
       ),
-      body: GridView(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+          ),
+          children:
+              categories.map((cat) => CategoryGridItem(category: cat)).toList(),
         ),
-        children: const [
-          Text('data'),
-          Text('data'),
-          Text('data'),
-          Text('data'),
-          Text('data'),
-          Text('data'),
-          Text('data'),
-          Text('data'),
-        ],
       ),
     );
   }

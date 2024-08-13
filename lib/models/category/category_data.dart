@@ -14,7 +14,7 @@ const categories = [
   ),
   Category(
     id: AssetScreen.id,
-    title: 'Locations',
+    title: 'Assets',
   ),
   Category(
     id: 'Asset list',
