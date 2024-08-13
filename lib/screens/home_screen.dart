@@ -15,16 +15,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          LocalData.title.getString(context),
-        ),
+        title: const Center(child: Text('Asset manger')),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 30,
-          vertical: 20,
+      body: GridView(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 3 / 2,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
         ),
-        child: Text(context.formatString(LocalData.body, ["user"])),
+        children: const [
+          Text('data'),
+          Text('data'),
+          Text('data'),
+          Text('data'),
+          Text('data'),
+          Text('data'),
+          Text('data'),
+          Text('data'),
+        ],
       ),
     );
   }
