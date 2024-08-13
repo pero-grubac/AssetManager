@@ -80,7 +80,7 @@ class _LocationInputState extends State<LocationInput> {
     _savePlace(lat, lng);
   }
 
-  Future<void> _savePlace(double latitude, double longitude) async {
+  Future<void> _setLocation(double latitude, double longitude) async {
     final url = Uri.parse(
         'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$API_KEY');
 
@@ -130,6 +130,10 @@ class _LocationInputState extends State<LocationInput> {
       });
       ErrorDialog.show(context, error.toString());
     }
+  }
+
+  Future<void> _savePlace(double latitude, double longitude) async {
+    await _setLocation(latitude, longitude);
     widget.onSelectedLocation(_pickedLocation!);
   }
 
@@ -194,7 +198,12 @@ class _LocationInputState extends State<LocationInput> {
       'No location chosen',
       textAlign: TextAlign.center,
     );
-
+    Widget addressName = RowIconWidget(
+        icon: Icons.location_on,
+        widget: Expanded(
+          child: Text(
+              _pickedLocation?.address ?? widget.assetLocation?.address ?? ''),
+        ));
     if (_pickedLocation != null) {
       previewContent = _locationImage(_pickedLocation!);
     }
@@ -240,11 +249,7 @@ class _LocationInputState extends State<LocationInput> {
       ],
     );
     if (!widget.isEditable) {
-      buttons = RowIconWidget(
-          icon: Icons.location_on,
-          widget: Expanded(
-            child: Text(widget.assetLocation!.address),
-          ));
+      buttons = addressName;
       previewContent = GestureDetector(
         onTap: () {
           Navigator.of(context).push(
@@ -273,6 +278,11 @@ class _LocationInputState extends State<LocationInput> {
           ),
           child: previewContent,
         ),
+        const SizedBox(
+          height: 10,
+        ),
+        if (_pickedLocation != null || widget.assetLocation != null)
+          addressName,
         const SizedBox(
           height: 10,
         ),

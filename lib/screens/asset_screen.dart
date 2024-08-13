@@ -16,8 +16,13 @@ import '../providers/search_provider.dart';
 
 class AssetScreen extends ConsumerStatefulWidget {
   static const id = 'asset_screen';
-  const AssetScreen({super.key});
-
+  const AssetScreen({
+    super.key,
+    this.location,
+    this.worker,
+  });
+  final AssetLocation? location;
+  final Worker? worker;
   @override
   ConsumerState<AssetScreen> createState() => _AssetScreenState();
 }
@@ -29,7 +34,9 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   @override
   void initState() {
     super.initState();
-    _assetsFuture = ref.read(assetProvider.notifier).loadItems();
+    _assetsFuture = ref
+        .read(assetProvider.notifier)
+        .loadItems(widget.location, widget.worker);
   }
 
   void setIsLoading(bool load) {

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
+  static const id = 'map_screen';
+
   const MapScreen({
     super.key,
     this.assetLocation,
@@ -28,6 +30,10 @@ class _MapScreenState extends State<MapScreen> {
           longitude: -122.084,
           address: 'address',
         );
+  }
+
+  void _onMarkerTap(LatLng position) {
+    print('Marker tapped at: ${position.latitude}, ${position.longitude}');
   }
 
   @override
@@ -72,6 +78,13 @@ class _MapScreenState extends State<MapScreen> {
                           _assetLocation.latitude,
                           _assetLocation.longitude,
                         ),
+                    onTap: () => _onMarkerTap(
+                      pickedLocation ??
+                          LatLng(
+                            _assetLocation.latitude,
+                            _assetLocation.longitude,
+                          ),
+                    ),
                   )
                 },
           onMapCreated: (controller) {

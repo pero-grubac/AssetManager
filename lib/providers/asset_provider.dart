@@ -1,18 +1,28 @@
 import 'package:asset_manager/models/asset.dart';
+import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as syspaths;
 import 'package:path/path.dart' as path;
 
+import '../models/worker.dart';
 import 'database.dart';
 
 class AssetNotifier extends StateNotifier<List<Asset>> {
   AssetNotifier() : super([]);
 
-  Future<void> loadItems() async {
+  Future<void> loadItems(AssetLocation? location, Worker? worker) async {
     final db = await DatabaseHelper().getAssetDatabase();
     final data = await db.query(Asset.dbName);
-    final assets = data.map((row) => Asset.fromMap(row)).toList();
+    List<Asset> assets = [];
+    if (location != null) {
+      // if location is not null find assets
+    } else if (worker != null) {
+      // if worker is not null find assets
+    } else {
+      assets = data.map((row) => Asset.fromMap(row)).toList();
+    }
+
     state = assets;
   }
 
