@@ -1,29 +1,21 @@
 import 'package:asset_manager/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../theme/drawer_header_theme.dart';
+
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final drawerHeaderTheme = Theme.of(context).extension<DrawerHeaderTheme>();
+
     return Drawer(
       child: Column(
         children: [
           DrawerHeader(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).colorScheme.primaryContainer,
-                  Theme.of(context)
-                      .colorScheme
-                      .primaryContainer
-                      .withOpacity(0.8),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
+            decoration: drawerHeaderTheme?.drawerHeaderDecoration,
             child: const Row(
               children: [
                 Icon(

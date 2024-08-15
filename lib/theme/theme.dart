@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'box_decoration_theme.dart';
+import 'drawer_header_theme.dart';
 
 class AppTheme {
   ThemeData getThemeData(ColorScheme colorScheme) {
@@ -82,6 +83,18 @@ class AppTheme {
                 offset: Offset(2, 2),
               ),
             ],
+          ),
+        ),
+        DrawerHeaderTheme(
+          drawerHeaderDecoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                colorScheme.primaryContainer,
+                colorScheme.primaryContainer.withOpacity(0.8),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
         ),
       ],
