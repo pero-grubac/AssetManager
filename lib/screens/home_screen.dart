@@ -1,6 +1,7 @@
 import 'package:asset_manager/models/category/category.dart';
 import 'package:asset_manager/models/category/category_data.dart';
 import 'package:asset_manager/widgets/category/category_grid_item.dart';
+import 'package:asset_manager/widgets/util/main_drawer.dart';
 import 'package:flutter/material.dart';
 
 import 'location_screen.dart';
@@ -16,8 +17,10 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Asset manger')),
+        centerTitle: true,
+        title: const Text('Asset manger'),
       ),
+      drawer: const MainDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView(

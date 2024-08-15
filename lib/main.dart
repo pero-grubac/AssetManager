@@ -2,6 +2,7 @@ import 'package:asset_manager/screens/asset_screen.dart';
 import 'package:asset_manager/screens/home_screen.dart';
 import 'package:asset_manager/screens/location_screen.dart';
 import 'package:asset_manager/screens/map_screen.dart';
+import 'package:asset_manager/screens/settings_screen.dart';
 import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:asset_manager/theme/theme_constants.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class AssetManager extends StatelessWidget {
         LocationScreen.id: (context) => const LocationScreen(),
         AssetScreen.id: (context) => const AssetScreen(),
         MapScreen.id: (context) => const MapScreen(),
+        SettingsScreen.id: (context) => const SettingsScreen(),
       },
     );
   }
