@@ -13,13 +13,30 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
 
   Future<void> loadItems(AssetLocation? location, Worker? worker) async {
     final db = await DatabaseHelper().getAssetDatabase();
-    final data = await db.query(Asset.dbName);
     List<Asset> assets = [];
-    if (location != null) {
-      // if location is not null find assets
+    if (location != null && worker != null) {
+      final data = await db.query(
+        Asset.dbName,
+        where: 'assignedLocationId = ? AND assignedPersonId = ?',
+        whereArgs: [location.id, worker.id],
+      );
+      assets = data.map((row) => Asset.fromMap(row)).toList();
+    } else if (location != null) {
+      final data = await db.query(
+        Asset.dbName,
+        where: 'assignedLocationId = ?',
+        whereArgs: [location.id],
+      );
+      assets = data.map((row) => Asset.fromMap(row)).toList();
     } else if (worker != null) {
-      // if worker is not null find assets
+      final data = await db.query(
+        Asset.dbName,
+        where: 'assignedPersonId = ?',
+        whereArgs: [worker.id],
+      );
+      assets = data.map((row) => Asset.fromMap(row)).toList();
     } else {
+      final data = await db.query(Asset.dbName);
       assets = data.map((row) => Asset.fromMap(row)).toList();
     }
 

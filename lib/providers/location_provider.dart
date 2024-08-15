@@ -82,6 +82,21 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     }
   }
 
+  Future<AssetLocation?> findLocationByLatLng(
+      double latitude, double longitude) async {
+    final db = await DatabaseHelper().getLocationDatabase();
+    final data = await db.query(
+      AssetLocation.dbName,
+      where: 'latitude = ? AND longitude = ?',
+      whereArgs: [latitude, longitude],
+    );
+    if (data.isNotEmpty) {
+      return AssetLocation.fromMap(data.first);
+    } else {
+      return null;
+    }
+  }
+
   @override
   void dispose() async {
     await DatabaseHelper().closeDatabases();

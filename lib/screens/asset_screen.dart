@@ -9,6 +9,7 @@ import 'package:asset_manager/widgets/util/centered_circular_loading.dart';
 import 'package:asset_manager/widgets/util/dismissible_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../models/asset.dart';
 import '../models/worker.dart';
@@ -18,11 +19,11 @@ class AssetScreen extends ConsumerStatefulWidget {
   static const id = 'asset_screen';
   const AssetScreen({
     super.key,
-    this.location,
     this.worker,
+    this.position,
   });
-  final AssetLocation? location;
   final Worker? worker;
+  final LatLng? position;
   @override
   ConsumerState<AssetScreen> createState() => _AssetScreenState();
 }
@@ -31,12 +32,23 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   final _searchController = TextEditingController();
   late Future<void> _assetsFuture;
   bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
-    _assetsFuture = ref
-        .read(assetProvider.notifier)
-        .loadItems(widget.location, widget.worker);
+    _initializeAssets();
+  }
+
+  void _initializeAssets() async {
+    AssetLocation? location;
+    if (widget.position != null) {
+      location = await ref.read(locationProvider.notifier).findLocationByLatLng(
+          widget.position!.latitude, widget.position!.longitude);
+    }
+
+    _assetsFuture =
+        ref.read(assetProvider.notifier).loadItems(location, widget.worker);
+    setState(() {}); // Trigger a rebuild after assets are loaded
   }
 
   void setIsLoading(bool load) {
