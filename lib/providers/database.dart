@@ -49,7 +49,7 @@ class DatabaseHelper {
            id TEXT PRIMARY KEY, 
            name TEXT,
            description TEXT,
-           barcode INTEGER, 
+           barcode INTEGER UNIQUE, 
            price REAL,
            creationDate TEXT, 
            assignedPersonId TEXT,
