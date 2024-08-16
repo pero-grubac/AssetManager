@@ -9,6 +9,7 @@ import 'package:asset_manager/screens/selection_screen.dart';
 import 'package:asset_manager/widgets/image/image_input.dart';
 import 'package:asset_manager/widgets/location/location_input.dart';
 import 'package:asset_manager/widgets/worker/worker_card.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -218,6 +219,53 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
     setIsLoading(false);
   }
 
+  void _barcodeOverlay() {
+    if (_barcodeController.text.isEmpty) {
+      ErrorDialog.show(context, 'No barcode data available.');
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      builder: (ctx) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Your barcode: ${_barcodeController.text}',
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Card(
+                color: Colors.white,
+                elevation: 10,
+                shadowColor: Theme.of(context).colorScheme.primary,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: BarcodeWidget(
+                    data: _barcodeController.text,
+                    barcode: Barcode.code128(),
+                    width: 250,
+                    height: 250,
+                    drawText: false,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   List<Widget> _buildTextFields({required bool isWideScreen}) {
     final nameTextField = BuildTextField(
       controller: _nameController,
@@ -246,9 +294,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
         const SizedBox(width: 8),
         IconButton(
           icon: const Icon(Icons.qr_code),
-          onPressed: () {
-            // TODO barcode widget
-          },
+          onPressed: _barcodeOverlay,
         ),
       ],
     );
