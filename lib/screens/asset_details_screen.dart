@@ -247,7 +247,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
         IconButton(
           icon: const Icon(Icons.qr_code),
           onPressed: () {
-            // Define your QR code scanning functionality here
+            // TODO barcode widget
           },
         ),
       ],

@@ -128,14 +128,16 @@ final assetProvider = StateNotifierProvider<AssetNotifier, List<Asset>>(
 final filteredAssetsProvider = Provider<List<Asset>>((ref) {
   final query = ref.watch(searchQueryProvider).toLowerCase();
   double? queryAsDouble = double.tryParse(query);
-
+  int? queryAsInt = int.tryParse(query);
   final assets = ref.watch(assetProvider);
   if (query.isEmpty) return assets;
   return assets.where((asset) {
     final assetName = asset.name.toLowerCase();
     final assetPrice = asset.price;
+    final assetBarcode = asset.barcode;
     bool matchesName = assetName.contains(query);
     bool matchesPrice = queryAsDouble != null && assetPrice == queryAsDouble;
-    return matchesPrice || matchesName;
+    bool matchesBarcode = queryAsInt != null && queryAsInt == assetBarcode;
+    return matchesPrice || matchesName || matchesBarcode;
   }).toList();
 });
