@@ -2,6 +2,7 @@ import 'package:asset_manager/screens/asset_screen.dart';
 import 'package:asset_manager/screens/home_screen.dart';
 import 'package:asset_manager/screens/location_screen.dart';
 import 'package:asset_manager/screens/map_screen.dart';
+import 'package:asset_manager/screens/scan_barcode_screen.dart';
 import 'package:asset_manager/screens/settings_screen.dart';
 import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:asset_manager/theme/theme_constants.dart';
@@ -34,7 +35,7 @@ class AssetManager extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: HomeScreen.id,
+      initialRoute: ScanBarcodeScreen.id,
       routes: {
         HomeScreen.id: (context) => const HomeScreen(),
         WorkersScreen.id: (context) => const WorkersScreen(),
@@ -42,6 +43,7 @@ class AssetManager extends StatelessWidget {
         AssetScreen.id: (context) => const AssetScreen(),
         MapScreen.id: (context) => const MapScreen(),
         SettingsScreen.id: (context) => const SettingsScreen(),
+        ScanBarcodeScreen.id: (context) => const ScanBarcodeScreen(),
       },
     );
   }
