@@ -155,7 +155,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Asset Details'),
+        title: const Text('Census Item Details'),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),

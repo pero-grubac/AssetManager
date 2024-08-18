@@ -1,5 +1,6 @@
 import 'package:asset_manager/models/category/category.dart';
 import 'package:asset_manager/screens/asset_screen.dart';
+import 'package:asset_manager/screens/census_list_screen.dart';
 import 'package:asset_manager/screens/location_screen.dart';
 import 'package:asset_manager/screens/workers_screen.dart';
 
@@ -17,7 +18,7 @@ const categories = [
     title: 'Assets',
   ),
   Category(
-    id: 'Asset list',
+    id: CensusListScreen.id,
     title: 'Census list',
   ),
 ];
