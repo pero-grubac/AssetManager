@@ -64,12 +64,12 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
                           onRemoveItem: _removeCensusList,
                           onEditItem: _editCensusList,
                           isEditable: true,
-                          // TODO censusListCard
                           itemBuilder: (context, censusList) =>
                               CensusListCard(censusList: censusList),
                           provider: filteredCensusListProvider,
                           emptyMessage: 'No census list found'),
             ),
+            // TODO census list detail overlay,add button for census items
             overlay: const CensusItemDetails())
       ],
     );

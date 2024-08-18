@@ -32,7 +32,7 @@ class DatabaseHelper {
       CREATE TABLE ${CensusList.dbName}(
         id TEXT PRIMARY KEY,
         name TEXT,
-        creationDate TEXT,
+        creationDate TEXT
        )
       ''');
       },
@@ -56,7 +56,7 @@ class DatabaseHelper {
         currentPersonId TEXT,
         newPersonId TEXT,
         currentLocationId TEXT,
-        newLocationId TEXT,
+        newLocationId TEXT
        )
       ''');
       },
