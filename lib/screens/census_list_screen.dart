@@ -42,6 +42,7 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
+//TODO
   Future<void> _removeCensusList(CensusList censusList) async {}
   Future<void> _editCensusList(CensusList censusList) async {}
 
