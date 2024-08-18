@@ -2,6 +2,7 @@ import 'package:asset_manager/providers/census_list_provider.dart';
 import 'package:asset_manager/providers/search_provider.dart';
 import 'package:asset_manager/screens/census_item_details.dart';
 import 'package:asset_manager/screens/screen.dart';
+import 'package:asset_manager/widgets/census/census_list_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,7 +65,8 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
                           onEditItem: _editCensusList,
                           isEditable: true,
                           // TODO censusListCard
-                          itemBuilder: (context, censusList) => Center(),
+                          itemBuilder: (context, censusList) =>
+                              CensusListCard(censusList: censusList),
                           provider: filteredCensusListProvider,
                           emptyMessage: 'No census list found'),
             ),
