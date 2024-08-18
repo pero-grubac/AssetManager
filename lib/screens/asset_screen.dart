@@ -61,12 +61,9 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
-  Future<void> _addAsset(
-      Asset asset, AssetLocation location, Worker worker) async {
+  Future<void> _addAsset(Asset asset) async {
     setIsLoading(true);
-    await ref.read(locationProvider.notifier).addLocation(location);
     await ref.read(assetProvider.notifier).addAsset(asset);
-    await ref.read(workerProvider.notifier).addWorker(worker);
     setIsLoading(false);
   }
 
@@ -102,22 +99,22 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AssetDetailsScreen(
-          onSaveAsset: (updatedAsset, location, worker) async {
+          onSaveAsset: (updatedAsset) async {
             setIsLoading(true);
 
             final oldAsset = await ref
                 .read(assetProvider.notifier)
                 .findAssetById(updatedAsset.id);
 
-            if (location.id != oldAsset?.assignedLocationId) {
+            /*   if (location.id != oldAsset?.assignedLocationId) {
               await ref.read(locationProvider.notifier).addLocation(location);
-            }
-            final oldWorker = await ref
+            }*/
+            /*   final oldWorker = await ref
                 .read(workerProvider.notifier)
                 .findWorkerById(updatedAsset.assignedPersonId);
             if (worker.id != oldWorker?.id) {
               await ref.read(workerProvider.notifier).addWorker(worker);
-            }
+            }*/
             await ref.read(assetProvider.notifier).updateAsset(updatedAsset);
             setIsLoading(false);
           },

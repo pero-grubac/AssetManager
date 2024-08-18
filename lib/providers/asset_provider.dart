@@ -10,7 +10,7 @@ import 'database.dart';
 
 class AssetNotifier extends StateNotifier<List<Asset>> {
   AssetNotifier() : super([]);
-
+// TODO fix,can not find assets by location/worker like this
   Future<void> loadItems(AssetLocation? location, Worker? worker) async {
     final db = await DatabaseHelper().getAssetDatabase();
     List<Asset> assets = [];

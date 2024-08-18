@@ -27,8 +27,7 @@ class AssetDetailsScreen extends ConsumerStatefulWidget {
     this.isEditable = true,
   });
   final Asset? asset;
-  final Future<void> Function(
-      Asset asset, AssetLocation location, Worker worker)? onSaveAsset;
+  final Future<void> Function(Asset asset)? onSaveAsset;
   final bool isEditable;
 
   @override
@@ -65,13 +64,13 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       _selectedDate = widget.asset?.creationDate;
       _pickedDate = widget.asset?.formatedDate;
       // Attempt to retrieve the location by its ID asynchronously
-      _selectedAssetLocation = await ref
+      /*  _selectedAssetLocation = await ref
           .read(locationProvider.notifier)
           .findLocationById(widget.asset!.assignedLocationId);
       // wind worker by id and assign  it to _workerController
       _selectedWorker = await ref
           .read(workerProvider.notifier)
-          .findWorkerById(widget.asset!.assignedPersonId);
+          .findWorkerById(widget.asset!.assignedPersonId);*/
     }
     setState(() {
       _isLoading = false;
@@ -105,16 +104,9 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       ErrorDialog.show(context, 'Image  can not be empty');
       return;
     }
-    if (_selectedAssetLocation == null) {
-      ErrorDialog.show(context, 'Location  can not be empty');
-      return;
-    }
+
     if (_selectedDate == null) {
       ErrorDialog.show(context, 'Date  can not be empty');
-      return;
-    }
-    if (_selectedWorker == null) {
-      ErrorDialog.show(context, 'Worker  can not be empty');
       return;
     }
 
@@ -126,8 +118,6 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
           description: enteredDescription,
           barcode: enteredBarcode,
           price: enteredPrice,
-          assignedPersonId: _selectedWorker!.id,
-          assignedLocationId: _selectedAssetLocation!.id,
           creationDate: _selectedDate!,
           image: _selectedImage!,
         );
@@ -139,18 +129,18 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
           barcode: enteredBarcode,
           price: enteredPrice,
           creationDate: _selectedDate!,
-          assignedPersonId: _selectedWorker!.id,
-          assignedLocationId: _selectedAssetLocation!.id,
           image: _selectedImage!,
         );
       }
-      widget.onSaveAsset!(asset, _selectedAssetLocation!, _selectedWorker!);
+
+      widget.onSaveAsset!(asset);
+
       Navigator.pop(context);
     } catch (e) {
       if (e is ArgumentError) {
         ErrorDialog.show(context, e.message);
       } else {
-        ErrorDialog.show(context, 'An unknown error occurred');
+        ErrorDialog.show(context, 'An unknown error occurred ');
       }
     }
   }
@@ -327,7 +317,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       image: _selectedImage,
       isEditable: widget.isEditable,
     );
-    final workerWidget = BuildTextField(
+/*    final workerWidget = BuildTextField(
       controller: _workerController,
       label: 'Worker',
       isEditable: true,
@@ -356,9 +346,9 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
           icon: const Icon(Icons.supervised_user_circle),
         ),
       ],
-    );
+    );*/
     final barcodeRow = widget.isEditable ? barcodeIcon : barcodeTextField;
-    final Widget locationWidget;
+    /* final Widget locationWidget;
     if (_isLoading) {
       locationWidget = const Center(child: CircularProgressIndicator());
     } else {
@@ -369,7 +359,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
         assetLocation: _selectedAssetLocation,
         isEditable: widget.isEditable,
       );
-    }
+    }*/
     if (isWideScreen) {
       // TODO
       return [];
@@ -379,7 +369,6 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
         priceDateRow,
         descriptionTextField,
         barcodeRow,
-        workerRow,
         const SizedBox(
           height: 10,
         ),
@@ -387,7 +376,6 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
         const SizedBox(
           height: 10,
         ),
-        locationWidget,
       ];
     }
   }

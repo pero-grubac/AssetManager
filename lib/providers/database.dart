@@ -52,8 +52,6 @@ class DatabaseHelper {
            barcode INTEGER UNIQUE, 
            price REAL,
            creationDate TEXT, 
-           assignedPersonId TEXT,
-           assignedLocationId TEXT, 
            imagePath TEXT)
          ''');
       },

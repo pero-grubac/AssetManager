@@ -19,8 +19,7 @@ class Asset implements Identifiable {
   final int barcode;
   final double price;
   final DateTime creationDate;
-  final String assignedPersonId;
-  final String assignedLocationId;
+
   late File image;
 
   Asset({
@@ -30,8 +29,6 @@ class Asset implements Identifiable {
     required this.barcode,
     required this.price,
     required this.creationDate,
-    required this.assignedPersonId,
-    required this.assignedLocationId,
     required this.image,
   }) : id = id ?? uuid.v4() {
     // Basic validation
@@ -39,12 +36,7 @@ class Asset implements Identifiable {
     if (description.isEmpty) throw ArgumentError('Description cannot be empty');
     if (barcode <= 0) throw ArgumentError('Barcode must be a positive integer');
     if (price <= 0) throw ArgumentError('Price must be a positive number');
-    if (assignedPersonId.isEmpty) {
-      throw ArgumentError('Assigned person id must be a positive number');
-    }
-    if (assignedLocationId.isEmpty) {
-      throw ArgumentError('Assigned location id cannot be empty');
-    }
+
     if (image == null) throw ArgumentError('Image  cannot be empty');
   }
   String get formatedDate {
@@ -60,8 +52,6 @@ class Asset implements Identifiable {
       'barcode': barcode,
       'price': price,
       'creationDate': creationDate.toIso8601String(),
-      'assignedPersonId': assignedPersonId,
-      'assignedLocationId': assignedLocationId,
       'imagePath': image.path,
     };
   }
@@ -75,8 +65,6 @@ class Asset implements Identifiable {
       barcode: map['barcode'],
       price: map['price'],
       creationDate: DateTime.parse(map['creationDate']),
-      assignedPersonId: map['assignedPersonId'],
-      assignedLocationId: map['assignedLocationId'],
       image: File(map['imagePath']),
     );
   }
