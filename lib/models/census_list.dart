@@ -1,17 +1,25 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
 
 class CensusList {
+  static const String dbName = 'censusList';
+  static const String dbFullName = 'censusList.db';
   final String id;
   final String name;
+  final DateTime creationDate;
 
   CensusList({
     String? id,
     required this.name,
+    required this.creationDate,
   }) : id = id ?? uuid.v4() {
     if (name.isEmpty) throw ArgumentError('Name cannot be empty');
+  }
+  String get formatedDate {
+    return DateFormat('dd.MM.yyyy').format(creationDate);
   }
 
   // Convert an InventoryList object into a Map object
@@ -19,6 +27,7 @@ class CensusList {
     return {
       'id': id,
       'name': name,
+      'creationDate': creationDate.toIso8601String(),
     };
   }
 
@@ -27,6 +36,7 @@ class CensusList {
     return CensusList(
       id: map['id'],
       name: map['name'],
+      creationDate: DateTime.parse(map['creationDate']),
     );
   }
 
