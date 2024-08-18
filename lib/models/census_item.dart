@@ -5,7 +5,7 @@ import 'identifiable.dart';
 
 const uuid = Uuid();
 
-class InventoryItem implements Identifiable {
+class CensusItem implements Identifiable {
   @override
   final String id;
   final String assetListId;
@@ -15,7 +15,7 @@ class InventoryItem implements Identifiable {
   final String currentLocationId;
   final String newLocationId;
 
-  InventoryItem({
+  CensusItem({
     String? id,
     required this.assetListId,
     required this.assetId,
@@ -52,8 +52,8 @@ class InventoryItem implements Identifiable {
   }
 
   // Convert a Map object into an InventoryItem object
-  factory InventoryItem.fromMap(Map<String, dynamic> map) {
-    return InventoryItem(
+  factory CensusItem.fromMap(Map<String, dynamic> map) {
+    return CensusItem(
       id: map['id'],
       assetListId: map['assetListId'],
       assetId: map['assetId'],
@@ -68,6 +68,6 @@ class InventoryItem implements Identifiable {
   String toJson() => json.encode(toMap());
 
   // Convert a JSON object into an InventoryItem object
-  factory InventoryItem.fromJson(String source) =>
-      InventoryItem.fromMap(json.decode(source));
+  factory CensusItem.fromJson(String source) =>
+      CensusItem.fromMap(json.decode(source));
 }

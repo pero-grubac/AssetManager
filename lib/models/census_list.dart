@@ -3,11 +3,11 @@ import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
 
-class InventoryList {
+class CensusList {
   final String id;
   final String name;
 
-  InventoryList({
+  CensusList({
     String? id,
     required this.name,
   }) : id = id ?? uuid.v4() {
@@ -23,8 +23,8 @@ class InventoryList {
   }
 
   // Convert a Map object into an InventoryList object
-  factory InventoryList.fromMap(Map<String, dynamic> map) {
-    return InventoryList(
+  factory CensusList.fromMap(Map<String, dynamic> map) {
+    return CensusList(
       id: map['id'],
       name: map['name'],
     );
@@ -34,6 +34,6 @@ class InventoryList {
   String toJson() => json.encode(toMap());
 
   // Convert a JSON object into an InventoryList object
-  factory InventoryList.fromJson(String source) =>
-      InventoryList.fromMap(json.decode(source));
+  factory CensusList.fromJson(String source) =>
+      CensusList.fromMap(json.decode(source));
 }

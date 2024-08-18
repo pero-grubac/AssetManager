@@ -18,6 +18,6 @@ const categories = [
   ),
   Category(
     id: 'Asset list',
-    title: 'Asset list',
+    title: 'Census list',
   ),
 ];

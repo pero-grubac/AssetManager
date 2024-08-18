@@ -1,4 +1,5 @@
 import 'package:asset_manager/screens/asset_screen.dart';
+import 'package:asset_manager/screens/census_item_details.dart';
 import 'package:asset_manager/screens/home_screen.dart';
 import 'package:asset_manager/screens/location_screen.dart';
 import 'package:asset_manager/screens/map_screen.dart';
@@ -35,7 +36,7 @@ class AssetManager extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: HomeScreen.id,
+      initialRoute: CensusItemDetails.id,
       routes: {
         HomeScreen.id: (context) => const HomeScreen(),
         WorkersScreen.id: (context) => const WorkersScreen(),
@@ -44,6 +45,7 @@ class AssetManager extends StatelessWidget {
         MapScreen.id: (context) => const MapScreen(),
         SettingsScreen.id: (context) => const SettingsScreen(),
         ScanBarcodeScreen.id: (context) => const ScanBarcodeScreen(),
+        CensusItemDetails.id: (context) => const CensusItemDetails(),
       },
     );
   }

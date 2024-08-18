@@ -1,9 +1,9 @@
-import 'inventory_item.dart';
-import 'inventory_list.dart';
+import 'census_item.dart';
+import 'census_list.dart';
 
 class InventoryListWithItems {
-  final InventoryList inventoryList;
-  final List<InventoryItem> items;
+  final CensusList inventoryList;
+  final List<CensusItem> items;
 
   InventoryListWithItems({
     required this.inventoryList,
