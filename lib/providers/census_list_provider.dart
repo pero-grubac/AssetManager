@@ -1,3 +1,4 @@
+import 'package:asset_manager/models/census_item.dart';
 import 'package:asset_manager/models/census_list.dart';
 import 'package:asset_manager/providers/database.dart';
 import 'package:asset_manager/providers/search_provider.dart';
@@ -27,14 +28,24 @@ class CensusListNotifier extends StateNotifier<List<CensusList>> {
     }
   }
 
-  Future<void> removeCensusList(CensusList censusList) async {
+  Future<bool> removeCensusList(CensusList censusList) async {
     final db = await DatabaseHelper().getCensusListDatabase();
+    final itemDB = await DatabaseHelper().getCensusItemDatabase();
+    final result = await itemDB.query(
+      CensusItem.dbName,
+      where: 'censusListId = ?',
+      whereArgs: [censusList.id],
+    );
+    if (result.isNotEmpty) {
+      return false;
+    }
     await db.delete(
       CensusList.dbName,
       where: 'id = ?',
       whereArgs: [censusList.id],
     );
     state = state.where((cl) => cl.id != censusList.id).toList();
+    return true;
   }
 
   int indexOfCensusList(CensusList censusList) {
@@ -61,6 +72,20 @@ class CensusListNotifier extends StateNotifier<List<CensusList>> {
     );
     if (data.isNotEmpty) return CensusList.fromMap(data.first);
     return null;
+  }
+
+  Future<void> updateCensusList(CensusList censusList) async {
+    final db = await DatabaseHelper().getCensusListDatabase();
+    await db.update(
+      CensusList.dbName,
+      censusList.toMap(),
+      where: 'id = ?',
+      whereArgs: [censusList.id],
+    );
+    final index = state.indexWhere((cl) => cl.id == censusList.id);
+    List<CensusList> temp = state;
+    temp[index] = censusList;
+    state = [...state];
   }
 
   @override

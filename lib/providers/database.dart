@@ -57,7 +57,7 @@ class DatabaseHelper {
         newPersonId TEXT,
         oldLocationId TEXT,
         newLocationId TEXT,
-        createdAt TEXT
+        createdAt TEXT,
         UNIQUE(censusListId, assetId)
        )
       ''');
