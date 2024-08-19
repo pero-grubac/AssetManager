@@ -56,11 +56,13 @@ class DatabaseHelper {
         oldPersonId TEXT,
         newPersonId TEXT,
         oldLocationId TEXT,
-        newLocationId TEXT
+        newLocationId TEXT,
+        createdAt TEXT
+        UNIQUE(censusListId, assetId)
        )
       ''');
       },
-      version: 2,
+      version: 1,
     );
     return _censusItemDatabase!;
   }
@@ -77,7 +79,8 @@ class DatabaseHelper {
            id TEXT PRIMARY KEY, 
            latitude REAL,
            longitude REAL,
-           address TEXT)
+           address TEXT,  
+           createdAt TEXT)
          ''');
       },
       version: 1,
@@ -121,7 +124,8 @@ class DatabaseHelper {
            firstName TEXT,
            lastName TEXT,
            phoneNumber TEXT, 
-           email TEXT)
+           email TEXT,  
+           createdAt TEXT)
          ''');
       },
       version: 1,

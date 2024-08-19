@@ -79,7 +79,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 3),
-        content: const Text('Location deleted.'),
+        content: const Text('Asset deleted.'),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () async {

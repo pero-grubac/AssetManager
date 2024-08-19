@@ -11,7 +11,10 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   Future<void> loadItems() async {
     final db = await DatabaseHelper().getWorkerDatabase();
 
-    final data = await db.query(Worker.dbName);
+    final data = await db.query(
+      Worker.dbName,
+      orderBy: 'createdAt DESC',
+    );
     final workers = data.map((row) => Worker.fromMap(row)).toList();
     state = workers;
   }

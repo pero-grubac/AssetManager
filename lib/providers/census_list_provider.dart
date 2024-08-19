@@ -7,7 +7,10 @@ class CensusListNotifier extends StateNotifier<List<CensusList>> {
   CensusListNotifier() : super([]);
   Future<void> loadItems() async {
     final db = await DatabaseHelper().getCensusListDatabase();
-    final data = await db.query(CensusList.dbName);
+    final data = await db.query(
+      CensusList.dbName,
+      orderBy: 'creationDate DESC',
+    );
     final items = data.map((row) => CensusList.fromMap(row)).toList();
     state = items;
   }

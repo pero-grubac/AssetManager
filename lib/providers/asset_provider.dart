@@ -25,9 +25,14 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
       final results = await Future.wait(futures);
       assets = results.where((asset) => asset != null).cast<Asset>().toList();
     } else {
-      final data = await db.query(Asset.dbName);
+      final data = await db.query(
+        Asset.dbName,
+        orderBy: 'creationDate DESC',
+      );
       assets = data.map((row) => Asset.fromMap(row)).toList();
     }
+    assets.sort((a, b) => b.creationDate.compareTo(a.creationDate));
+
     state = assets;
   }
 

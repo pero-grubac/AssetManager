@@ -15,14 +15,16 @@ class Worker implements Identifiable {
   final String lastName;
   final String phoneNumber;
   final String email;
-
+  final DateTime createdAt;
   Worker({
     String? id,
     required this.firstName,
     required this.lastName,
     required this.phoneNumber,
     required this.email,
-  }) : id = id ?? uuid.v4() {
+    DateTime? createdAt,
+  })  : id = id ?? uuid.v4(),
+        createdAt = createdAt ?? DateTime.now() {
     if (firstName.isEmpty) throw ArgumentError('First name cannot be empty');
     if (lastName.isEmpty) throw ArgumentError('Last name cannot be empty');
     if (phoneNumber.isEmpty || !_isValidPhoneNumber(phoneNumber)) {

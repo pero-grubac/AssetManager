@@ -11,7 +11,10 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
 
   Future<void> loadItems() async {
     final db = await DatabaseHelper().getLocationDatabase();
-    final data = await db.query(AssetLocation.dbName);
+    final data = await db.query(
+      AssetLocation.dbName,
+      orderBy: 'createdAt DESC',
+    );
     final locations = data.map((row) => AssetLocation.fromMap(row)).toList();
     state = locations;
   }

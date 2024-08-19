@@ -7,7 +7,10 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   CensusItemNotifier() : super(const []);
   Future<void> loadItems() async {
     final db = await DatabaseHelper().getCensusItemDatabase();
-    final data = await db.query(CensusItem.dbName);
+    final data = await db.query(
+      CensusItem.dbName,
+      orderBy: 'createdAt DESC',
+    );
     final items = data.map((row) => CensusItem.fromMap(row)).toList();
     state = items;
   }
@@ -15,6 +18,12 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   Future<void> addCensusItem(CensusItem censusItem) async {
     final db = await DatabaseHelper().getCensusItemDatabase();
     final ci = await findCensusItemById(censusItem.id);
+    final existingItems = await db.query(
+      CensusItem.dbName,
+      where: 'censusListId = ? AND assetId = ?',
+      whereArgs: [censusItem.censusListId, censusItem.assetId],
+    );
+    if (existingItems.isNotEmpty) return;
     if (ci == null) {
       await db.insert(
         CensusItem.dbName,

@@ -16,6 +16,7 @@ class CensusItem implements Identifiable {
   final String newPersonId;
   final String oldLocationId;
   final String newLocationId;
+  final DateTime createdAt;
 
   CensusItem({
     String? id,
@@ -25,7 +26,9 @@ class CensusItem implements Identifiable {
     required this.newPersonId,
     required this.oldLocationId,
     required this.newLocationId,
-  }) : id = id ?? uuid.v4() {
+    DateTime? createdAt,
+  })  : id = id ?? uuid.v4(),
+        createdAt = createdAt ?? DateTime.now() {
     if (assetId.isEmpty) throw ArgumentError('Asset ID cannot be empty');
     if (oldPersonId.isEmpty) {
       throw ArgumentError('Current person ID must be a positive integer');

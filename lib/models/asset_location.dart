@@ -14,13 +14,16 @@ class AssetLocation implements Identifiable {
   final double latitude;
   final double longitude;
   final String address;
+  final DateTime createdAt;
 
-  AssetLocation(
-      {String? id,
-      required this.latitude,
-      required this.longitude,
-      required this.address})
-      : id = id ?? uuid.v4() {
+  AssetLocation({
+    String? id,
+    required this.latitude,
+    required this.longitude,
+    required this.address,
+    DateTime? createdAt,
+  })  : id = id ?? uuid.v4(),
+        createdAt = createdAt ?? DateTime.now() {
     if (address.isEmpty) throw ArgumentError('Address cannot be empty');
   }
 
