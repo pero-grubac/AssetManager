@@ -94,6 +94,6 @@ final filteredCensusListProvider = Provider<List<CensusList>>((ref) {
   if (query.isEmpty) return items;
   return items.where((item) {
     final itemName = item.name.toLowerCase();
-    return itemName == query;
+    return itemName.contains(query);
   }).toList();
 });
