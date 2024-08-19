@@ -53,14 +53,14 @@ class DatabaseHelper {
         id TEXT PRIMARY KEY,
         censusListId TEXT,
         assetId TEXT,
-        currentPersonId TEXT,
+        oldPersonId TEXT,
         newPersonId TEXT,
-        currentLocationId TEXT,
+        oldLocationId TEXT,
         newLocationId TEXT
        )
       ''');
       },
-      version: 1,
+      version: 2,
     );
     return _censusItemDatabase!;
   }

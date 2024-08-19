@@ -5,42 +5,64 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as syspaths;
 import 'package:path/path.dart' as path;
 
+import '../models/census_item.dart';
 import '../models/worker.dart';
 import 'database.dart';
 
 class AssetNotifier extends StateNotifier<List<Asset>> {
   AssetNotifier() : super([]);
-// TODO fix,can not find assets by location/worker like this
   Future<void> loadItems(AssetLocation? location, Worker? worker) async {
     final db = await DatabaseHelper().getAssetDatabase();
     List<Asset> assets = [];
-    if (location != null && worker != null) {
-      final data = await db.query(
-        Asset.dbName,
-        where: 'assignedLocationId = ? AND assignedPersonId = ?',
-        whereArgs: [location.id, worker.id],
-      );
-      assets = data.map((row) => Asset.fromMap(row)).toList();
-    } else if (location != null) {
-      final data = await db.query(
-        Asset.dbName,
-        where: 'assignedLocationId = ?',
-        whereArgs: [location.id],
-      );
-      assets = data.map((row) => Asset.fromMap(row)).toList();
+    if (location != null) {
+      final assetIds = await getAssetsByLocation(location.id);
+      final futures = assetIds.map((id) => findAssetById(id)).toList();
+      final results = await Future.wait(futures);
+      assets = results.where((asset) => asset != null).cast<Asset>().toList();
     } else if (worker != null) {
-      final data = await db.query(
-        Asset.dbName,
-        where: 'assignedPersonId = ?',
-        whereArgs: [worker.id],
-      );
-      assets = data.map((row) => Asset.fromMap(row)).toList();
+      final assetIds = await getAssetsByWorker(worker.id);
+      final futures = assetIds.map((id) => findAssetById(id)).toList();
+      final results = await Future.wait(futures);
+      assets = results.where((asset) => asset != null).cast<Asset>().toList();
     } else {
       final data = await db.query(Asset.dbName);
       assets = data.map((row) => Asset.fromMap(row)).toList();
     }
-
     state = assets;
+  }
+
+  Future<List<String>> getAssetsByWorker(String workerId) async {
+    final db = await DatabaseHelper().getCensusItemDatabase();
+
+    final List<Map<String, dynamic>> results = await db.rawQuery('''
+    SELECT ci.assetId
+    FROM ${CensusItem.dbName} ci
+    JOIN (
+      SELECT assetId, MAX(id) as maxId
+      FROM ${CensusItem.dbName}
+      GROUP BY assetId
+    ) latest_ci ON ci.id = latest_ci.maxId
+    WHERE ci.newPersonId = ?
+  ''', [workerId]);
+
+    return results.map((row) => row['assetId'] as String).toList();
+  }
+
+  Future<List<String>> getAssetsByLocation(String locationId) async {
+    final db = await DatabaseHelper().getCensusItemDatabase();
+
+    final List<Map<String, dynamic>> results = await db.rawQuery('''
+    SELECT ci.assetId
+    FROM ${CensusItem.dbName} ci
+    JOIN (
+      SELECT assetId, MAX(id) as maxId
+      FROM ${CensusItem.dbName}
+      GROUP BY assetId
+    ) latest_ci ON ci.id = latest_ci.maxId
+    WHERE ci.newLocationId = ?
+  ''', [locationId]);
+
+    return results.map((row) => row['assetId'] as String).toList();
   }
 
   Future<void> addAsset(Asset asset) async {

@@ -12,28 +12,28 @@ class CensusItem implements Identifiable {
   final String id;
   final String censusListId;
   final String assetId;
-  final String currentPersonId;
+  final String oldPersonId;
   final String newPersonId;
-  final String currentLocationId;
+  final String oldLocationId;
   final String newLocationId;
 
   CensusItem({
     String? id,
     required this.censusListId,
     required this.assetId,
-    required this.currentPersonId,
+    required this.oldPersonId,
     required this.newPersonId,
-    required this.currentLocationId,
+    required this.oldLocationId,
     required this.newLocationId,
   }) : id = id ?? uuid.v4() {
     if (assetId.isEmpty) throw ArgumentError('Asset ID cannot be empty');
-    if (currentPersonId.isEmpty) {
+    if (oldPersonId.isEmpty) {
       throw ArgumentError('Current person ID must be a positive integer');
     }
     if (newPersonId.isEmpty) {
       throw ArgumentError('Current person ID must be a positive integer');
     }
-    if (currentLocationId.isEmpty) {
+    if (oldLocationId.isEmpty) {
       throw ArgumentError('Current location ID must be a positive integer');
     }
     if (newLocationId.isEmpty) {
@@ -46,9 +46,9 @@ class CensusItem implements Identifiable {
       'id': id,
       'censusListId': censusListId,
       'assetId': assetId,
-      'currentPersonId': currentPersonId,
+      'oldPersonId': oldPersonId,
       'newPersonId': newPersonId,
-      'currentLocationId': currentLocationId,
+      'oldLocationId': oldLocationId,
       'newLocationId': newLocationId,
     };
   }
@@ -59,9 +59,9 @@ class CensusItem implements Identifiable {
       id: map['id'],
       censusListId: map['censusListId'],
       assetId: map['assetId'],
-      currentPersonId: map['currentPersonId'],
+      oldPersonId: map['oldPersonId'],
       newPersonId: map['newPersonId'],
-      currentLocationId: map['currentLocationId'],
+      oldLocationId: map['oldLocationId'],
       newLocationId: map['newLocationId'],
     );
   }
