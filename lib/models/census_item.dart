@@ -53,6 +53,7 @@ class CensusItem implements Identifiable {
       'newPersonId': newPersonId,
       'oldLocationId': oldLocationId,
       'newLocationId': newLocationId,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
@@ -66,6 +67,7 @@ class CensusItem implements Identifiable {
       newPersonId: map['newPersonId'],
       oldLocationId: map['oldLocationId'],
       newLocationId: map['newLocationId'],
+      createdAt: DateTime.parse(map['createdAt']),
     );
   }
 

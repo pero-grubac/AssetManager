@@ -33,6 +33,7 @@ class AssetLocation implements Identifiable {
       'latitude': latitude,
       'longitude': longitude,
       'address': address,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
@@ -43,6 +44,7 @@ class AssetLocation implements Identifiable {
       latitude: map['latitude'],
       longitude: map['longitude'],
       address: map['address'],
+      createdAt: DateTime.parse(map['createdAt']),
     );
   }
 

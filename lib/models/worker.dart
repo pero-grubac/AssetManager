@@ -62,6 +62,7 @@ class Worker implements Identifiable {
       'lastName': lastName,
       'phoneNumber': phoneNumber,
       'email': email,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
@@ -73,6 +74,7 @@ class Worker implements Identifiable {
       lastName: map['lastName'],
       phoneNumber: map['phoneNumber'],
       email: map['email'],
+      createdAt: DateTime.parse(map['createdAt']),
     );
   }
 
