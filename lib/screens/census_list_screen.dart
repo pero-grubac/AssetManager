@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/census_list.dart';
+import '../widgets/census/census_list_overlay.dart';
 import '../widgets/util/centered_circular_loading.dart';
 import '../widgets/util/dismissible_list.dart';
 
@@ -53,24 +54,25 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
       children: [
         if (_isLoading) const CenteredCircularLoading(),
         Screen(
-            searchController: _searchController,
-            onSearchChanged: _searchCensusList,
-            body: FutureBuilder(
-              future: _censusListFuture,
-              builder: (context, snapshot) =>
-                  snapshot.connectionState == ConnectionState.waiting
-                      ? const CenteredCircularLoading()
-                      : DismissibleList(
-                          onRemoveItem: _removeCensusList,
-                          onEditItem: _editCensusList,
-                          isEditable: true,
-                          itemBuilder: (context, censusList) =>
-                              CensusListCard(censusList: censusList),
-                          provider: filteredCensusListProvider,
-                          emptyMessage: 'No census list found'),
-            ),
-            // TODO census list detail overlay,add button for census items
-            overlay: const CensusItemDetails())
+          searchController: _searchController,
+          onSearchChanged: _searchCensusList,
+          body: FutureBuilder(
+            future: _censusListFuture,
+            builder: (context, snapshot) =>
+                snapshot.connectionState == ConnectionState.waiting
+                    ? const CenteredCircularLoading()
+                    : DismissibleList(
+                        onRemoveItem: _removeCensusList,
+                        onEditItem: _editCensusList,
+                        isEditable: true,
+                        itemBuilder: (context, censusList) =>
+                            CensusListCard(censusList: censusList),
+                        provider: filteredCensusListProvider,
+                        emptyMessage: 'No census list found'),
+          ),
+          // TODO census list detail overlay,add button for census items
+          overlay: const CensusListOverlay(),
+        )
       ],
     );
   }
