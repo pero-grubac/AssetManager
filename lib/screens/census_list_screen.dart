@@ -85,7 +85,7 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         duration: Duration(seconds: 3),
-        content: Text('Worker can not be deleted.'),
+        content: Text('Census List can not be deleted.'),
       ));
     }
   }

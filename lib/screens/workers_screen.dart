@@ -50,6 +50,7 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
     final workerNotifier = ref.read(workerProvider.notifier);
 
     final workerIndex = workerNotifier.indexOfWorker(worker);
+    // TODO test if worker can not be deleted this .state is not necessary
     final updatedState =
         workerNotifier.state.where((w) => w.id != worker.id).toList();
     workerNotifier.state = updatedState;
