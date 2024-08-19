@@ -47,26 +47,11 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
 
   Future<void> _removeLocation(AssetLocation location) async {
     final locationNotifier = ref.read(locationProvider.notifier);
-
-    final locationIndex = locationNotifier.indexOfLocation(location);
-    final updatedState =
-        locationNotifier.state.where((l) => l.id != location.id).toList();
-    locationNotifier.state = updatedState;
-
     final shouldDelete = await locationNotifier.removeLocation(location);
-    if (!shouldDelete) {
-      // Reinstate the location back to the list if deletion is not allowed
-      locationNotifier.state = [
-        ...updatedState.sublist(0, locationIndex),
-        location,
-        ...updatedState.sublist(locationIndex)
-      ];
-    }
-    _showUndoSnackBar(location, locationIndex, shouldDelete);
+    _showUndoSnackBar(location, shouldDelete);
   }
 
-  void _showUndoSnackBar(
-      AssetLocation location, int locationIndex, bool shouldDelete) {
+  void _showUndoSnackBar(AssetLocation location, bool shouldDelete) {
     ScaffoldMessenger.of(context).clearSnackBars();
     if (shouldDelete) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -77,9 +62,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
             label: 'Undo',
             onPressed: () async {
               setIsLoading(true);
-              await ref
-                  .read(locationProvider.notifier)
-                  .insetLocation(location, locationIndex);
+              await ref.read(locationProvider.notifier).addLocation(location);
               setIsLoading(false);
             },
           ),

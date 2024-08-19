@@ -68,30 +68,35 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   }
 
   Future<void> _removeAsset(Asset asset) async {
-    final assetIndex = ref.read(assetProvider.notifier).indexOfAsset(asset);
-    await ref.read(assetProvider.notifier).removeAsset(asset);
+    final shouldDelete =
+        await ref.read(assetProvider.notifier).removeAsset(asset);
 
-    _showUndoSnackBar(asset, assetIndex);
+    _showUndoSnackBar(asset, shouldDelete);
   }
 
-  void _showUndoSnackBar(Asset asset, int assetIndex) {
+  void _showUndoSnackBar(Asset asset, bool shouldDelete) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 3),
-        content: const Text('Asset deleted.'),
-        action: SnackBarAction(
-          label: 'Undo',
-          onPressed: () async {
-            setIsLoading(true);
-            await ref
-                .read(assetProvider.notifier)
-                .insetAsset(asset, assetIndex);
-            setIsLoading(false);
-          },
+    if (shouldDelete) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 3),
+          content: const Text('Asset deleted.'),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () async {
+              setIsLoading(true);
+              await ref.read(assetProvider.notifier).addAsset(asset);
+              setIsLoading(false);
+            },
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        duration: Duration(seconds: 3),
+        content: Text('Asset can not be deleted.'),
+      ));
+    }
   }
 
   Future<void> _editAsset(Asset asset) async {

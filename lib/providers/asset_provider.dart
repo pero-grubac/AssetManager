@@ -82,8 +82,17 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     state = [asset, ...state];
   }
 
-  Future<void> removeAsset(Asset asset) async {
+  Future<bool> removeAsset(Asset asset) async {
     final db = await DatabaseHelper().getAssetDatabase();
+    final ciDB = await DatabaseHelper().getCensusItemDatabase();
+    final result = await ciDB.query(
+      CensusItem.dbName,
+      where: 'assetId = ?',
+      whereArgs: [asset.id],
+    );
+    if (result.isNotEmpty) {
+      return false;
+    }
     await db.delete(
       Asset.dbName,
       where: 'id = ?',
@@ -93,6 +102,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
       await asset.image.delete();
     }
     state = state.where((a) => a.id != asset.id).toList();
+    return true;
   }
 
   int indexOfAsset(Asset asset) {

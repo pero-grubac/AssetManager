@@ -44,26 +44,13 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
-//TODO
   Future<void> _removeCensusList(CensusList censusList) async {
     final censusListNotifier = ref.read(censusListProvider.notifier);
-    final censusListIndex = censusListNotifier.indexOfCensusList(censusList);
-    final updatedState =
-        censusListNotifier.state.where((cl) => cl.id != censusList.id).toList();
-    censusListNotifier.state = updatedState;
     final shouldDelete = await censusListNotifier.removeCensusList(censusList);
-    if (!shouldDelete) {
-      censusListNotifier.state = [
-        ...updatedState.sublist(0, censusListIndex),
-        censusList,
-        ...updatedState.sublist(censusListIndex),
-      ];
-    }
-    _showUndoSnackBar(censusList, censusListIndex, shouldDelete);
+    _showUndoSnackBar(censusList, shouldDelete);
   }
 
-  void _showUndoSnackBar(
-      CensusList censusList, int censusListIndex, bool shouldDelete) {
+  void _showUndoSnackBar(CensusList censusList, bool shouldDelete) {
     ScaffoldMessenger.of(context).clearSnackBars();
     if (shouldDelete) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -76,7 +63,7 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
               setIsLoading(true);
               await ref
                   .read(censusListProvider.notifier)
-                  .insertCensusList(censusList, censusListIndex);
+                  .addCensusList(censusList);
               setIsLoading(false);
             },
           ),

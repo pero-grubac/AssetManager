@@ -49,24 +49,12 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
   Future<void> _removeWorker(Worker worker) async {
     final workerNotifier = ref.read(workerProvider.notifier);
 
-    final workerIndex = workerNotifier.indexOfWorker(worker);
-    // TODO test if worker can not be deleted this .state is not necessary
-    final updatedState =
-        workerNotifier.state.where((w) => w.id != worker.id).toList();
-    workerNotifier.state = updatedState;
     final shouldDelete = await workerNotifier.removeWorker(worker);
-    if (!shouldDelete) {
-      // Reinstate the location back to the list if deletion is not allowed
-      workerNotifier.state = [
-        ...updatedState.sublist(0, workerIndex),
-        worker,
-        ...updatedState.sublist(workerIndex)
-      ];
-    }
-    _showUndoSnackBar(worker, workerIndex, shouldDelete);
+
+    _showUndoSnackBar(worker, shouldDelete);
   }
 
-  void _showUndoSnackBar(Worker worker, int workerIndex, bool shouldDelete) {
+  void _showUndoSnackBar(Worker worker, bool shouldDelete) {
     ScaffoldMessenger.of(context).clearSnackBars();
     if (shouldDelete) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -77,9 +65,7 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
             label: 'Undo',
             onPressed: () async {
               setIsLoading(true);
-              await ref
-                  .read(workerProvider.notifier)
-                  .insertWorker(worker, workerIndex);
+              await ref.read(workerProvider.notifier).addWorker(worker);
               setIsLoading(false);
             },
           ),

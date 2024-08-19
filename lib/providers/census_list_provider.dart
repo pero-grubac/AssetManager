@@ -52,17 +52,6 @@ class CensusListNotifier extends StateNotifier<List<CensusList>> {
     return state.indexOf(censusList);
   }
 
-  Future<void> insertCensusList(CensusList censusList, int index) async {
-    final db = await DatabaseHelper().getCensusListDatabase();
-    await db.update(
-      CensusList.dbName,
-      censusList.toMap(),
-      where: 'id = ?',
-      whereArgs: [censusList.id],
-    );
-    state = [censusList, ...state];
-  }
-
   Future<CensusList?> findCensusListById(String id) async {
     final db = await DatabaseHelper().getCensusListDatabase();
     final data = await db.query(
