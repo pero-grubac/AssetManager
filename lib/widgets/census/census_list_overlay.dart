@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../../models/census_list.dart';
 import '../util/build_text_field.dart';
+import '../util/error_dialog.dart';
 
 class CensusListOverlay extends StatefulWidget {
   const CensusListOverlay({super.key, this.censusList, this.onSave});
@@ -97,12 +98,43 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
             if (widget.onSave != null) const Spacer(),
             if (widget.onSave != null)
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _submitData,
                 child: const Text('Save'),
               ),
           ],
         )
       ];
+    }
+  }
+
+  void _submitData() {
+    final name = _nameController.text.trim();
+    if (_selectedDate == null) {
+      ErrorDialog.show(context, 'Date  can not be empty');
+      return;
+    }
+    try {
+      CensusList censusList;
+      if (widget.censusList == null) {
+        censusList = CensusList(
+          name: name,
+          creationDate: _selectedDate!,
+        );
+      } else {
+        censusList = CensusList(
+          id: widget.censusList!.id,
+          name: name,
+          creationDate: _selectedDate!,
+        );
+      }
+      widget.onSave!(censusList);
+      Navigator.pop(context);
+    } catch (e) {
+      if (e is ArgumentError) {
+        ErrorDialog.show(context, e.message);
+      } else {
+        ErrorDialog.show(context, 'An unknown error occurred ');
+      }
     }
   }
 

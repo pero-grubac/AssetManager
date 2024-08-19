@@ -47,6 +47,11 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
 //TODO
   Future<void> _removeCensusList(CensusList censusList) async {}
   Future<void> _editCensusList(CensusList censusList) async {}
+  Future<void> _addCensusList(CensusList censusList) async {
+    setIsLoading(true);
+    await ref.read(censusListProvider.notifier).addCensusList(censusList);
+    setIsLoading(false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +75,9 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
                         provider: filteredCensusListProvider,
                         emptyMessage: 'No census list found'),
           ),
-          // TODO census list detail overlay,add button for census items
-          overlay: const CensusListOverlay(),
+          overlay: CensusListOverlay(
+            onSave: _addCensusList,
+          ),
         )
       ],
     );
