@@ -4,6 +4,7 @@ import 'package:asset_manager/models/census_item.dart';
 import 'package:asset_manager/models/worker.dart';
 import 'package:asset_manager/providers/asset_provider.dart';
 import 'package:asset_manager/providers/location_provider.dart';
+import 'package:asset_manager/providers/util_provider.dart';
 import 'package:asset_manager/providers/worker_provider.dart';
 import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:asset_manager/screens/scan_barcode_screen.dart';
@@ -31,10 +32,7 @@ class CensusItemDetails extends ConsumerStatefulWidget {
     this.onSaveCensusItem,
     this.isEditable = true,
   });
-/*TODO
-*  providers for location/worker
-* implement functions
-* */
+
   final CensusItem? censusItem;
   final Future<void> Function(CensusItem censusItem)? onSaveCensusItem;
   final bool isEditable;
@@ -45,11 +43,7 @@ class CensusItemDetails extends ConsumerStatefulWidget {
 class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
   final _barcodeController = TextEditingController();
 
-  final _newWorkerController = TextEditingController();
-  final _oldWorkerController = TextEditingController();
-
-  AssetLocation? _selectedAssetLocation;
-  AssetLocation? _currentAssetLocation;
+  AssetLocation? _oldAssetLocation;
   AssetLocation? _newAssetLocation;
 
   Worker? _oldWorker;
@@ -58,37 +52,46 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
   Asset? _asset;
   bool _isLoading = true;
 
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
+  void _initializeData() async {
+    setIsLoading(true);
     if (widget.censusItem != null) {
-      _currentAssetLocation = await ref
-          .read(locationProvider.notifier)
-          .findLocationById(widget.censusItem!.oldLocationId);
-      _newAssetLocation = await ref
-          .read(locationProvider.notifier)
-          .findLocationById(widget.censusItem!.newLocationId);
-      _oldWorker = await ref
-          .read(workerProvider.notifier)
-          .findWorkerById(widget.censusItem!.oldPersonId);
-      _newWorker = await ref
-          .read(workerProvider.notifier)
-          .findWorkerById(widget.censusItem!.newPersonId);
-      _asset = await ref
-          .read(assetProvider.notifier)
-          .findAssetById(widget.censusItem!.assetId);
+      try {
+        _oldAssetLocation = await ref
+            .read(locationProvider.notifier)
+            .findLocationById(widget.censusItem!.oldLocationId);
+        _newAssetLocation = await ref
+            .read(locationProvider.notifier)
+            .findLocationById(widget.censusItem!.newLocationId);
+        _oldWorker = await ref
+            .read(workerProvider.notifier)
+            .findWorkerById(widget.censusItem!.oldPersonId);
+        _newWorker = await ref
+            .read(workerProvider.notifier)
+            .findWorkerById(widget.censusItem!.newPersonId);
+        _asset = await ref
+            .read(assetProvider.notifier)
+            .findAssetById(widget.censusItem!.assetId);
 
-      _barcodeController.text = _asset!.barcode.toString();
-      _newWorkerController.text = _newWorker!.fullName;
-      _oldWorkerController.text = _oldWorker!.fullName;
+        setState(() {
+          _barcodeController.text = _asset?.barcode.toString() ?? '';
+        });
+      } catch (e) {
+        ErrorDialog.show(context, 'Error loading data');
+      }
     }
     setIsLoading(false);
   }
 
   @override
+  void initState() {
+    super.initState();
+    _initializeData(); // Use a separate method to handle async loading
+  }
+
+  @override
   void dispose() {
     _barcodeController.dispose();
-    _newWorkerController.dispose();
+
     super.dispose();
   }
 
@@ -110,10 +113,11 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
           ),
         ),
         const SizedBox(width: 8),
-        IconButton(
-          icon: const Icon(Icons.qr_code),
-          onPressed: _scanBarcode,
-        ),
+        if (widget.isEditable)
+          IconButton(
+            icon: const Icon(Icons.qr_code),
+            onPressed: _scanBarcode,
+          ),
         IconButton(
           onPressed: _loadAsset,
           icon: const Icon(Icons.more_horiz),
@@ -131,6 +135,14 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
     );
     if (scanResult != null && scanResult.isNotEmpty && scanResult != '-1') {
       _barcodeController.text = scanResult;
+      int? barcode = int.tryParse(_barcodeController.text);
+
+      if (barcode != null) {
+        _asset =
+            await ref.read(assetProvider.notifier).findAssetByBarcode(barcode);
+      } else {
+        ErrorDialog.show(context, 'Barcode is a number');
+      }
     }
   }
 
@@ -162,9 +174,9 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
   Widget _buildNewWorkerField() {
     return WorkerField(
       isEditable: widget.isEditable,
-      initialWorker: _oldWorker,
+      initialWorker: _newWorker,
       onWorkerSelected: (worker) {
-        _oldWorker = worker;
+        _newWorker = worker;
       },
       textFieldLabel: 'New worker',
       controllerTextEmpty: 'New worker can not be empty',
@@ -183,29 +195,102 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
     );
   }
 
-  Widget _buildLocationInput({required bool isEditable}) {
+  Widget _buildLocationInput({
+    required AssetLocation? location,
+    required bool isEditable,
+    required Function(AssetLocation?) onLocationChanged,
+  }) {
     return _isLoading
         ? const CenteredCircularLoading()
         : LocationInput(
-            onSelectedLocation: (assetLocation) {
-              _selectedAssetLocation = assetLocation;
-            },
-            assetLocation: _selectedAssetLocation,
+            onSelectedLocation: onLocationChanged,
+            assetLocation: location,
             isEditable: isEditable,
           );
   }
 
   List<Widget> _buildFields({required bool isWideScreen}) {
-    return [
-      _buildBarcodeField(),
-      _buildOldWorkerField(),
-      const SizedBox(height: 10),
-      _buildLocationInput(isEditable: true),
-      const SizedBox(height: 10),
-      _buildNewWorkerField(),
-      const SizedBox(height: 10),
-      _buildLocationInput(isEditable: true),
-    ];
+    return _isLoading
+        ? [const CenteredCircularLoading()]
+        : [
+            _buildBarcodeField(),
+            _buildOldWorkerField(),
+            const SizedBox(height: 10),
+            _buildLocationInput(
+              location: _oldAssetLocation,
+              isEditable: widget.isEditable,
+              onLocationChanged: (location) {
+                setState(() {
+                  _oldAssetLocation = location;
+                });
+              },
+            ),
+            const SizedBox(height: 10),
+            _buildNewWorkerField(),
+            const SizedBox(height: 10),
+            _buildLocationInput(
+              location: _newAssetLocation,
+              isEditable: widget.isEditable,
+              onLocationChanged: (location) {
+                setState(() {
+                  _newAssetLocation = location;
+                });
+              },
+            ),
+          ];
+  }
+
+  Future<void> _submitData() async {
+    int? barcode = int.tryParse(_barcodeController.text.trim());
+    if (barcode == null) {
+      ErrorDialog.show(context, 'Barcode  can not be empty');
+      return;
+    }
+    if (_oldWorker == null) {
+      ErrorDialog.show(context, 'Old worker  can not be empty');
+      return;
+    }
+    if (_oldAssetLocation == null) {
+      ErrorDialog.show(context, 'Old location  can not be empty');
+      return;
+    }
+    _asset ??=
+        await ref.read(assetProvider.notifier).findAssetByBarcode(barcode);
+    _newWorker ??= _oldWorker;
+    _newAssetLocation ??= _oldAssetLocation;
+    try {
+      CensusItem censusItem;
+      String id = ref.read(censusListIdProvider.notifier).state;
+
+      if (widget.censusItem == null) {
+        censusItem = CensusItem(
+          censusListId: id,
+          assetId: _asset!.id,
+          oldPersonId: _oldWorker!.id,
+          newPersonId: _newWorker!.id,
+          oldLocationId: _oldAssetLocation!.id,
+          newLocationId: _newAssetLocation!.id,
+        );
+      } else {
+        censusItem = CensusItem(
+          id: widget.censusItem!.id,
+          censusListId: id,
+          assetId: _asset!.id,
+          oldPersonId: _oldWorker!.id,
+          newPersonId: _newWorker!.id,
+          oldLocationId: _oldAssetLocation!.id,
+          newLocationId: _newAssetLocation!.id,
+        );
+      }
+      widget.onSaveCensusItem!(censusItem);
+      Navigator.pop(context);
+    } catch (e) {
+      if (e is ArgumentError) {
+        ErrorDialog.show(context, e.message);
+      } else {
+        ErrorDialog.show(context, 'An unknown error occurred ');
+      }
+    }
   }
 
   @override
@@ -218,9 +303,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
-            onPressed: () {
-              // Handle save logic here
-            },
+            onPressed: _submitData,
           ),
         ],
       ),

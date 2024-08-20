@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/asset.dart';
+import '../../providers/asset_provider.dart';
+import '../../providers/location_provider.dart';
+import '../../providers/worker_provider.dart';
 
 class CensusItemCard extends ConsumerStatefulWidget {
   const CensusItemCard({super.key, required this.censusItem});
@@ -20,10 +23,33 @@ class _CensusItemCardState extends ConsumerState<CensusItemCard> {
   late Asset? asset;
   late Worker? worker;
   late AssetLocation? assetLocation;
+  bool _isLoading = true;
+
   @override
   void initState() {
-    // TODO: read asset/worker/location
     super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final assetResult = await ref
+        .read(assetProvider.notifier)
+        .findAssetById(widget.censusItem.assetId);
+    final workerResult = await ref
+        .read(workerProvider.notifier)
+        .findWorkerById(widget.censusItem.newPersonId);
+    final locationResult = await ref
+        .read(locationProvider.notifier)
+        .findLocationById(widget.censusItem.newLocationId);
+
+    if (mounted) {
+      setState(() {
+        asset = assetResult;
+        worker = workerResult;
+        assetLocation = locationResult;
+        _isLoading = false;
+      });
+    }
   }
 
   void openOverlay() {
@@ -40,24 +66,26 @@ class _CensusItemCardState extends ConsumerState<CensusItemCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 26,
-          backgroundImage: FileImage(asset!.image),
-        ),
-        title: RowIconWidget(
-          icon: Icons.person_2,
-          widget: Expanded(child: Text(worker!.fullName)),
-        ),
-        subtitle: RowIconWidget(
-          icon: Icons.location_city,
-          widget: Expanded(
-            child: Text(assetLocation!.address),
-          ),
-        ),
-        onTap: openOverlay,
-      ),
-    );
+    return _isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : Card(
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 26,
+                backgroundImage: FileImage(asset!.image),
+              ),
+              title: RowIconWidget(
+                icon: Icons.person_2,
+                widget: Expanded(child: Text(worker!.fullName)),
+              ),
+              subtitle: RowIconWidget(
+                icon: Icons.location_city,
+                widget: Expanded(
+                  child: Text(assetLocation!.address),
+                ),
+              ),
+              onTap: openOverlay,
+            ),
+          );
   }
 }

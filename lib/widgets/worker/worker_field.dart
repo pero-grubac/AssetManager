@@ -23,7 +23,6 @@ class WorkerField extends ConsumerStatefulWidget {
   final Function(Worker worker)? onWorkerSelected;
   final String textFieldLabel;
   final String controllerTextEmpty;
-
   @override
   ConsumerState<WorkerField> createState() => _WorkerFieldState();
 }
@@ -36,6 +35,8 @@ class _WorkerFieldState extends ConsumerState<WorkerField> {
   void initState() {
     super.initState();
     if (widget.initialWorker != null) {
+      print(widget.initialWorker!.fullName);
+
       _newWorkerController.text = widget.initialWorker!.fullName;
       _newWorker = widget.initialWorker;
     }
@@ -60,10 +61,11 @@ class _WorkerFieldState extends ConsumerState<WorkerField> {
           ),
         ),
         const SizedBox(width: 8),
-        IconButton(
-          onPressed: _existingWorkers,
-          icon: const Icon(Icons.supervised_user_circle),
-        ),
+        if (widget.isEditable)
+          IconButton(
+            onPressed: _existingWorkers,
+            icon: const Icon(Icons.supervised_user_circle),
+          ),
         IconButton(
           onPressed: _showWorkerOverlay,
           icon: const Icon(Icons.more_horiz),

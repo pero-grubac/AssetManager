@@ -1,25 +1,16 @@
 import 'dart:io';
 
 import 'package:asset_manager/models/asset.dart';
-import 'package:asset_manager/models/asset_location.dart';
-import 'package:asset_manager/providers/location_provider.dart';
-import 'package:asset_manager/providers/worker_provider.dart';
-import 'package:asset_manager/screens/screen.dart';
-import 'package:asset_manager/screens/selection_screen.dart';
 import 'package:asset_manager/widgets/image/image_input.dart';
-import 'package:asset_manager/widgets/location/location_input.dart';
-import 'package:asset_manager/widgets/worker/worker_card.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../models/worker.dart';
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
-import '../widgets/worker/worker_overlay.dart';
 
-class AssetDetailsScreen extends ConsumerStatefulWidget {
+class AssetDetailsScreen extends StatefulWidget {
   const AssetDetailsScreen({
     super.key,
     this.onSaveAsset,
@@ -31,10 +22,10 @@ class AssetDetailsScreen extends ConsumerStatefulWidget {
   final bool isEditable;
 
   @override
-  ConsumerState<AssetDetailsScreen> createState() => _AssetDetailsScreenState();
+  State<AssetDetailsScreen> createState() => _AssetDetailsScreenState();
 }
 
-class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
+class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _barcodeController = TextEditingController();
@@ -42,8 +33,7 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
   final _workerController = TextEditingController();
 
   File? _selectedImage;
-  AssetLocation? _selectedAssetLocation;
-  Worker? _selectedWorker;
+
   bool _isLoading = true;
   DateTime? _selectedDate;
   String? _pickedDate;
@@ -59,14 +49,6 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
       _selectedImage = widget.asset?.image;
       _selectedDate = widget.asset?.creationDate;
       _pickedDate = widget.asset?.formatedDate;
-      // Attempt to retrieve the location by its ID asynchronously
-      /*  _selectedAssetLocation = await ref
-          .read(locationProvider.notifier)
-          .findLocationById(widget.asset!.assignedLocationId);
-      // wind worker by id and assign  it to _workerController
-      _selectedWorker = await ref
-          .read(workerProvider.notifier)
-          .findWorkerById(widget.asset!.assignedPersonId);*/
     }
     setState(() {
       _isLoading = false;
@@ -161,48 +143,10 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
     });
   }
 
-  void _existingWorkers() async {
-    setState(() {
-      _workerController.text = '';
-    });
-    final selectedWorker = await Navigator.push<Worker>(
-      context,
-      MaterialPageRoute(
-          builder: (ctx) => SelectionScreen<Worker>(
-                provider: workerProvider,
-                onConfirmSelection: (selectedItem) {},
-                cardBuilder:
-                    (Worker item, bool isSelected, void Function() onTap) {
-                  return WorkerCard(
-                    worker: item,
-                    onTap: onTap,
-                    isSelected: isSelected,
-                  );
-                },
-                title: 'Select worker',
-                emptyMessage: 'No workers found',
-              )),
-    );
-    if (selectedWorker != null) {
-      setState(() {
-        _workerController.text = selectedWorker.fullName;
-        _selectedWorker = selectedWorker;
-      });
-    } else {
-      return;
-    }
-  }
-
   void setIsLoading(bool load) {
     setState(() {
       _isLoading = load;
     });
-  }
-
-  Future<void> _addWorker(Worker worker) async {
-    setIsLoading(true);
-    await ref.read(workerProvider.notifier).addWorker(worker);
-    setIsLoading(false);
   }
 
   void _barcodeOverlay() {
