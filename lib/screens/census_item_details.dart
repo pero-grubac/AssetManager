@@ -15,6 +15,7 @@ class CensusItemDetails extends ConsumerStatefulWidget {
     super.key,
     this.censusItem,
     this.onSaveCensusItem,
+    this.isEditable,
   });
 /*TODO
 *  providers for location/worker
@@ -22,7 +23,7 @@ class CensusItemDetails extends ConsumerStatefulWidget {
 * */
   final CensusItem? censusItem;
   final Future<void> Function(CensusItem censusItem)? onSaveCensusItem;
-
+  final bool? isEditable;
   @override
   ConsumerState<CensusItemDetails> createState() => _CensusItemDetailsState();
 }

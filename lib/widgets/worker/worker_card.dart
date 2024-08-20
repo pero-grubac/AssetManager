@@ -41,7 +41,7 @@ class WorkerCard extends StatelessWidget {
             : null,
         title: CenterRowIconText(
           icon: Icons.person_2,
-          widget: Text(worker.fullName),
+          widget: Expanded(child: Text(worker.fullName)),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0),
