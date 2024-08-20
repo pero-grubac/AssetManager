@@ -1,11 +1,21 @@
+import 'dart:async';
+
 import 'package:asset_manager/models/census_item.dart';
+import 'package:asset_manager/models/worker.dart';
+import 'package:asset_manager/providers/asset_provider.dart';
+import 'package:asset_manager/providers/location_provider.dart';
+import 'package:asset_manager/providers/worker_provider.dart';
+import 'package:asset_manager/screens/scan_barcode_screen.dart';
 import 'package:asset_manager/widgets/util/centered_circular_loading.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/asset.dart';
 import '../models/asset_location.dart';
 import '../widgets/location/location_input.dart';
 import '../widgets/util/build_text_field.dart';
+import '../widgets/util/error_dialog.dart';
 import '../widgets/worker/worker_overlay.dart';
 
 class CensusItemDetails extends ConsumerStatefulWidget {
@@ -15,7 +25,7 @@ class CensusItemDetails extends ConsumerStatefulWidget {
     super.key,
     this.censusItem,
     this.onSaveCensusItem,
-    this.isEditable,
+    this.isEditable = true,
   });
 /*TODO
 *  providers for location/worker
@@ -23,7 +33,7 @@ class CensusItemDetails extends ConsumerStatefulWidget {
 * */
   final CensusItem? censusItem;
   final Future<void> Function(CensusItem censusItem)? onSaveCensusItem;
-  final bool? isEditable;
+  final bool isEditable;
   @override
   ConsumerState<CensusItemDetails> createState() => _CensusItemDetailsState();
 }
@@ -32,12 +42,37 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
   final _barcodeController = TextEditingController();
   final _workerController = TextEditingController();
   AssetLocation? _selectedAssetLocation;
+  AssetLocation? _currentAssetLocation;
+  AssetLocation? _newAssetLocation;
+
+  Worker? _oldWorker;
+  Worker? _newWorker;
+
+  Asset? _asset;
   bool _isLoading = true;
 
   @override
-  void initState() {
-    super.initState();
-    _initializeAssetDetails();
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    if (widget.censusItem != null) {
+      _currentAssetLocation = await ref
+          .read(locationProvider.notifier)
+          .findLocationById(widget.censusItem!.oldLocationId);
+      _newAssetLocation = await ref
+          .read(locationProvider.notifier)
+          .findLocationById(widget.censusItem!.newLocationId);
+      _oldWorker = await ref
+          .read(workerProvider.notifier)
+          .findWorkerById(widget.censusItem!.oldPersonId);
+      _newWorker = await ref
+          .read(workerProvider.notifier)
+          .findWorkerById(widget.censusItem!.newPersonId);
+      _asset = await ref
+          .read(assetProvider.notifier)
+          .findAssetById(widget.censusItem!.assetId);
+      _barcodeController.text = _asset!.barcode.toString();
+    }
+    setIsLoading(false);
   }
 
   @override
@@ -47,8 +82,10 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
     super.dispose();
   }
 
-  Future<void> _initializeAssetDetails() async {
-    setState(() => _isLoading = false);
+  void setIsLoading(bool load) {
+    setState(() {
+      _isLoading = load;
+    });
   }
 
   Widget _buildBarcodeField() {
@@ -59,15 +96,13 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
           child: BuildTextField(
             controller: _barcodeController,
             label: 'Barcode',
-            isEditable: true,
+            isEditable: !widget.isEditable,
           ),
         ),
         const SizedBox(width: 8),
         IconButton(
           icon: const Icon(Icons.qr_code),
-          onPressed: () {
-            // Add your barcode scanning logic here
-          },
+          onPressed: _scanBarcode,
         ),
         IconButton(
           onPressed: () {
@@ -77,6 +112,24 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
         ),
       ],
     );
+  }
+
+  Future<void> _scanBarcode() async {
+    final scanResult = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ScanBarcodeScreen(),
+      ),
+    );
+    if (scanResult != null && scanResult.isNotEmpty && scanResult != '-1') {
+      _barcodeController.text = scanResult;
+    }
+  }
+
+  Future<void> _loadAsset() async {
+    if (_barcodeController.text.isEmpty) {
+      ErrorDialog.show(context, 'Barcode  can not be empty');
+    }
   }
 
   Widget _buildWorkerField() {

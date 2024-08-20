@@ -29,10 +29,13 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen> {
       ErrorDialog.show(context, 'Error scanning barcode.');
     }
     if (!mounted) return;
-    setState(() {
-      this.scanResult = scanResult;
-    });
-    print(scanResult);
+    if (scanResult != '-1') {
+      Navigator.pop(context, scanResult);
+    } else {
+      setState(() {
+        this.scanResult = null;
+      });
+    }
   }
 
   @override
