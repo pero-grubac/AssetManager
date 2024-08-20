@@ -50,10 +50,6 @@ class _AssetDetailsScreenState extends ConsumerState<AssetDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeAssetDetails();
-  }
-
-  Future<void> _initializeAssetDetails() async {
     if (widget.asset != null) {
       // Editing an existing asset
       _nameController.text = widget.asset!.name;

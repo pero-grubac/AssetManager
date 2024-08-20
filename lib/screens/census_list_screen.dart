@@ -24,14 +24,11 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
   final _searchController = TextEditingController();
   late Future<void> _censusListFuture;
   bool _isLoading = false;
-  @override
-  void initState() {
-    super.initState();
-    _initializeAssets();
-  }
 
-  void _initializeAssets() async {
+  @override
+  void didChangeDependencies() {
     _censusListFuture = ref.read(censusListProvider.notifier).loadItems();
+    super.didChangeDependencies();
   }
 
   void setIsLoading(bool load) {

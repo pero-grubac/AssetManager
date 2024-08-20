@@ -34,12 +34,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   bool _isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
-    _initializeAssets();
-  }
-
-  void _initializeAssets() async {
+  void didChangeDependencies() async {
     AssetLocation? location;
     if (widget.position != null) {
       location = await ref.read(locationProvider.notifier).findLocationByLatLng(
@@ -48,7 +43,8 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
     _assetsFuture =
         ref.read(assetProvider.notifier).loadItems(location, widget.worker);
-    setState(() {}); // Trigger a rebuild after assets are loaded
+    setState(() {});
+    super.didChangeDependencies();
   }
 
   void setIsLoading(bool load) {
