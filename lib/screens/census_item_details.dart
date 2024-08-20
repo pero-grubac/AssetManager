@@ -7,7 +7,9 @@ import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/providers/worker_provider.dart';
 import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:asset_manager/screens/scan_barcode_screen.dart';
+import 'package:asset_manager/screens/selection_screen.dart';
 import 'package:asset_manager/widgets/util/centered_circular_loading.dart';
+import 'package:asset_manager/widgets/worker/worker_field.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +19,7 @@ import '../models/asset_location.dart';
 import '../widgets/location/location_input.dart';
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
+import '../widgets/worker/worker_card.dart';
 import '../widgets/worker/worker_overlay.dart';
 
 class CensusItemDetails extends ConsumerStatefulWidget {
@@ -41,7 +44,10 @@ class CensusItemDetails extends ConsumerStatefulWidget {
 
 class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
   final _barcodeController = TextEditingController();
-  final _workerController = TextEditingController();
+
+  final _newWorkerController = TextEditingController();
+  final _oldWorkerController = TextEditingController();
+
   AssetLocation? _selectedAssetLocation;
   AssetLocation? _currentAssetLocation;
   AssetLocation? _newAssetLocation;
@@ -71,7 +77,10 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
       _asset = await ref
           .read(assetProvider.notifier)
           .findAssetById(widget.censusItem!.assetId);
+
       _barcodeController.text = _asset!.barcode.toString();
+      _newWorkerController.text = _newWorker!.fullName;
+      _oldWorkerController.text = _oldWorker!.fullName;
     }
     setIsLoading(false);
   }
@@ -79,7 +88,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
   @override
   void dispose() {
     _barcodeController.dispose();
-    _workerController.dispose();
+    _newWorkerController.dispose();
     super.dispose();
   }
 
@@ -150,32 +159,27 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
     }
   }
 
-  Widget _buildWorkerField() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Expanded(
-          child: BuildTextField(
-            controller: _workerController,
-            label: 'Worker',
-            isEditable: true,
-          ),
-        ),
-        const SizedBox(width: 8),
-        IconButton(
-          onPressed: () {
-            _showWorkerOverlay();
-          },
-          icon: const Icon(Icons.add),
-        ),
-        const SizedBox(width: 8),
-        IconButton(
-          onPressed: () {
-            // Add your worker selection logic here
-          },
-          icon: const Icon(Icons.supervised_user_circle),
-        ),
-      ],
+  Widget _buildNewWorkerField() {
+    return WorkerField(
+      isEditable: widget.isEditable,
+      initialWorker: _oldWorker,
+      onWorkerSelected: (worker) {
+        _oldWorker = worker;
+      },
+      textFieldLabel: 'New worker',
+      controllerTextEmpty: 'New worker can not be empty',
+    );
+  }
+
+  Widget _buildOldWorkerField() {
+    return WorkerField(
+      isEditable: widget.isEditable,
+      initialWorker: _oldWorker,
+      onWorkerSelected: (worker) {
+        _oldWorker = worker;
+      },
+      textFieldLabel: 'Old worker',
+      controllerTextEmpty: 'Old worker can not be empty',
     );
   }
 
@@ -191,31 +195,14 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
           );
   }
 
-  void _showWorkerOverlay() {
-    showModalBottomSheet(
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: context,
-      builder: (ctx) => WorkerOverlay(
-        onSaveWorker: (worker) {
-          // Handle worker save logic
-        },
-      ),
-    );
-  }
-
   List<Widget> _buildFields({required bool isWideScreen}) {
     return [
       _buildBarcodeField(),
-      BuildTextField(
-        controller: _workerController,
-        label: 'Current worker',
-        isEditable: true,
-      ),
+      _buildOldWorkerField(),
       const SizedBox(height: 10),
       _buildLocationInput(isEditable: true),
       const SizedBox(height: 10),
-      _buildWorkerField(),
+      _buildNewWorkerField(),
       const SizedBox(height: 10),
       _buildLocationInput(isEditable: true),
     ];

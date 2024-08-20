@@ -100,6 +100,21 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
     }
   }
 
+  Future<Worker?> findWorkerByFullName(
+      String firstName, String lastName) async {
+    final db = await DatabaseHelper().getWorkerDatabase();
+    final data = await db.query(
+      Worker.dbName,
+      where: 'firstName = ? AND lastName = ?',
+      whereArgs: [firstName, lastName],
+    );
+    if (data.isNotEmpty) {
+      return Worker.fromMap(data.first);
+    } else {
+      return null;
+    }
+  }
+
   @override
   void dispose() async {
     await DatabaseHelper().closeDatabases();
