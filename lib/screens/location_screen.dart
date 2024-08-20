@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/asset_location.dart';
-import '../providers/search_provider.dart';
+import '../providers/util_provider.dart';
 import '../widgets/util/centered_circular_loading.dart';
 import '../widgets/util/dismissible_list.dart';
 

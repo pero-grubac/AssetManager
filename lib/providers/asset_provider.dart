@@ -1,6 +1,6 @@
 import 'package:asset_manager/models/asset.dart';
 import 'package:asset_manager/models/asset_location.dart';
-import 'package:asset_manager/providers/search_provider.dart';
+import 'package:asset_manager/providers/util_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as syspaths;
 import 'package:path/path.dart' as path;

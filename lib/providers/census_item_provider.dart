@@ -1,6 +1,6 @@
 import 'package:asset_manager/models/census_item.dart';
 import 'package:asset_manager/providers/database.dart';
-import 'package:asset_manager/providers/search_provider.dart';
+import 'package:asset_manager/providers/util_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
@@ -82,10 +82,12 @@ final censusItemProvider =
 );
 final filteredCensusItemProvider = Provider<List<CensusItem>>((ref) {
   final query = ref.watch(searchQueryProvider).toLowerCase();
+  final id = ref.watch(censusListIdProvider).toLowerCase();
   final items = ref.watch(censusItemProvider);
-  if (query.isEmpty) return items;
+  if (query.isEmpty || id.isEmpty) return items;
   return items.where((censusItem) {
-    // TODO fix searching
-    return true;
+    bool matchesId = id == censusItem.censusListId;
+    //TODO add searching by something like worker/location
+    return matchesId;
   }).toList();
 });

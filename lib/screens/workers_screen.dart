@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/worker.dart';
-import '../providers/search_provider.dart';
+import '../providers/util_provider.dart';
 import '../screens/screen.dart';
 import '../widgets/util/centered_circular_loading.dart';
 import '../widgets/util/dismissible_list.dart';

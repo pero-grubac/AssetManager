@@ -13,7 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../models/asset.dart';
 import '../models/worker.dart';
-import '../providers/search_provider.dart';
+import '../providers/util_provider.dart';
 
 class AssetScreen extends ConsumerStatefulWidget {
   static const id = 'asset_screen';

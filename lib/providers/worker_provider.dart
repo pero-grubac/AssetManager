@@ -1,5 +1,5 @@
 import 'package:asset_manager/models/worker.dart';
-import 'package:asset_manager/providers/search_provider.dart';
+import 'package:asset_manager/providers/util_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/asset.dart';
