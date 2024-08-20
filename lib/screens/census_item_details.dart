@@ -5,6 +5,7 @@ import 'package:asset_manager/models/worker.dart';
 import 'package:asset_manager/providers/asset_provider.dart';
 import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/providers/worker_provider.dart';
+import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:asset_manager/screens/scan_barcode_screen.dart';
 import 'package:asset_manager/widgets/util/centered_circular_loading.dart';
 import 'package:barcode_widget/barcode_widget.dart';
@@ -105,9 +106,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
           onPressed: _scanBarcode,
         ),
         IconButton(
-          onPressed: () {
-            // Additional barcode options
-          },
+          onPressed: _loadAsset,
           icon: const Icon(Icons.more_horiz),
         ),
       ],
@@ -129,6 +128,25 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
   Future<void> _loadAsset() async {
     if (_barcodeController.text.isEmpty) {
       ErrorDialog.show(context, 'Barcode  can not be empty');
+    } else {
+      int? barcode = int.tryParse(_barcodeController.text.trim());
+      if (barcode != null) {
+        _asset =
+            await ref.read(assetProvider.notifier).findAssetByBarcode(barcode);
+      } else {
+        ErrorDialog.show(context, 'Barcode is a number');
+      }
+    }
+    if (_asset != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => AssetDetailsScreen(
+            asset: _asset,
+            isEditable: false,
+          ),
+        ),
+      );
     }
   }
 

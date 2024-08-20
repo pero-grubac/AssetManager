@@ -151,6 +151,20 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     }
   }
 
+  Future<Asset?> findAssetByBarcode(int barcode) async {
+    final db = await DatabaseHelper().getAssetDatabase();
+    final data = await db.query(
+      Asset.dbName,
+      where: 'barcode = ?',
+      whereArgs: [barcode],
+    );
+    if (data.isNotEmpty) {
+      return Asset.fromMap(data.first);
+    } else {
+      return null;
+    }
+  }
+
   @override
   void dispose() async {
     await DatabaseHelper().closeDatabases();
