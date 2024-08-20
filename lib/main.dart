@@ -1,5 +1,6 @@
 import 'package:asset_manager/screens/asset_screen.dart';
 import 'package:asset_manager/screens/census_item_details.dart';
+import 'package:asset_manager/screens/census_list_items_screen.dart';
 import 'package:asset_manager/screens/census_list_screen.dart';
 import 'package:asset_manager/screens/home_screen.dart';
 import 'package:asset_manager/screens/location_screen.dart';
@@ -48,6 +49,7 @@ class AssetManager extends StatelessWidget {
         ScanBarcodeScreen.id: (context) => const ScanBarcodeScreen(),
         CensusItemDetails.id: (context) => const CensusItemDetails(),
         CensusListScreen.id: (context) => const CensusListScreen(),
+        CensusListItemsScreen.id: (context) => const CensusListItemsScreen(),
       },
     );
   }

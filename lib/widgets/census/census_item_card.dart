@@ -4,18 +4,19 @@ import 'package:asset_manager/models/worker.dart';
 import 'package:asset_manager/screens/census_item_details.dart';
 import 'package:asset_manager/widgets/util/row_icon_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/asset.dart';
 
-class CensusItemCard extends StatefulWidget {
+class CensusItemCard extends ConsumerStatefulWidget {
   const CensusItemCard({super.key, required this.censusItem});
   final CensusItem censusItem;
 
   @override
-  State<CensusItemCard> createState() => _CensusItemCardState();
+  ConsumerState<CensusItemCard> createState() => _CensusItemCardState();
 }
 
-class _CensusItemCardState extends State<CensusItemCard> {
+class _CensusItemCardState extends ConsumerState<CensusItemCard> {
   late Asset? asset;
   late Worker? worker;
   late AssetLocation? assetLocation;

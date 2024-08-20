@@ -121,7 +121,8 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
                         itemBuilder: (context, censusList) =>
                             CensusListCard(censusList: censusList),
                         provider: filteredCensusListProvider,
-                        emptyMessage: 'No census list found'),
+                        emptyMessage: 'No census list found',
+                      ),
           ),
           overlay: CensusListOverlay(
             onSave: _addCensusList,

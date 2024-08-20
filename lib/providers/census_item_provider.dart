@@ -5,10 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   CensusItemNotifier() : super(const []);
-  Future<void> loadItems() async {
+  Future<void> loadItems(String censusListID) async {
     final db = await DatabaseHelper().getCensusItemDatabase();
     final data = await db.query(
       CensusItem.dbName,
+      where: 'censusListId = ?',
+      whereArgs: [censusListID],
       orderBy: 'createdAt DESC',
     );
     final items = data.map((row) => CensusItem.fromMap(row)).toList();
@@ -69,6 +71,20 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
     return null;
   }
 
+  Future<void> updateCensusItem(CensusItem censusItem) async {
+    final db = await DatabaseHelper().getCensusItemDatabase();
+    await db.update(
+      CensusItem.dbName,
+      censusItem.toMap(),
+      where: 'id = ?',
+      whereArgs: [censusItem.id],
+    );
+    final index = state.indexWhere((item) => item.id == censusItem.id);
+    List<CensusItem> temp = state;
+    temp[index] = censusItem;
+    state = [...temp];
+  }
+
   @override
   void dispose() async {
     await DatabaseHelper().closeDatabases();
@@ -83,11 +99,16 @@ final censusItemProvider =
 final filteredCensusItemProvider = Provider<List<CensusItem>>((ref) {
   final query = ref.watch(searchQueryProvider).toLowerCase();
   final id = ref.watch(censusListIdProvider).toLowerCase();
-  final items = ref.watch(censusItemProvider);
-  if (query.isEmpty || id.isEmpty) return items;
-  return items.where((censusItem) {
-    bool matchesId = id == censusItem.censusListId;
-    //TODO add searching by something like worker/location
-    return matchesId;
-  }).toList();
+
+  var items = ref.watch(censusItemProvider);
+  if (id.isNotEmpty) {
+    items = items.where((item) => id == item.censusListId).toList();
+  }
+  if (query.isNotEmpty) {
+    return items.where((censusItem) {
+      //TODO add searching by something like worker/location
+      return true;
+    }).toList();
+  }
+  return items;
 });
