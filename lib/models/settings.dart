@@ -4,9 +4,9 @@ class Settings {
   static const darkMode = 'dark';
   static const lightMode = 'light';
 
-  static const engLang = 'english';
+  static const engLang = 'en';
   static const engName = '🇺🇸  English';
-  static const srbLang = 'serbian';
+  static const srbLang = 'sr';
   static const srbName = '🇷🇸  Srpski';
 
   final String language;

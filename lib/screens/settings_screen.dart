@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/settings.dart';
+import '../providers/locale_provider.dart';
 import '../providers/settings_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,7 +16,6 @@ class SettingsScreen extends ConsumerWidget {
     final settings = ref.watch(settingsNotifierProvider);
     final isDarkMode = settings.themeMode == Settings.darkMode;
 
-    // Define the list of languages with their display names and values
     final languageOptions = [
       {'name': Settings.engName, 'value': Settings.engLang},
       {'name': Settings.srbName, 'value': Settings.srbLang},
@@ -29,7 +29,6 @@ class SettingsScreen extends ConsumerWidget {
       body: Center(
         child: Column(
           children: [
-            // Dropdown for language selection
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -41,7 +40,10 @@ class SettingsScreen extends ConsumerWidget {
                 style: TextStyle(
                   color: Theme.of(context).textTheme.titleLarge!.color,
                 ),
-                value: settings.language,
+                value: languageOptions
+                        .any((lang) => lang['value'] == settings.language)
+                    ? settings.language
+                    : languageOptions.first['value'],
                 items: languageOptions.map((lang) {
                   return DropdownMenuItem<String>(
                     value: lang['value'],
@@ -57,12 +59,13 @@ class SettingsScreen extends ConsumerWidget {
                     ref
                         .read(settingsNotifierProvider.notifier)
                         .updateLanguage(value);
+                    ref.read(localeProvider.notifier).updateLocale(
+                        Locale(value == Settings.engLang ? 'en' : 'sr'));
                   }
                 },
               ),
             ),
             const SizedBox(height: 20),
-            // Switch for theme mode
             SwitchListTile(
               title: Text(AppLocalizations.of(context)!.theme),
               value: isDarkMode,

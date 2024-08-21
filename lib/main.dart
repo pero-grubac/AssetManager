@@ -1,3 +1,4 @@
+import 'package:asset_manager/providers/locale_provider.dart';
 import 'package:asset_manager/providers/settings_provider.dart';
 import 'package:asset_manager/screens/asset_screen.dart';
 import 'package:asset_manager/screens/census_item_details.dart';
@@ -36,6 +37,7 @@ class _AssetManagerState extends ConsumerState<AssetManager> {
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsNotifierProvider);
+    final locale = ref.watch(localeProvider);
 
     return AnimatedTheme(
       data: settings.themeMode == Settings.darkMode
@@ -51,7 +53,7 @@ class _AssetManagerState extends ConsumerState<AssetManager> {
             : ThemeMode.light,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('sr'),
+        locale: locale,
         initialRoute: HomeScreen.id,
         routes: {
           HomeScreen.id: (context) => const HomeScreen(),
