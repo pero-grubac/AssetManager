@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../util/error_dialog.dart';
+import '../util/helper_widgets.dart';
 import 'location_card.dart';
 
 const API_KEY = 'AIzaSyD06o4maRDfYNUvDtzb0xQu9b_Gmo23HCQ';
@@ -291,16 +292,14 @@ class _LocationInputState extends State<LocationInput> {
             ),
             child: previewContent,
           ),
-          const SizedBox(
-            width: 10,
-          ),
+          addHorizontalSpace(10),
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (_pickedLocation != null || widget.assetLocation != null)
                 addressName,
-              const SizedBox(height: 5),
+              addVerticalSpace(5),
               buttons,
             ],
           )),
@@ -321,14 +320,10 @@ class _LocationInputState extends State<LocationInput> {
             ),
             child: previewContent,
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          addVerticalSpace(10),
           if (_pickedLocation != null || widget.assetLocation != null)
             addressName,
-          const SizedBox(
-            height: 10,
-          ),
+          addVerticalSpace(10),
           if (widget.isEditable) buttons,
         ],
       );

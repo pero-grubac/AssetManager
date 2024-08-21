@@ -1,4 +1,5 @@
 import 'package:asset_manager/providers/util_provider.dart';
+import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:asset_manager/widgets/util/row_icon_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class CensusListCard extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 8), // Space between name and date
+            addHorizontalSpace(8), // Space between name and date
             RowIconWidget(
               icon: Icons.calendar_month,
               widget: Text(censusList.formatedDate),

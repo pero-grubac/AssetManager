@@ -1,3 +1,4 @@
+import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -67,7 +68,7 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
           Text(
             _pickedDate ?? 'Select date',
           ),
-          const SizedBox(width: 8),
+          addHorizontalSpace(8),
           const Icon(Icons.calendar_month),
         ],
       ),
@@ -78,11 +79,11 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(child: nameTextField),
-          const SizedBox(width: 16),
+          addHorizontalSpace(16),
           Expanded(child: dateField)
         ],
       ),
-      const SizedBox(height: 16),
+      addVerticalSpace(16),
       Row(
         children: [
           if (widget.onSave == null) const Spacer(),

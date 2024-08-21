@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -69,9 +70,7 @@ class _ImageInputState extends State<ImageInput> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         cameraWidget,
-        const SizedBox(
-          width: 10,
-        ),
+        addHorizontalSpace(10),
         galleryWidget,
       ],
     );
@@ -112,10 +111,7 @@ class _ImageInputState extends State<ImageInput> {
           ),
           child: content,
         ),
-        if (_selectedImage != null && widget.isEditable)
-          const SizedBox(
-            height: 10,
-          ),
+        if (_selectedImage != null && widget.isEditable) addVerticalSpace(10),
         if (_selectedImage != null && widget.isEditable) buttonsRow,
       ],
     );

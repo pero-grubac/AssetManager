@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
+import '../widgets/util/helper_widgets.dart';
 
 class AssetDetailsScreen extends StatefulWidget {
   const AssetDetailsScreen({
@@ -162,7 +163,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
                   softWrap: true,
                 ),
               ),
-              const SizedBox(height: 20),
+              addVerticalSpace(20),
               Card(
                 color: Colors.white,
                 elevation: 10,
@@ -210,7 +211,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(child: barcodeTextField),
-        const SizedBox(width: 8),
+        addHorizontalSpace(8),
         IconButton(
           icon: const Icon(Icons.qr_code),
           onPressed: _barcodeOverlay,
@@ -221,7 +222,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(child: priceTextField),
-        const SizedBox(width: 16),
+        addHorizontalSpace(8),
         Expanded(
           child: GestureDetector(
             onTap: widget.isEditable ? _presentDatePicker : null,
@@ -231,7 +232,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
                 Text(
                   _pickedDate ?? 'Select date',
                 ),
-                const SizedBox(width: 8),
+                addHorizontalSpace(8),
                 const Icon(Icons.calendar_month),
               ],
             ),
@@ -255,9 +256,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Flexible(flex: 1, child: imageWidget),
-            const SizedBox(
-              width: 10,
-            ),
+            addHorizontalSpace(10),
             Expanded(
               flex: 2,
               child: Column(
@@ -278,13 +277,9 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
         priceDateRow,
         descriptionTextField,
         barcodeRow,
-        const SizedBox(
-          height: 10,
-        ),
+        addVerticalSpace(10),
         imageWidget,
-        const SizedBox(
-          height: 10,
-        ),
+        addVerticalSpace(10),
       ];
     }
   }

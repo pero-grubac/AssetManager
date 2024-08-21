@@ -1,3 +1,4 @@
+import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
 
 class RowIconWidget extends StatelessWidget {
@@ -15,7 +16,7 @@ class RowIconWidget extends StatelessWidget {
     return Row(
       children: [
         Icon(icon),
-        const SizedBox(width: 8),
+        addHorizontalSpace(8),
         widget,
       ],
     );

@@ -10,6 +10,7 @@ import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:asset_manager/screens/scan_barcode_screen.dart';
 import 'package:asset_manager/screens/selection_screen.dart';
 import 'package:asset_manager/widgets/util/centered_circular_loading.dart';
+import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:asset_manager/widgets/worker/worker_field.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +113,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
             isEditable: !widget.isEditable,
           ),
         ),
-        const SizedBox(width: 8),
+        addHorizontalSpace(8),
         if (widget.isEditable)
           IconButton(
             icon: const Icon(Icons.qr_code),
@@ -217,7 +218,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
         : [
             _buildBarcodeField(),
             _buildOldWorkerField(),
-            const SizedBox(height: 10),
+            addVerticalSpace(10),
             _buildLocationInput(
               location: _oldAssetLocation,
               isEditable: widget.isEditable,
@@ -228,9 +229,9 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
               },
               isLandscape: isWideScreen,
             ),
-            const SizedBox(height: 10),
+            addVerticalSpace(10),
             _buildNewWorkerField(),
-            const SizedBox(height: 10),
+            addVerticalSpace(10),
             _buildLocationInput(
               location: _newAssetLocation,
               isEditable: widget.isEditable,

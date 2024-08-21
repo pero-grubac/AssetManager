@@ -1,3 +1,4 @@
+import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../screens/settings_screen.dart';
@@ -28,9 +29,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   size: 48,
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                const SizedBox(
-                  width: 18,
-                ),
+                addHorizontalSpace(18),
                 const Text('Asset manager'),
               ],
             ),

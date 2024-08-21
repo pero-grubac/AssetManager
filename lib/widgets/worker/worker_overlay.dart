@@ -2,6 +2,7 @@ import 'package:asset_manager/widgets/util/build_text_field.dart';
 import 'package:flutter/material.dart';
 import '../../models/worker.dart';
 import '../util/error_dialog.dart';
+import '../util/helper_widgets.dart';
 
 class WorkerOverlay extends StatefulWidget {
   const WorkerOverlay({
@@ -108,15 +109,15 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
         Row(
           children: [
             Expanded(child: firstNameWidget),
-            const SizedBox(width: 16),
+            addHorizontalSpace(16),
             Expanded(child: lastNameWidget),
           ],
         ),
-        const SizedBox(width: 16),
+        addHorizontalSpace(16),
         Row(
           children: [
             Expanded(child: emailWidget),
-            const SizedBox(width: 16),
+            addHorizontalSpace(16),
             Expanded(child: phoneWidget),
           ],
         ),
@@ -150,7 +151,7 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ..._buildTextFields(isWideScreen: isWideScreen),
-                  const SizedBox(height: 16),
+                  addVerticalSpace(10),
                   Row(
                     children: [
                       if (widget.onSaveWorker == null) const Spacer(),

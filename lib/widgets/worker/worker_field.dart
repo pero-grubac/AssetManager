@@ -1,3 +1,4 @@
+import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:asset_manager/widgets/worker/worker_card.dart';
 import 'package:asset_manager/widgets/worker/worker_overlay.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _WorkerFieldState extends ConsumerState<WorkerField> {
             readOnly: !widget.isEditable,
           ),
         ),
-        const SizedBox(width: 8),
+        addHorizontalSpace(8),
         if (widget.isEditable)
           IconButton(
             onPressed: _existingWorkers,

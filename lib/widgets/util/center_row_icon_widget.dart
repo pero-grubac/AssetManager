@@ -1,3 +1,4 @@
+import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
 
 class CenterRowIconText extends StatelessWidget {
@@ -16,7 +17,7 @@ class CenterRowIconText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(icon),
-        const SizedBox(width: 8),
+        addHorizontalSpace(8),
         widget,
       ],
     );
