@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widgets/util/error_dialog.dart';
 
@@ -20,21 +21,25 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen> {
     String? scanResult;
     try {
       scanResult = await FlutterBarcodeScanner.scanBarcode(
-        "#ff6666", // Convert color to string
+        "#ff6666",
         "Cancel",
         true,
         ScanMode.BARCODE,
       );
     } on PlatformException {
-      ErrorDialog.show(context, 'Error scanning barcode.');
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.scanError);
+      }
     }
     if (!mounted) return;
     if (scanResult != '-1') {
       Navigator.pop(context, scanResult);
     } else {
-      setState(() {
-        this.scanResult = null;
-      });
+      if (mounted) {
+        setState(() {
+          this.scanResult = null;
+        });
+      }
     }
   }
 
@@ -42,7 +47,7 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scan Barcode'),
+        title: Text(AppLocalizations.of(context)!.scanBarcode),
         centerTitle: true,
       ),
       body: Center(
@@ -52,7 +57,7 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen> {
             ElevatedButton.icon(
               onPressed: scanBarcode,
               icon: const Icon(Icons.camera_alt_outlined),
-              label: const Text('Start Scan'),
+              label: Text(AppLocalizations.of(context)!.startScan),
             ),
           ],
         ),

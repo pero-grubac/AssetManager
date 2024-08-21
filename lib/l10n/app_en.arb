@@ -35,5 +35,8 @@
   "locationDelete": "Location deleted",
   "locationNotDeleted": "Location can not be deleted",
   "pickYourLocation": "Pick your location",
-  "address": "address"
+  "address": "address",
+  "scanError": "Error while scanning",
+  "scanBarcode": "Scan barcode",
+  "startScan": "Start scan"
 }

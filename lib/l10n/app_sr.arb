@@ -35,8 +35,10 @@
   "locationDelete": "Lokacija obrisana",
   "locationNotDeleted": "Lokacija ne može biti obrisana",
   "pickYourLocation": "Izaberite Vašu lokaciju",
-  "address": "adresa"
-
+  "address": "adresa",
+  "scanError": "Greška prilikom skeniranja",
+  "scanBarcode": "Skeniraj barkod",
+  "startScan": "Započni skeniranje"
 
 
 }
