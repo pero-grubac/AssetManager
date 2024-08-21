@@ -4,7 +4,6 @@ import 'package:asset_manager/models/asset.dart';
 import 'package:asset_manager/widgets/image/image_input.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets/util/build_text_field.dart';
@@ -34,7 +33,6 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
 
   File? _selectedImage;
 
-  bool _isLoading = true;
   DateTime? _selectedDate;
   String? _pickedDate;
   @override
@@ -50,9 +48,6 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       _selectedDate = widget.asset?.creationDate;
       _pickedDate = widget.asset?.formatedDate;
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -140,12 +135,6 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
         _selectedDate = pickedDate;
         _pickedDate = DateFormat('dd.MM.yyyy').format(_selectedDate!);
       });
-    });
-  }
-
-  void setIsLoading(bool load) {
-    setState(() {
-      _isLoading = load;
     });
   }
 
@@ -257,52 +246,32 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       image: _selectedImage,
       isEditable: widget.isEditable,
     );
-/*    final workerWidget = BuildTextField(
-      controller: _workerController,
-      label: 'Worker',
-      isEditable: true,
-    );
-    final workerRow = Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Expanded(child: workerWidget),
-        const SizedBox(width: 8),
-        IconButton(
-          onPressed: () {
-            showModalBottomSheet(
-              useSafeArea: true,
-              isScrollControlled: true,
-              context: context,
-              builder: (ctx) => WorkerOverlay(
-                onSaveWorker: _addWorker,
-              ),
-            );
-          },
-          icon: const Icon(Icons.add),
-        ),
-        const SizedBox(width: 8),
-        IconButton(
-          onPressed: _existingWorkers,
-          icon: const Icon(Icons.supervised_user_circle),
-        ),
-      ],
-    );*/
+
     final barcodeRow = widget.isEditable ? barcodeIcon : barcodeTextField;
-    /* final Widget locationWidget;
-    if (_isLoading) {
-      locationWidget = const Center(child: CircularProgressIndicator());
-    } else {
-      locationWidget = LocationInput(
-        onSelectedLocation: (assetLocation) {
-          _selectedAssetLocation = assetLocation;
-        },
-        assetLocation: _selectedAssetLocation,
-        isEditable: widget.isEditable,
-      );
-    }*/
+
     if (isWideScreen) {
-      // TODO
-      return [];
+      return [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(flex: 1, child: imageWidget),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  nameTextField,
+                  priceDateRow,
+                  descriptionTextField,
+                  barcodeRow,
+                ],
+              ),
+            )
+          ],
+        )
+      ];
     } else {
       return [
         nameTextField,
@@ -339,6 +308,9 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       body: LayoutBuilder(
         builder: (ctx, constraints) {
           final isWideScreen = constraints.maxWidth > 600;
+          final isLandscape =
+              MediaQuery.of(context).orientation == Orientation.landscape;
+
           return SingleChildScrollView(
             padding: EdgeInsets.only(bottom: keyboardSpace),
             child: Padding(
@@ -347,7 +319,8 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ..._buildTextFields(isWideScreen: isWideScreen),
+                  ..._buildTextFields(
+                      isWideScreen: isWideScreen || isLandscape),
                 ],
               ),
             ),
