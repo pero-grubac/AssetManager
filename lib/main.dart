@@ -4,16 +4,16 @@ import 'package:asset_manager/screens/census_item_details.dart';
 import 'package:asset_manager/screens/census_list_items_screen.dart';
 import 'package:asset_manager/screens/census_list_screen.dart';
 import 'package:asset_manager/screens/home_screen.dart';
-import 'package:asset_manager/screens/loading_screen.dart';
 import 'package:asset_manager/screens/location_screen.dart';
 import 'package:asset_manager/screens/map_screen.dart';
 import 'package:asset_manager/screens/scan_barcode_screen.dart';
 import 'package:asset_manager/screens/settings_screen.dart';
 import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:asset_manager/theme/theme_constants.dart';
-import 'package:asset_manager/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'models/settings.dart';
 
@@ -25,11 +25,16 @@ void main() {
   );
 }
 
-class AssetManager extends ConsumerWidget {
+class AssetManager extends ConsumerStatefulWidget {
   const AssetManager({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AssetManager> createState() => _AssetManagerState();
+}
+
+class _AssetManagerState extends ConsumerState<AssetManager> {
+  @override
+  Widget build(BuildContext context) {
     final settings = ref.watch(settingsNotifierProvider);
 
     return AnimatedTheme(
@@ -44,6 +49,9 @@ class AssetManager extends ConsumerWidget {
         themeMode: settings.themeMode == Settings.darkMode
             ? ThemeMode.dark
             : ThemeMode.light,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('sr'),
         initialRoute: HomeScreen.id,
         routes: {
           HomeScreen.id: (context) => const HomeScreen(),

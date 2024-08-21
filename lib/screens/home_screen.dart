@@ -3,6 +3,7 @@ import 'package:asset_manager/models/category/category_data.dart';
 import 'package:asset_manager/widgets/category/category_grid_item.dart';
 import 'package:asset_manager/widgets/util/main_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   static const id = 'home_screen';
@@ -16,7 +17,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Asset manger'),
+        title: Text(AppLocalizations.of(context)!.homeScreenTitle),
       ),
       drawer: const MainDrawer(),
       body: Padding(
