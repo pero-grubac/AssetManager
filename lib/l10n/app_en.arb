@@ -4,5 +4,17 @@
   "language": "Language",
   "theme": "Theme",
   "addLocation": "Add location",
-  "yourLocation": "Your location"
+  "yourLocation": "Your location",
+  "emptyPrice" : "Price cannot be left empty.",
+  "emptyBarcode": "Barcode cannot be left empty.",
+  "emptyImage": "Image cannot be left empty.",
+  "emptyDate": "Date cannot be left empty.",
+  "unknownError": "An unknown error occurred",
+  "yourBarcode": "Your barcode",
+  "name": "Name",
+  "description": "Description",
+  "barcode": "Barcode",
+  "price": "Price",
+  "selectDate": "Select date",
+  "assetDetails":"Asset Details"
 }

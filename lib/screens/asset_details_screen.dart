@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
 import '../widgets/util/helper_widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AssetDetailsScreen extends StatefulWidget {
   const AssetDetailsScreen({
@@ -67,20 +68,20 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
     double? enteredPrice = double.tryParse(_priceController.text.trim());
     int? enteredBarcode = int.tryParse(_barcodeController.text.trim());
     if (enteredPrice == null) {
-      ErrorDialog.show(context, 'Price  can not be empty');
+      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyPrice);
       return;
     }
     if (enteredBarcode == null) {
-      ErrorDialog.show(context, 'Barcode  can not be empty');
+      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyBarcode);
       return;
     }
     if (_selectedImage == null) {
-      ErrorDialog.show(context, 'Image  can not be empty');
+      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyImage);
       return;
     }
 
     if (_selectedDate == null) {
-      ErrorDialog.show(context, 'Date  can not be empty');
+      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyDate);
       return;
     }
 
@@ -114,7 +115,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       if (e is ArgumentError) {
         ErrorDialog.show(context, e.message);
       } else {
-        ErrorDialog.show(context, 'An unknown error occurred ');
+        ErrorDialog.show(context, AppLocalizations.of(context)!.unknownError);
       }
     }
   }
@@ -141,7 +142,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
 
   void _barcodeOverlay() {
     if (_barcodeController.text.isEmpty) {
-      ErrorDialog.show(context, 'No barcode data available.');
+      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyBarcode);
       return;
     }
 
@@ -157,7 +158,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
-                  'Your barcode: ${_barcodeController.text}',
+                  '${AppLocalizations.of(context)!.yourBarcode}: ${_barcodeController.text}',
                   style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.center,
                   softWrap: true,
@@ -189,22 +190,22 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
   List<Widget> _buildTextFields({required bool isWideScreen}) {
     final nameTextField = BuildTextField(
       controller: _nameController,
-      label: 'Name',
+      label: AppLocalizations.of(context)!.name,
       isEditable: !widget.isEditable,
     );
     final descriptionTextField = BuildTextField(
       controller: _descriptionController,
-      label: 'Description',
+      label: AppLocalizations.of(context)!.description,
       isEditable: !widget.isEditable,
     );
     final barcodeTextField = BuildTextField(
       controller: _barcodeController,
-      label: 'Barcode',
+      label: AppLocalizations.of(context)!.barcode,
       isEditable: !widget.isEditable,
     );
     final priceTextField = BuildTextField(
       controller: _priceController,
-      label: 'Price',
+      label: AppLocalizations.of(context)!.price,
       isEditable: !widget.isEditable,
     );
     final barcodeIcon = Row(
@@ -230,7 +231,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  _pickedDate ?? 'Select date',
+                  _pickedDate ?? AppLocalizations.of(context)!.selectDate,
                 ),
                 addHorizontalSpace(8),
                 const Icon(Icons.calendar_month),
@@ -290,7 +291,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Asset Details'),
+        title: Text(AppLocalizations.of(context)!.assetDetails),
         actions: widget.isEditable
             ? [
                 IconButton(
