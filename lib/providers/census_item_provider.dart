@@ -1,7 +1,10 @@
 import 'package:asset_manager/models/census_item.dart';
 import 'package:asset_manager/providers/database.dart';
 import 'package:asset_manager/providers/util_provider.dart';
+import 'package:asset_manager/providers/worker_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../models/worker.dart';
 
 class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   CensusItemNotifier() : super(const []);
@@ -97,18 +100,12 @@ final censusItemProvider =
   (ref) => CensusItemNotifier(),
 );
 final filteredCensusItemProvider = Provider<List<CensusItem>>((ref) {
-  final query = ref.watch(searchQueryProvider).toLowerCase();
   final id = ref.watch(censusListIdProvider).toLowerCase();
 
   var items = ref.watch(censusItemProvider);
   if (id.isNotEmpty) {
     items = items.where((item) => id == item.censusListId).toList();
   }
-  if (query.isNotEmpty) {
-    return items.where((censusItem) {
-      //TODO add searching by something like worker/location
-      return true;
-    }).toList();
-  }
+
   return items;
 });

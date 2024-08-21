@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Screen extends StatelessWidget {
-  final TextEditingController searchController;
-  final ValueChanged<String> onSearchChanged;
+  final TextEditingController? searchController;
+  final ValueChanged<String>? onSearchChanged;
   final Widget body;
   final Widget overlay;
   final String hintText;
 
   const Screen({
     super.key,
-    required this.searchController,
-    required this.onSearchChanged,
+    this.searchController,
+    this.onSearchChanged,
     required this.body,
     required this.overlay,
     this.hintText = 'Search...',
@@ -29,15 +29,17 @@ class Screen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          controller: searchController,
-          decoration: InputDecoration(
-            hintText: hintText,
-            border: InputBorder.none,
-            hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
-          ),
-          onChanged: onSearchChanged,
-        ),
+        title: onSearchChanged != null
+            ? TextField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  hintText: hintText,
+                  border: InputBorder.none,
+                  hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
+                ),
+                onChanged: onSearchChanged,
+              )
+            : null,
         actions: [
           IconButton(
             onPressed: openAddOverlay,

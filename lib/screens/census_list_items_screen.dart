@@ -102,8 +102,6 @@ class _CensusListItemsScreenState extends ConsumerState<CensusListItemsScreen> {
       children: [
         if (_isLoading) const CenteredCircularLoading(),
         Screen(
-            searchController: _searchController,
-            onSearchChanged: _searchItems,
             body: FutureBuilder(
               future: _censusItemsFuture,
               builder: (context, snapshot) =>
