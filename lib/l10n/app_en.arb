@@ -28,5 +28,6 @@
   "unknownError": "An unknown error occurred",
   "yourBarcode": "Your barcode",
   "yourLocation": "Your location",
-  "censusItemDetails": "Census item details"
+  "censusItemDetails": "Census item details",
+  "noItems": "No items found"
 }

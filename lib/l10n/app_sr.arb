@@ -28,6 +28,8 @@
   "unknownError": "Nepoznata greška",
   "yourBarcode": "Vaš barkod",
   "yourLocation": "Vaša lokacija",
-  "censusItemDetails": "Detalji popisne stavke"
+  "censusItemDetails": "Detalji popisne stavke",
+  "noItems": "Nema stavki"
+
 
 }

@@ -5,6 +5,7 @@ import 'package:asset_manager/widgets/census/census_item_card.dart';
 import 'package:asset_manager/widgets/util/dismissible_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/census_item.dart';
 import '../providers/util_provider.dart';
@@ -49,9 +50,9 @@ class _CensusListItemsScreenState extends ConsumerState<CensusListItemsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 3),
-          content: const Text('Asset deleted.'),
+          content: Text(AppLocalizations.of(context)!.assetDelete),
           action: SnackBarAction(
-            label: 'Undo',
+            label: AppLocalizations.of(context)!.undo,
             onPressed: () async {
               setIsLoading(true);
               await ref
@@ -63,9 +64,9 @@ class _CensusListItemsScreenState extends ConsumerState<CensusListItemsScreen> {
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        duration: Duration(seconds: 3),
-        content: Text('Asset can not be deleted.'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text(AppLocalizations.of(context)!.assetNotDeleted),
       ));
     }
   }
@@ -118,10 +119,11 @@ class _CensusListItemsScreenState extends ConsumerState<CensusListItemsScreen> {
                         isEditable: true,
                         onEditItem: _editCensusItem,
                         itemBuilder: (context, censusItem) => CensusItemCard(
-                              censusItem: censusItem,
-                            ),
+                          censusItem: censusItem,
+                        ),
                         provider: filteredCensusItemProvider,
-                        emptyMessage: 'No items found'),
+                        emptyMessage: AppLocalizations.of(context)!.noItems,
+                      ),
           ),
           onIconPressed: _onIconPressed,
         )
