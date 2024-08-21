@@ -20,14 +20,17 @@ class WorkerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void openOverlay() {
-      showModalBottomSheet(
-        useSafeArea: true,
-        isScrollControlled: true,
+      showDialog(
         context: context,
-        builder: (ctx) => WorkerOverlay(
-          worker: worker,
-          isEditable: false,
-        ),
+        builder: (ctx) {
+          return Dialog(
+            insetPadding: EdgeInsets.zero,
+            child: WorkerOverlay(
+              worker: worker,
+              isEditable: false,
+            ),
+          );
+        },
       );
     }
 

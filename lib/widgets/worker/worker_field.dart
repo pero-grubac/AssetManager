@@ -35,8 +35,6 @@ class _WorkerFieldState extends ConsumerState<WorkerField> {
   void initState() {
     super.initState();
     if (widget.initialWorker != null) {
-      print(widget.initialWorker!.fullName);
-
       _newWorkerController.text = widget.initialWorker!.fullName;
       _newWorker = widget.initialWorker;
     }
@@ -84,14 +82,17 @@ class _WorkerFieldState extends ConsumerState<WorkerField> {
           .findWorkerByFullName(parts[0], parts[1]);
 
       if (_newWorker != null) {
-        showModalBottomSheet(
-          useSafeArea: true,
-          isScrollControlled: true,
+        showDialog(
           context: context,
-          builder: (ctx) => WorkerOverlay(
-            worker: _newWorker,
-            isEditable: false,
-          ),
+          builder: (ctx) {
+            return Dialog(
+              insetPadding: EdgeInsets.zero,
+              child: WorkerOverlay(
+                worker: _newWorker,
+                isEditable: false,
+              ),
+            );
+          },
         );
       } else {
         ErrorDialog.show(context, 'Worker does not exist.');

@@ -294,7 +294,16 @@ class _LocationInputState extends State<LocationInput> {
           const SizedBox(
             width: 10,
           ),
-          Expanded(child: buttons),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (_pickedLocation != null || widget.assetLocation != null)
+                addressName,
+              const SizedBox(height: 5),
+              buttons,
+            ],
+          )),
         ],
       );
     } else {

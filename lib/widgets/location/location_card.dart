@@ -20,14 +20,14 @@ class LocationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void openOverlay() {
-      showModalBottomSheet(
-        useSafeArea: true,
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) => AddLocationScreen(
-          isEditable: false,
-          onAddLocation: (AssetLocation location) {},
-          location: location,
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => AddLocationScreen(
+            isEditable: false,
+            onAddLocation: (AssetLocation location) {},
+            location: location,
+          ),
         ),
       );
     }

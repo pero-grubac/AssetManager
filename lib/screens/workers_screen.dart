@@ -96,13 +96,16 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
   }
 
   void _onIconPressed() {
-    showModalBottomSheet(
-      useSafeArea: true,
-      isScrollControlled: true,
+    showDialog(
       context: context,
-      builder: (ctx) => WorkerOverlay(
-        onSaveWorker: _addWorker,
-      ),
+      builder: (ctx) {
+        return Dialog(
+          insetPadding: EdgeInsets.zero,
+          child: WorkerOverlay(
+            onSaveWorker: _addWorker,
+          ),
+        );
+      },
     );
   }
 
