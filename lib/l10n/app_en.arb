@@ -39,5 +39,9 @@
   "scanError": "Error while scanning",
   "scanBarcode": "Scan barcode",
   "startScan": "Start scan",
-  "search": "Search..."
+  "search": "Search...",
+  "workerDelete": "Worker deleted",
+  "workerNotDeleted": "Worker can not be deleted",
+  "noWorker" : "No workers found"
+
 }

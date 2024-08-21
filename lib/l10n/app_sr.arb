@@ -39,7 +39,10 @@
   "scanError": "Greška prilikom skeniranja",
   "scanBarcode": "Skeniraj barkod",
   "startScan": "Započni skeniranje",
-  "search": "Pretraga..."
+  "search": "Pretraga...",
+  "workerDelete": "Ranik obrisan",
+  "workerNotDeleted": "Radnik ne može biti obrisan",
+  "noWorker" : "Nema radnika"
 
 
 }

@@ -30,10 +30,15 @@ class _SelectionScreenState<T extends Identifiable>
   late Future<void> _loadItemsFuture;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Load the items asynchronously
-    _loadItemsFuture = ref.read(widget.provider.notifier).loadItems();
+  void initState() {
+    super.initState();
+    _loadItems(); // Load items when the state is initialized
+  }
+
+  Future<void> _loadItems() async {
+    setState(() {
+      _loadItemsFuture = ref.read(widget.provider.notifier).loadItems();
+    });
   }
 
   void _selectItem(String itemId) {
@@ -74,7 +79,7 @@ class _SelectionScreenState<T extends Identifiable>
                   body: Consumer(
                     builder: (context, ref, child) {
                       final items = ref.watch(widget.provider);
-                      if (items == null || items.isEmpty) {
+                      if (items.isEmpty) {
                         return Center(
                           child: Text(widget.emptyMessage),
                         );
