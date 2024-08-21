@@ -38,5 +38,6 @@
   "address": "address",
   "scanError": "Error while scanning",
   "scanBarcode": "Scan barcode",
-  "startScan": "Start scan"
+  "startScan": "Start scan",
+  "search": "Search..."
 }

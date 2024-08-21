@@ -38,7 +38,8 @@
   "address": "adresa",
   "scanError": "Greška prilikom skeniranja",
   "scanBarcode": "Skeniraj barkod",
-  "startScan": "Započni skeniranje"
+  "startScan": "Započni skeniranje",
+  "search": "Pretraga..."
 
 
 }

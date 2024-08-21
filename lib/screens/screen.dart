@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Screen extends StatelessWidget {
   final TextEditingController? searchController;
   final ValueChanged<String>? onSearchChanged;
   final Widget body;
-  final String hintText;
   final VoidCallback? onIconPressed;
   const Screen({
     super.key,
@@ -12,27 +12,17 @@ class Screen extends StatelessWidget {
     this.onSearchChanged,
     required this.body,
     required this.onIconPressed,
-    this.hintText = 'Search...',
   });
 
   @override
   Widget build(BuildContext context) {
-    void openAddOverlay() {
-      showModalBottomSheet(
-        useSafeArea: true,
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) => const Text(''),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: onSearchChanged != null
             ? TextField(
                 controller: searchController,
                 decoration: InputDecoration(
-                  hintText: hintText,
+                  hintText: AppLocalizations.of(context)!.search,
                   border: InputBorder.none,
                   hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
                 ),
