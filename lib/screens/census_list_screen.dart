@@ -1,10 +1,10 @@
 import 'package:asset_manager/providers/census_list_provider.dart';
 import 'package:asset_manager/providers/util_provider.dart';
-import 'package:asset_manager/screens/census_item_details.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/census/census_list_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/census_list.dart';
 import '../widgets/census/census_list_overlay.dart';
@@ -53,9 +53,9 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 3),
-          content: const Text('Census List deleted.'),
+          content: Text(AppLocalizations.of(context)!.censusListDelete),
           action: SnackBarAction(
-            label: 'Undo',
+            label: AppLocalizations.of(context)!.undo,
             onPressed: () async {
               setIsLoading(true);
               await ref
@@ -67,9 +67,9 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        duration: Duration(seconds: 3),
-        content: Text('Census List can not be deleted.'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text(AppLocalizations.of(context)!.censusListNotDelete),
       ));
     }
   }
@@ -129,7 +129,7 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
                         itemBuilder: (context, censusList) =>
                             CensusListCard(censusList: censusList),
                         provider: filteredCensusListProvider,
-                        emptyMessage: 'No census list found',
+                        emptyMessage: AppLocalizations.of(context)!.noItems,
                       ),
           ),
           onIconPressed: _onIconPressed,

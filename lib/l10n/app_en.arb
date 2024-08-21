@@ -29,5 +29,7 @@
   "yourBarcode": "Your barcode",
   "yourLocation": "Your location",
   "censusItemDetails": "Census item details",
-  "noItems": "No items found"
+  "noItems": "No items found",
+  "censusListDelete": "Census list deleted",
+  "censusListNotDelete": "Census List can not be deleted"
 }
