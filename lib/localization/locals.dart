@@ -6,6 +6,7 @@ const List<MapLocale> LOCALS = [
   MapLocale("en", LocalData.EN),
   MapLocale("srb", LocalData.SRB),
 ];
+
 mixin LocalData {
   static const String title = 'title';
   static const String body = 'body';

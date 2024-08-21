@@ -1,8 +1,10 @@
+import 'package:asset_manager/providers/settings_provider.dart';
 import 'package:asset_manager/screens/asset_screen.dart';
 import 'package:asset_manager/screens/census_item_details.dart';
 import 'package:asset_manager/screens/census_list_items_screen.dart';
 import 'package:asset_manager/screens/census_list_screen.dart';
 import 'package:asset_manager/screens/home_screen.dart';
+import 'package:asset_manager/screens/loading_screen.dart';
 import 'package:asset_manager/screens/location_screen.dart';
 import 'package:asset_manager/screens/map_screen.dart';
 import 'package:asset_manager/screens/scan_barcode_screen.dart';
@@ -12,6 +14,8 @@ import 'package:asset_manager/theme/theme_constants.dart';
 import 'package:asset_manager/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'models/settings.dart';
 
 void main() {
   runApp(
@@ -26,19 +30,20 @@ class AssetManager extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeNotifierProvider);
+    final settings = ref.watch(settingsNotifierProvider);
 
     return AnimatedTheme(
-      data: Theme.of(context).copyWith(
-        brightness:
-            themeMode == ThemeMode.dark ? Brightness.dark : Brightness.light,
-      ),
+      data: settings.themeMode == Settings.darkMode
+          ? ThemeData.dark()
+          : ThemeData.light(),
       duration: const Duration(milliseconds: 300),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
         darkTheme: darkTheme,
-        themeMode: themeMode,
+        themeMode: settings.themeMode == Settings.darkMode
+            ? ThemeMode.dark
+            : ThemeMode.light,
         initialRoute: HomeScreen.id,
         routes: {
           HomeScreen.id: (context) => const HomeScreen(),

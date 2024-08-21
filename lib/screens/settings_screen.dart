@@ -1,6 +1,8 @@
-import 'package:asset_manager/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../models/settings.dart';
+import '../providers/settings_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   static const id = 'settings_screen';
@@ -8,8 +10,8 @@ class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeNotifierProvider);
-    final isDarkMode = themeMode == ThemeMode.dark;
+    final settings = ref.watch(settingsNotifierProvider);
+    final isDarkMode = settings.themeMode == Settings.darkMode;
 
     return Scaffold(
       appBar: AppBar(
@@ -26,7 +28,11 @@ class SettingsScreen extends ConsumerWidget {
               activeColor: Theme.of(context).colorScheme.secondary,
               activeTrackColor: Theme.of(context).colorScheme.primary,
               onChanged: (value) {
-                ref.read(themeNotifierProvider.notifier).toggleTheme(value);
+                final themeMode =
+                    value ? Settings.darkMode : Settings.lightMode;
+                ref
+                    .read(settingsNotifierProvider.notifier)
+                    .updateThemeMode(themeMode);
               },
             ),
           ],
