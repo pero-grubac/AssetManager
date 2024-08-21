@@ -199,6 +199,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
     required AssetLocation? location,
     required bool isEditable,
     required Function(AssetLocation?) onLocationChanged,
+    required bool isLandscape,
   }) {
     return _isLoading
         ? const CenteredCircularLoading()
@@ -206,6 +207,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
             onSelectedLocation: onLocationChanged,
             assetLocation: location,
             isEditable: isEditable,
+            isLandscape: isLandscape,
           );
   }
 
@@ -224,6 +226,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
                   _oldAssetLocation = location;
                 });
               },
+              isLandscape: isWideScreen,
             ),
             const SizedBox(height: 10),
             _buildNewWorkerField(),
@@ -236,6 +239,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
                   _newAssetLocation = location;
                 });
               },
+              isLandscape: isWideScreen,
             ),
           ];
   }
@@ -310,13 +314,16 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isWideScreen = constraints.maxWidth > 600;
+          final isLandscape =
+              MediaQuery.of(context).orientation == Orientation.landscape;
           return SingleChildScrollView(
             padding: EdgeInsets.only(bottom: keyboardSpace),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: _buildFields(isWideScreen: isWideScreen),
+                children:
+                    _buildFields(isWideScreen: isWideScreen || isLandscape),
               ),
             ),
           );

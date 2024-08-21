@@ -22,11 +22,13 @@ class LocationInput extends StatefulWidget {
     this.isEditable = true,
     this.isExistingLocation = true,
     this.assetLocation,
+    this.isLandscape = false,
   });
   final void Function(AssetLocation assetLocation) onSelectedLocation;
   final bool isEditable;
   final bool isExistingLocation;
   final AssetLocation? assetLocation;
+  final bool isLandscape;
   @override
   State<LocationInput> createState() => _LocationInputState();
 }
@@ -272,31 +274,55 @@ class _LocationInputState extends State<LocationInput> {
         child: _locationImage(widget.assetLocation!),
       );
     }
-
-    return Column(
-      children: [
-        Container(
-          height: 170,
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: Theme.of(context).colorScheme.primary,
+    if (widget.isLandscape) {
+      // Landscape: Buttons to the right of the container
+      return Row(
+        children: [
+          Container(
+            height: 170,
+            width: MediaQuery.of(context).size.width *
+                0.6, // Adjust width based on your layout
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
+            child: previewContent,
           ),
-          child: previewContent,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        if (_pickedLocation != null || widget.assetLocation != null)
-          addressName,
-        const SizedBox(
-          height: 10,
-        ),
-        if (widget.isEditable) buttons,
-      ],
-    );
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(child: buttons),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          Container(
+            height: 170,
+            width: double.infinity,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            child: previewContent,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          if (_pickedLocation != null || widget.assetLocation != null)
+            addressName,
+          const SizedBox(
+            height: 10,
+          ),
+          if (widget.isEditable) buttons,
+        ],
+      );
+    }
   }
 }

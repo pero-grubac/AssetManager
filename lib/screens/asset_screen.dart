@@ -102,20 +102,6 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
         builder: (context) => AssetDetailsScreen(
           onSaveAsset: (updatedAsset) async {
             setIsLoading(true);
-
-            final oldAsset = await ref
-                .read(assetProvider.notifier)
-                .findAssetById(updatedAsset.id);
-
-            /*   if (location.id != oldAsset?.assignedLocationId) {
-              await ref.read(locationProvider.notifier).addLocation(location);
-            }*/
-            /*   final oldWorker = await ref
-                .read(workerProvider.notifier)
-                .findWorkerById(updatedAsset.assignedPersonId);
-            if (worker.id != oldWorker?.id) {
-              await ref.read(workerProvider.notifier).addWorker(worker);
-            }*/
             await ref.read(assetProvider.notifier).updateAsset(updatedAsset);
             setIsLoading(false);
           },

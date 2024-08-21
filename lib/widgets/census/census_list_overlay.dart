@@ -53,7 +53,7 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
     });
   }
 
-  List<Widget> _buildTextFields({required bool isWideScreen}) {
+  List<Widget> _buildTextFields() {
     final nameTextField = BuildTextField(
       controller: _nameController,
       label: 'Name',
@@ -72,39 +72,35 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
         ],
       ),
     );
-    if (isWideScreen) {
-      // TODO
-      return [];
-    } else {
-      return [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(child: nameTextField),
-            const SizedBox(width: 16),
-            Expanded(child: dateField)
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            if (widget.onSave == null) const Spacer(),
+
+    return [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(child: nameTextField),
+          const SizedBox(width: 16),
+          Expanded(child: dateField)
+        ],
+      ),
+      const SizedBox(height: 16),
+      Row(
+        children: [
+          if (widget.onSave == null) const Spacer(),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+          if (widget.onSave != null) const Spacer(),
+          if (widget.onSave != null)
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
+              onPressed: _submitData,
+              child: const Text('Save'),
             ),
-            if (widget.onSave != null) const Spacer(),
-            if (widget.onSave != null)
-              ElevatedButton(
-                onPressed: _submitData,
-                child: const Text('Save'),
-              ),
-          ],
-        )
-      ];
-    }
+        ],
+      )
+    ];
   }
 
   void _submitData() {
@@ -143,8 +139,6 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
 
     return LayoutBuilder(builder: (ctx, constraints) {
-      final isWideScreen = constraints.maxWidth > 600;
-
       return SizedBox(
         height: double.infinity,
         width: double.infinity,
@@ -154,7 +148,7 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: _buildTextFields(isWideScreen: isWideScreen),
+              children: _buildTextFields(),
             ),
           ),
         ),
