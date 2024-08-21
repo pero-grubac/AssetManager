@@ -21,7 +21,6 @@ class CensusListItemsScreen extends ConsumerStatefulWidget {
 }
 
 class _CensusListItemsScreenState extends ConsumerState<CensusListItemsScreen> {
-  final _searchController = TextEditingController();
   late Future<void> _censusItemsFuture;
   bool _isLoading = false;
 
@@ -36,10 +35,6 @@ class _CensusListItemsScreenState extends ConsumerState<CensusListItemsScreen> {
     setState(() {
       _isLoading = load;
     });
-  }
-
-  void _searchItems(String query) {
-    ref.read(searchQueryProvider.notifier).state = query;
   }
 
   Future<void> _addCensusItem(CensusItem censusItem) async {
