@@ -1,11 +1,16 @@
-import 'package:asset_manager/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../screens/settings_screen.dart';
 import '../../theme/drawer_header_theme.dart';
 
-class MainDrawer extends StatelessWidget {
+class MainDrawer extends StatefulWidget {
   const MainDrawer({super.key});
 
+  @override
+  _MainDrawerState createState() => _MainDrawerState();
+}
+
+class _MainDrawerState extends State<MainDrawer> {
   @override
   Widget build(BuildContext context) {
     final drawerHeaderTheme = Theme.of(context).extension<DrawerHeaderTheme>();
@@ -16,23 +21,25 @@ class MainDrawer extends StatelessWidget {
           DrawerHeader(
             padding: const EdgeInsets.all(20),
             decoration: drawerHeaderTheme?.drawerHeaderDecoration,
-            child: const Row(
+            child: Row(
               children: [
                 Icon(
                   Icons.business_center,
                   size: 48,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 18,
                 ),
-                Text('Asset manager'),
+                const Text('Asset manager'),
               ],
             ),
           ),
           ListTile(
-            leading: const Icon(
+            leading: Icon(
               Icons.settings,
               size: 26,
+              color: Theme.of(context).colorScheme.primary,
             ),
             title: const Text('Settings'),
             onTap: () {

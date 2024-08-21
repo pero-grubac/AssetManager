@@ -4,8 +4,6 @@ import 'package:asset_manager/widgets/category/category_grid_item.dart';
 import 'package:asset_manager/widgets/util/main_drawer.dart';
 import 'package:flutter/material.dart';
 
-import 'location_screen.dart';
-
 class HomeScreen extends StatelessWidget {
   static const id = 'home_screen';
   const HomeScreen({super.key});
