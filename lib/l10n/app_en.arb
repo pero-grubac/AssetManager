@@ -31,5 +31,7 @@
   "censusItemDetails": "Census item details",
   "noItems": "No items found",
   "censusListDelete": "Census list deleted",
-  "censusListNotDelete": "Census List can not be deleted"
+  "censusListNotDelete": "Census List can not be deleted",
+  "locationDelete": "Location deleted",
+  "locationNotDeleted": "Location can not be deleted"
 }

@@ -31,7 +31,9 @@
   "censusItemDetails": "Detalji popisne stavke",
   "noItems": "Nema stavki",
   "censusListDelete": "Popisna lista obrisana",
-  "censusListNotDelete": "Popisna lista ne može biti obrisana"
+  "censusListNotDelete": "Popisna lista ne može biti obrisana",
+  "locationDelete": "Lokacija obrisana",
+  "locationNotDeleted": "Lokacija ne može biti obrisana"
 
 
 }

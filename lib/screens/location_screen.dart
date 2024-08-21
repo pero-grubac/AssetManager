@@ -4,6 +4,7 @@ import 'package:asset_manager/widgets/location/location_card.dart';
 import 'package:asset_manager/screens/add_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/asset_location.dart';
 import '../providers/util_provider.dart';
@@ -57,9 +58,9 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 3),
-          content: const Text('Location deleted.'),
+          content: Text(AppLocalizations.of(context)!.locationDelete),
           action: SnackBarAction(
-            label: 'Undo',
+            label: AppLocalizations.of(context)!.undo,
             onPressed: () async {
               setIsLoading(true);
               await ref.read(locationProvider.notifier).addLocation(location);
@@ -69,9 +70,9 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        duration: Duration(seconds: 3),
-        content: Text('Location can not be deleted.'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text(AppLocalizations.of(context)!.locationNotDeleted),
       ));
     }
   }
@@ -95,15 +96,21 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
         Screen(
           searchController: _searchController,
           onSearchChanged: _searchLocation,
-          body: DismissibleList<AssetLocation>(
-            onRemoveItem: _removeLocation,
-            itemBuilder: (context, location) => LocationCard(
-              location: location,
-              isSelectable: false,
-            ),
-            isEditable: false,
-            provider: filteredLocationsProvider,
-            emptyMessage: 'No locations found.',
+          body: FutureBuilder(
+            future: _locationFuture,
+            builder: (context, snapshot) =>
+                snapshot.connectionState == ConnectionState.waiting
+                    ? const CenteredCircularLoading()
+                    : DismissibleList<AssetLocation>(
+                        onRemoveItem: _removeLocation,
+                        itemBuilder: (context, location) => LocationCard(
+                          location: location,
+                          isSelectable: false,
+                        ),
+                        isEditable: false,
+                        provider: filteredLocationsProvider,
+                        emptyMessage: 'No locations found.',
+                      ),
           ),
           onIconPressed: _onIconPressed,
         ),
