@@ -1,7 +1,6 @@
 import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/providers/asset_provider.dart';
 import 'package:asset_manager/providers/location_provider.dart';
-import 'package:asset_manager/providers/worker_provider.dart';
 import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/asset/asset_card.dart';

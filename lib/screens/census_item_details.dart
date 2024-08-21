@@ -8,21 +8,18 @@ import 'package:asset_manager/providers/util_provider.dart';
 import 'package:asset_manager/providers/worker_provider.dart';
 import 'package:asset_manager/screens/asset_details_screen.dart';
 import 'package:asset_manager/screens/scan_barcode_screen.dart';
-import 'package:asset_manager/screens/selection_screen.dart';
 import 'package:asset_manager/widgets/util/centered_circular_loading.dart';
 import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:asset_manager/widgets/worker/worker_field.dart';
-import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/asset.dart';
 import '../models/asset_location.dart';
 import '../widgets/location/location_input.dart';
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
-import '../widgets/worker/worker_card.dart';
-import '../widgets/worker/worker_overlay.dart';
 
 class CensusItemDetails extends ConsumerStatefulWidget {
   static const id = 'census_item_screen';
@@ -73,14 +70,20 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
             .read(assetProvider.notifier)
             .findAssetById(widget.censusItem!.assetId);
 
-        setState(() {
-          _barcodeController.text = _asset?.barcode.toString() ?? '';
-        });
+        if (mounted) {
+          setState(() {
+            _barcodeController.text = _asset?.barcode.toString() ?? '';
+          });
+        }
       } catch (e) {
-        ErrorDialog.show(context, 'Error loading data');
+        if (mounted) {
+          ErrorDialog.show(context, AppLocalizations.of(context)!.loadingError);
+        }
       }
     }
-    setIsLoading(false);
+    if (mounted) {
+      setIsLoading(false);
+    }
   }
 
   @override
@@ -109,7 +112,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
         Expanded(
           child: BuildTextField(
             controller: _barcodeController,
-            label: 'Barcode',
+            label: AppLocalizations.of(context)!.barcode,
             isEditable: !widget.isEditable,
           ),
         ),
@@ -134,6 +137,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
         builder: (context) => const ScanBarcodeScreen(),
       ),
     );
+    if (!mounted) return;
     if (scanResult != null && scanResult.isNotEmpty && scanResult != '-1') {
       _barcodeController.text = scanResult;
       int? barcode = int.tryParse(_barcodeController.text);
@@ -142,24 +146,34 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
         _asset =
             await ref.read(assetProvider.notifier).findAssetByBarcode(barcode);
       } else {
-        ErrorDialog.show(context, 'Barcode is a number');
+        if (mounted) {
+          ErrorDialog.show(context, AppLocalizations.of(context)!.barcodeNum);
+        }
       }
     }
   }
 
   Future<void> _loadAsset() async {
+    if (!mounted) return;
+
     if (_barcodeController.text.isEmpty) {
-      ErrorDialog.show(context, 'Barcode  can not be empty');
-    } else {
-      int? barcode = int.tryParse(_barcodeController.text.trim());
-      if (barcode != null) {
-        _asset =
-            await ref.read(assetProvider.notifier).findAssetByBarcode(barcode);
-      } else {
-        ErrorDialog.show(context, 'Barcode is a number');
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.emptyBarcode);
       }
+      return;
     }
-    if (_asset != null) {
+    int? barcode = int.tryParse(_barcodeController.text.trim());
+    if (barcode != null) {
+      _asset =
+          await ref.read(assetProvider.notifier).findAssetByBarcode(barcode);
+    } else {
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.barcodeNum);
+      }
+      return;
+    }
+
+    if (_asset != null && mounted) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -179,8 +193,8 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
       onWorkerSelected: (worker) {
         _newWorker = worker;
       },
-      textFieldLabel: 'New worker',
-      controllerTextEmpty: 'New worker can not be empty',
+      textFieldLabel: AppLocalizations.of(context)!.newWorker,
+      controllerTextEmpty: AppLocalizations.of(context)!.noNewWorker,
     );
   }
 
@@ -191,8 +205,8 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
       onWorkerSelected: (worker) {
         _oldWorker = worker;
       },
-      textFieldLabel: 'Old worker',
-      controllerTextEmpty: 'Old worker can not be empty',
+      textFieldLabel: AppLocalizations.of(context)!.oldWorker,
+      controllerTextEmpty: AppLocalizations.of(context)!.noOldWorker,
     );
   }
 
@@ -246,17 +260,25 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
   }
 
   Future<void> _submitData() async {
+    if (!mounted) return;
+
     int? barcode = int.tryParse(_barcodeController.text.trim());
     if (barcode == null) {
-      ErrorDialog.show(context, 'Barcode  can not be empty');
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.emptyBarcode);
+      }
       return;
     }
     if (_oldWorker == null) {
-      ErrorDialog.show(context, 'Old worker  can not be empty');
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.noOldWorker);
+      }
       return;
     }
     if (_oldAssetLocation == null) {
-      ErrorDialog.show(context, 'Old location  can not be empty');
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.noOldLocation);
+      }
       return;
     }
     _asset ??=
@@ -288,12 +310,16 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
         );
       }
       widget.onSaveCensusItem!(censusItem);
-      Navigator.pop(context);
+      if (mounted) {
+        Navigator.pop(context);
+      }
     } catch (e) {
-      if (e is ArgumentError) {
-        ErrorDialog.show(context, e.message);
-      } else {
-        ErrorDialog.show(context, 'An unknown error occurred ');
+      if (mounted) {
+        if (e is ArgumentError) {
+          ErrorDialog.show(context, e.message);
+        } else {
+          ErrorDialog.show(context, AppLocalizations.of(context)!.unknownError);
+        }
       }
     }
   }
@@ -304,7 +330,7 @@ class _CensusItemDetailsState extends ConsumerState<CensusItemDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Census Item Details'),
+        title: Text(AppLocalizations.of(context)!.censusItemDetails),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
