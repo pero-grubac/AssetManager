@@ -76,6 +76,18 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
     }
   }
 
+  void _onIconPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => AddLocationScreen(
+          onAddLocation: _addLocation,
+          isExistingLocation: false,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -93,10 +105,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
             provider: filteredLocationsProvider,
             emptyMessage: 'No locations found.',
           ),
-          overlay: AddLocationScreen(
-            onAddLocation: _addLocation,
-            isExistingLocation: false,
-          ),
+          onIconPressed: _onIconPressed,
         ),
 
         if (_isLoading)

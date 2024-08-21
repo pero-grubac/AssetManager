@@ -4,15 +4,14 @@ class Screen extends StatelessWidget {
   final TextEditingController? searchController;
   final ValueChanged<String>? onSearchChanged;
   final Widget body;
-  final Widget overlay;
   final String hintText;
-
+  final VoidCallback? onIconPressed;
   const Screen({
     super.key,
     this.searchController,
     this.onSearchChanged,
     required this.body,
-    required this.overlay,
+    required this.onIconPressed,
     this.hintText = 'Search...',
   });
 
@@ -23,7 +22,7 @@ class Screen extends StatelessWidget {
         useSafeArea: true,
         isScrollControlled: true,
         context: context,
-        builder: (ctx) => overlay,
+        builder: (ctx) => const Text(''),
       );
     }
 
@@ -42,7 +41,7 @@ class Screen extends StatelessWidget {
             : null,
         actions: [
           IconButton(
-            onPressed: openAddOverlay,
+            onPressed: onIconPressed,
             icon: const Icon(Icons.add),
           )
         ],

@@ -98,6 +98,17 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
     setIsLoading(false);
   }
 
+  void _onIconPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => CensusListOverlay(
+          onSave: _addCensusList,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -121,9 +132,7 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
                         emptyMessage: 'No census list found',
                       ),
           ),
-          overlay: CensusListOverlay(
-            onSave: _addCensusList,
-          ),
+          onIconPressed: _onIconPressed,
         )
       ],
     );

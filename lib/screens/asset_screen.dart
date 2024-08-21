@@ -111,6 +111,17 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
     );
   }
 
+  void _onIconPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => AssetDetailsScreen(
+          onSaveAsset: _addAsset,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -134,9 +145,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
                         emptyMessage: 'No assets found',
                       ),
           ),
-          overlay: AssetDetailsScreen(
-            onSaveAsset: _addAsset,
-          ),
+          onIconPressed: _onIconPressed,
         ),
         if (_isLoading) const CenteredCircularLoading(),
       ],

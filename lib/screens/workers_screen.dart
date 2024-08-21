@@ -95,6 +95,17 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
     );
   }
 
+  void _onIconPressed() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => WorkerOverlay(
+        onSaveWorker: _addWorker,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -113,9 +124,7 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
             provider: filteredWorkersProvider,
             emptyMessage: 'No workers found.',
           ),
-          overlay: WorkerOverlay(
-            onSaveWorker: _addWorker,
-          ),
+          onIconPressed: _onIconPressed,
         ),
         if (_isLoading)
           const CenteredCircularLoading(), // Overlay a loading indicator during operations

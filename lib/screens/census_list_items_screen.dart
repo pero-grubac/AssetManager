@@ -91,30 +91,40 @@ class _CensusListItemsScreenState extends ConsumerState<CensusListItemsScreen> {
     );
   }
 
+  void _onIconPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => CensusItemDetails(
+          onSaveCensusItem: _addCensusItem,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         if (_isLoading) const CenteredCircularLoading(),
         Screen(
-            body: FutureBuilder(
-              future: _censusItemsFuture,
-              builder: (context, snapshot) =>
-                  snapshot.connectionState == ConnectionState.waiting
-                      ? const CenteredCircularLoading()
-                      : DismissibleList(
-                          onRemoveItem: _removeCensusItem,
-                          isEditable: true,
-                          onEditItem: _editCensusItem,
-                          itemBuilder: (context, censusItem) => CensusItemCard(
-                                censusItem: censusItem,
-                              ),
-                          provider: filteredCensusItemProvider,
-                          emptyMessage: 'No items found'),
-            ),
-            overlay: CensusItemDetails(
-              onSaveCensusItem: _addCensusItem,
-            ))
+          body: FutureBuilder(
+            future: _censusItemsFuture,
+            builder: (context, snapshot) =>
+                snapshot.connectionState == ConnectionState.waiting
+                    ? const CenteredCircularLoading()
+                    : DismissibleList(
+                        onRemoveItem: _removeCensusItem,
+                        isEditable: true,
+                        onEditItem: _editCensusItem,
+                        itemBuilder: (context, censusItem) => CensusItemCard(
+                              censusItem: censusItem,
+                            ),
+                        provider: filteredCensusItemProvider,
+                        emptyMessage: 'No items found'),
+          ),
+          onIconPressed: _onIconPressed,
+        )
       ],
     );
   }
