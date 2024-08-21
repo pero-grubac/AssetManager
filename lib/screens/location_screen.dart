@@ -25,9 +25,15 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
   bool _isLoading = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _locationFuture = ref.read(locationProvider.notifier).loadItems();
+  void initState() {
+    super.initState();
+    _loadLocations();
+  }
+
+  Future<void> _loadLocations() async {
+    setState(() {
+      _locationFuture = ref.read(locationProvider.notifier).loadItems();
+    });
   }
 
   void setIsLoading(bool load) {

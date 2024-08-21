@@ -34,17 +34,22 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   bool _isLoading = false;
 
   @override
-  void didChangeDependencies() async {
+  void initState() {
+    super.initState();
+    _loadAssets(); // Load assets when the state is initialized
+  }
+
+  Future<void> _loadAssets() async {
     AssetLocation? location;
     if (widget.position != null) {
       location = await ref.read(locationProvider.notifier).findLocationByLatLng(
           widget.position!.latitude, widget.position!.longitude);
     }
 
-    _assetsFuture =
-        ref.read(assetProvider.notifier).loadItems(location, widget.worker);
-    setState(() {});
-    super.didChangeDependencies();
+    setState(() {
+      _assetsFuture =
+          ref.read(assetProvider.notifier).loadItems(location, widget.worker);
+    });
   }
 
   void setIsLoading(bool load) {

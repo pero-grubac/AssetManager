@@ -26,10 +26,16 @@ class _CensusListItemsScreenState extends ConsumerState<CensusListItemsScreen> {
   bool _isLoading = false;
 
   @override
-  void didChangeDependencies() {
-    final id = ref.watch(censusListIdProvider).toLowerCase();
-    _censusItemsFuture = ref.read(censusItemProvider.notifier).loadItems(id);
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    _loadCensusItems(); // Load census items when the state is initialized
+  }
+
+  Future<void> _loadCensusItems() async {
+    final id = ref.read(censusListIdProvider).toLowerCase();
+    setState(() {
+      _censusItemsFuture = ref.read(censusItemProvider.notifier).loadItems(id);
+    });
   }
 
   void setIsLoading(bool load) {
