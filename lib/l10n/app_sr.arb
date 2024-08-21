@@ -2,7 +2,9 @@
   "homeScreenTitle" : "Asset Manger",
   "settingsScreenTitle": "Podešavanja",
   "language": "Jezik",
-  "theme": "Tema"
+  "theme": "Tema",
+  "addLocation": "Dodaj lokaciju",
+  "yourLocation": "Vaša lokacija"
 
 
 }

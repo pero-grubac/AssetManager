@@ -1,6 +1,7 @@
 import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/widgets/location/location_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddLocationScreen extends StatefulWidget {
   const AddLocationScreen({
@@ -42,8 +43,8 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: widget.isEditable
-            ? const Text('Add Location')
-            : const Text('Your Location'),
+            ? Text(AppLocalizations.of(context)!.addLocation)
+            : Text(AppLocalizations.of(context)!.yourLocation),
         actions: widget.isEditable
             ? [
                 IconButton(
