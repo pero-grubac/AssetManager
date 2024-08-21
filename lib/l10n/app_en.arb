@@ -16,5 +16,9 @@
   "barcode": "Barcode",
   "price": "Price",
   "selectDate": "Select date",
-  "assetDetails":"Asset Details"
+  "assetDetails":"Asset Details",
+  "assetDelete":"Asset deleted.",
+  "undo": "Undo",
+  "assetNotDeleted" : "Asset can not be deleted",
+  "noAsset": "No assets found"
 }

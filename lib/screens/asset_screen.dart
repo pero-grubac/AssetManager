@@ -14,6 +14,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/asset.dart';
 import '../models/worker.dart';
 import '../providers/util_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AssetScreen extends ConsumerStatefulWidget {
   static const id = 'asset_screen';
@@ -76,9 +77,9 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 3),
-          content: const Text('Asset deleted.'),
+          content: Text(AppLocalizations.of(context)!.assetDelete),
           action: SnackBarAction(
-            label: 'Undo',
+            label: AppLocalizations.of(context)!.undo,
             onPressed: () async {
               setIsLoading(true);
               await ref.read(assetProvider.notifier).addAsset(asset);
@@ -88,9 +89,9 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        duration: Duration(seconds: 3),
-        content: Text('Asset can not be deleted.'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text(AppLocalizations.of(context)!.assetNotDeleted),
       ));
     }
   }
@@ -142,7 +143,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
                           asset: asset,
                         ),
                         provider: filteredAssetsProvider,
-                        emptyMessage: 'No assets found',
+                        emptyMessage: AppLocalizations.of(context)!.noAsset,
                       ),
           ),
           onIconPressed: _onIconPressed,

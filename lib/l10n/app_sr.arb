@@ -6,17 +6,21 @@
   "addLocation": "Dodaj lokaciju",
   "yourLocation": "Vaša lokacija",
   "emptyPrice" : "Cijena ne može biti izostavljena",
-    "emptyBarcode": "Barkod ne može biti izostavljen",
-    "emptyImage": "Slika ne može biti izostavljena",
-    "emptyDate": "Datum ne može biti izostavljen",
-    "unknownError": "Nepoznata greška",
-    "yourBarcode": "Vaš barkod",
-    "name": "Ime",
-    "description": "Opis",
-    "barcode": "Barkod",
-    "price": "Cijena",
-    "selectDate": "Datum",
-    "assetDetails":"Detalji o osnovnom sredstvu"
+  "emptyBarcode": "Barkod ne može biti izostavljen",
+  "emptyImage": "Slika ne može biti izostavljena",
+  "emptyDate": "Datum ne može biti izostavljen",
+  "unknownError": "Nepoznata greška",
+  "yourBarcode": "Vaš barkod",
+  "name": "Ime",
+  "description": "Opis",
+  "barcode": "Barkod",
+  "price": "Cijena",
+  "selectDate": "Datum",
+  "assetDetails":"Detalji o osnovnom sredstvu",
+  "assetDelete":"Osnovno sredstvo obrisano.",
+  "undo": "Poništi",
+  "assetNotDeleted" : "Osnovno sredstvo ne može biti obrisano",
+  "noAsset": "Nema osnovnih sredstava"
 
 
 }
