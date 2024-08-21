@@ -33,7 +33,10 @@
   "censusListDelete": "Popisna lista obrisana",
   "censusListNotDelete": "Popisna lista ne može biti obrisana",
   "locationDelete": "Lokacija obrisana",
-  "locationNotDeleted": "Lokacija ne može biti obrisana"
+  "locationNotDeleted": "Lokacija ne može biti obrisana",
+  "pickYourLocation": "Izaberite Vašu lokaciju",
+  "address": "adresa"
+
 
 
 }

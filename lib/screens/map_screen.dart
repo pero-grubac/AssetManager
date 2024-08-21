@@ -2,6 +2,7 @@ import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/screens/asset_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MapScreen extends StatefulWidget {
   static const id = 'map_screen';
@@ -29,7 +30,7 @@ class _MapScreenState extends State<MapScreen> {
         AssetLocation(
           latitude: 37.422,
           longitude: -122.084,
-          address: 'address',
+          address: AppLocalizations.of(context)!.address,
         );
   }
 
@@ -47,8 +48,9 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(widget.isSelecting ? 'Pick your location' : 'Your location'),
+        title: Text(widget.isSelecting
+            ? AppLocalizations.of(context)!.pickYourLocation
+            : AppLocalizations.of(context)!.yourLocation),
         actions: [
           if (widget.isSelecting)
             IconButton(

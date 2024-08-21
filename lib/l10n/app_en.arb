@@ -33,5 +33,7 @@
   "censusListDelete": "Census list deleted",
   "censusListNotDelete": "Census List can not be deleted",
   "locationDelete": "Location deleted",
-  "locationNotDeleted": "Location can not be deleted"
+  "locationNotDeleted": "Location can not be deleted",
+  "pickYourLocation": "Pick your location",
+  "address": "address"
 }
