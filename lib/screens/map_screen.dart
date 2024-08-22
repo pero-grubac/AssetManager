@@ -28,8 +28,8 @@ class _MapScreenState extends State<MapScreen> {
     super.didChangeDependencies();
     _assetLocation = widget.assetLocation ??
         AssetLocation(
-          latitude: 37.422,
-          longitude: -122.084,
+          latitude: 42.711799,
+          longitude: 18.388541,
           address: AppLocalizations.of(context)!.address,
         );
   }
