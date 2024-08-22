@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/settings.dart';
 import '../theme/theme_manager.dart';
+import 'locale_provider.dart';
 
 class SettingsNotifier extends StateNotifier<Settings> {
   final Ref ref;
@@ -11,24 +12,24 @@ class SettingsNotifier extends StateNotifier<Settings> {
   SettingsNotifier(this.ref)
       : super(Settings(
             themeMode: Settings.lightMode, language: Settings.engLang)) {
-    _loadSettings(); // Load settings when the notifier is created
+    _loadSettings();
   }
 
-  // Method to update theme mode
   void updateThemeMode(String themeMode) {
     state = Settings(themeMode: themeMode, language: state.language);
     _saveSettings(); // Save settings after updating
 
-    // Update the theme in ThemeNotifier
     final themeModeEnum =
         themeMode == Settings.darkMode ? ThemeMode.dark : ThemeMode.light;
     ref.read(themeNotifierProvider.notifier).setTheme(themeModeEnum);
   }
 
-  // Method to update language
   void updateLanguage(String language) {
     state = Settings(themeMode: state.themeMode, language: language);
-    _saveSettings(); // Save settings after updating
+    _saveSettings();
+
+    final locale = Locale(language == Settings.engLang ? 'en' : 'sr');
+    ref.read(localeProvider.notifier).updateLocale(locale);
   }
 
   Future<void> _loadSettings() async {
@@ -38,13 +39,14 @@ class SettingsNotifier extends StateNotifier<Settings> {
 
     state = Settings(themeMode: themeMode, language: language);
 
-    // Update the theme in ThemeNotifier based on loaded settings
     final themeModeEnum =
         themeMode == Settings.darkMode ? ThemeMode.dark : ThemeMode.light;
     ref.read(themeNotifierProvider.notifier).setTheme(themeModeEnum);
+
+    final locale = Locale(language == Settings.engLang ? 'en' : 'sr');
+    ref.read(localeProvider.notifier).updateLocale(locale);
   }
 
-  // Method to save settings to storage
   Future<void> _saveSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('themeMode', state.themeMode);
