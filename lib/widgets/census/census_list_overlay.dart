@@ -11,6 +11,7 @@ class CensusListOverlay extends StatefulWidget {
   const CensusListOverlay({super.key, this.censusList, this.onSave});
   final CensusList? censusList;
   final void Function(CensusList censusList)? onSave;
+
   @override
   State<CensusListOverlay> createState() => _CensusListOverlayState();
 }
@@ -19,6 +20,7 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
   final _nameController = TextEditingController();
   DateTime? _selectedDate;
   String? _pickedDate;
+
   @override
   void initState() {
     super.initState();
@@ -43,11 +45,10 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
       context: context,
       firstDate: firstDate,
       lastDate: lastDate,
-      initialDate: now,
+      initialDate: _selectedDate ?? now,
     ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
+      if (pickedDate == null) return;
+
       setState(() {
         _selectedDate = pickedDate;
         _pickedDate = DateFormat('dd.MM.yyyy').format(_selectedDate!);
@@ -59,8 +60,9 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
     final nameTextField = BuildTextField(
       controller: _nameController,
       label: AppLocalizations.of(context)!.name,
-      isEditable: false,
+      isEditable: false, // Allow editing
     );
+
     final dateField = GestureDetector(
       onTap: _presentDatePicker,
       child: Row(
@@ -81,7 +83,7 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
         children: [
           Expanded(child: nameTextField),
           addHorizontalSpace(16),
-          Expanded(child: dateField)
+          Flexible(child: dateField),
         ],
       ),
       addVerticalSpace(16),
@@ -101,16 +103,23 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
               child: Text(AppLocalizations.of(context)!.save),
             ),
         ],
-      )
+      ),
     ];
   }
 
   void _submitData() {
     final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      // TODO translate empty name
+      ErrorDialog.show(context,
+          AppLocalizations.of(context)!.emptyPrice); // Handle empty name error
+      return;
+    }
     if (_selectedDate == null) {
       ErrorDialog.show(context, AppLocalizations.of(context)!.emptyDate);
       return;
     }
+
     try {
       CensusList censusList;
       if (widget.censusList == null) {
@@ -125,7 +134,8 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
           creationDate: _selectedDate!,
         );
       }
-      widget.onSave!(censusList);
+
+      widget.onSave?.call(censusList);
       Navigator.pop(context);
     } catch (e) {
       if (e is ArgumentError) {
@@ -139,16 +149,18 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (ctx, constraints) {
-      return SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: SingleChildScrollView(
+      return Material(
+        child: SizedBox(
+          width: constraints.maxWidth * 0.8,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: _buildTextFields(),
+              children: [
+                addVerticalSpace(24),
+                ..._buildTextFields(),
+              ],
             ),
           ),
         ),

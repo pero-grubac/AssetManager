@@ -16,6 +16,7 @@ import 'location_card.dart';
 
 const API_KEY = 'AIzaSyD06o4maRDfYNUvDtzb0xQu9b_Gmo23HCQ';
 
+// TODO translate
 class LocationInput extends StatefulWidget {
   const LocationInput({
     super.key,

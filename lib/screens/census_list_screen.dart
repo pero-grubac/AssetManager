@@ -85,15 +85,17 @@ class _CensusListScreenState extends ConsumerState<CensusListScreen> {
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
-      builder: (ctx) => CensusListOverlay(
-        onSave: (censusList) async {
-          setIsLoading(true);
-          await ref
-              .read(censusListProvider.notifier)
-              .updateCensusList(censusList);
-          setIsLoading(false);
-        },
-        censusList: censusList,
+      builder: (ctx) => Material(
+        child: CensusListOverlay(
+          onSave: (censusList) async {
+            setIsLoading(true);
+            await ref
+                .read(censusListProvider.notifier)
+                .updateCensusList(censusList);
+            setIsLoading(false);
+          },
+          censusList: censusList,
+        ),
       ),
     );
   }
