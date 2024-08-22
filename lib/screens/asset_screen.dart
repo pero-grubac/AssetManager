@@ -77,7 +77,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
   void _showUndoSnackBar(Asset asset, bool shouldDelete) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    if (shouldDelete) {
+    /* if (shouldDelete) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 3),
@@ -86,6 +86,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
             label: AppLocalizations.of(context)!.undo,
             onPressed: () async {
               setIsLoading(true);
+              // obrisao si sliku pa je ne mozes vratiti
               await ref.read(assetProvider.notifier).addAsset(asset);
               setIsLoading(false);
             },
@@ -93,6 +94,12 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
         ),
       );
     } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text(AppLocalizations.of(context)!.assetNotDeleted),
+      ));
+    }*/
+    if (!shouldDelete) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: const Duration(seconds: 3),
         content: Text(AppLocalizations.of(context)!.assetNotDeleted),

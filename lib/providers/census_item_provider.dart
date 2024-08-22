@@ -41,7 +41,7 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   Future<void> removeCensusItem(CensusItem censusItem) async {
     final db = await DatabaseHelper().getCensusItemDatabase();
     await db.delete(
-      censusItem.id,
+      CensusItem.dbName,
       where: 'id = ?',
       whereArgs: [censusItem.id],
     );
