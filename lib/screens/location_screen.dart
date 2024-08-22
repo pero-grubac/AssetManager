@@ -56,6 +56,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
     final locationNotifier = ref.read(locationProvider.notifier);
     final shouldDelete = await locationNotifier.removeLocation(location);
     _showUndoSnackBar(location, shouldDelete);
+    print(shouldDelete);
   }
 
   void _showUndoSnackBar(AssetLocation location, bool shouldDelete) {
@@ -68,9 +69,7 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
           action: SnackBarAction(
             label: AppLocalizations.of(context)!.undo,
             onPressed: () async {
-              setIsLoading(true);
-              await ref.read(locationProvider.notifier).addLocation(location);
-              setIsLoading(false);
+              await _addLocation(location);
             },
           ),
         ),

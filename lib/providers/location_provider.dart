@@ -2,9 +2,8 @@ import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/providers/database.dart';
 import 'package:asset_manager/providers/util_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sqflite/sqflite.dart' as sql;
 
-import '../models/asset.dart';
+import '../models/census_item.dart';
 
 class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   LocationNotifier() : super(const []);
@@ -33,12 +32,12 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
 
   Future<bool> removeLocation(AssetLocation location) async {
     final db = await DatabaseHelper().getLocationDatabase();
-    final assetDb = await DatabaseHelper().getAssetDatabase();
+    final ciDb = await DatabaseHelper().getCensusItemDatabase();
 
-    final result = await assetDb.query(
-      Asset.dbName,
-      where: 'assignedLocationId = ?',
-      whereArgs: [location.id],
+    final result = await ciDb.query(
+      CensusItem.dbName,
+      where: 'oldLocationId = ? OR newLocationId = ?',
+      whereArgs: [location.id, location.id],
     );
 
     if (result.isNotEmpty) {
