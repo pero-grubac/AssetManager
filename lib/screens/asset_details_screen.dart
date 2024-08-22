@@ -249,7 +249,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       isEditable: widget.isEditable,
     );
 
-    final barcodeRow = widget.isEditable ? barcodeIcon : barcodeTextField;
+    final barcodeRow = barcodeIcon;
 
     if (isWideScreen) {
       return [
