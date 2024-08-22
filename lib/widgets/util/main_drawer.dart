@@ -1,5 +1,6 @@
 import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../screens/settings_screen.dart';
 import '../../theme/drawer_header_theme.dart';
@@ -25,7 +26,7 @@ class MainDrawer extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
                 addHorizontalSpace(18),
-                const Text('Asset manager'),
+                Text(AppLocalizations.of(context)!.assetManager),
               ],
             ),
           ),
@@ -35,7 +36,7 @@ class MainDrawer extends StatelessWidget {
               size: 26,
               color: Theme.of(context).colorScheme.primary,
             ),
-            title: const Text('Settings'),
+            title: Text(AppLocalizations.of(context)!.settings),
             onTap: () {
               Navigator.of(context).pushNamed(SettingsScreen.id);
             },

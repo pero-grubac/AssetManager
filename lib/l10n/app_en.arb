@@ -48,6 +48,8 @@
   "camera": "Camera",
   "gallery": "Gallery",
   "invalidInput": "Invalid input",
-  "okay": "Okay"
+  "okay": "Okay",
+  "assetManager": "Asset Manger",
+  "settings": "Settings"
 
 }

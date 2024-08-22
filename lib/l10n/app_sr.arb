@@ -48,7 +48,10 @@
   "camera": "Kamera",
   "gallery": "Galerija",
   "invalidInput": "Ne validan unos",
-  "okay": "Ok"
+  "okay": "Ok",
+  "assetManager": "Asset Manger",
+  "settings": "Podešavanja"
+
 
 
 }
