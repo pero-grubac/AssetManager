@@ -50,7 +50,14 @@
   "invalidInput": "Ne validan unos",
   "okay": "Ok",
   "assetManager": "Asset Manger",
-  "settings": "Podešavanja"
+  "settings": "Podešavanja",
+  "workerDoesNotExist": "Radnik ne postoji",
+  "selectWorker": "Izaberite radnika",
+  "firstName": "Ime",
+  "lastName": "Prezime",
+  "email": "Email",
+  "phoneNumber": "Broj telefona"
+
 
 
 

@@ -1,5 +1,7 @@
 import 'package:asset_manager/widgets/util/build_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../models/worker.dart';
 import '../util/error_dialog.dart';
 import '../util/helper_widgets.dart';
@@ -83,23 +85,23 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
   List<Widget> _buildTextFields({required bool isWideScreen}) {
     final firstNameWidget = BuildTextField(
       controller: _firstNameController,
-      label: 'First name',
+      label: AppLocalizations.of(context)!.firstName,
       isEditable: !widget.isEditable,
     );
     final lastNameWidget = BuildTextField(
       controller: _lastNameController,
-      label: 'Last name',
+      label: AppLocalizations.of(context)!.lastName,
       isEditable: !widget.isEditable,
     );
     final emailWidget = BuildTextField(
       controller: _emailController,
-      label: 'Email',
+      label: AppLocalizations.of(context)!.email,
       keyboardType: TextInputType.emailAddress,
       isEditable: !widget.isEditable,
     );
     final phoneWidget = BuildTextField(
       controller: _phoneController,
-      label: 'Phone number',
+      label: AppLocalizations.of(context)!.phoneNumber,
       keyboardType: TextInputType.phone,
       isEditable: !widget.isEditable,
     );
@@ -159,13 +161,13 @@ class _WorkerOverlayState extends State<WorkerOverlay> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('Cancel'),
+                        child: Text(AppLocalizations.of(context)!.cancel),
                       ),
                       if (widget.onSaveWorker != null) const Spacer(),
                       if (widget.onSaveWorker != null)
                         ElevatedButton(
                           onPressed: _submitData,
-                          child: const Text('Save'),
+                          child: Text(AppLocalizations.of(context)!.save),
                         ),
                     ],
                   ),

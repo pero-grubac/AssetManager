@@ -50,6 +50,12 @@
   "invalidInput": "Invalid input",
   "okay": "Okay",
   "assetManager": "Asset Manger",
-  "settings": "Settings"
+  "settings": "Settings",
+  "workerDoesNotExist": "Worker does not exist",
+  "selectWorker": "Select worker",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "email": "Email",
+  "phoneNumber": "Phone number"
 
 }
