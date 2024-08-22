@@ -44,6 +44,8 @@
   "workerNotDeleted": "Worker can not be deleted",
   "noWorker" : "No workers found",
   "cancel": "Cancel",
-  "save": "Save"
+  "save": "Save",
+  "camera": "Camera",
+  "gallery": "Gallery"
 
 }

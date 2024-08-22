@@ -42,7 +42,11 @@
   "search": "Pretraga...",
   "workerDelete": "Ranik obrisan",
   "workerNotDeleted": "Radnik ne može biti obrisan",
-  "noWorker" : "Nema radnika"
+  "noWorker" : "Nema radnika",
+  "cancel": "Otkaži",
+  "save": "Sačuvaj",
+  "camera": "Kamera",
+  "gallery": "Galerija"
 
 
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImageInput extends StatefulWidget {
   const ImageInput({
@@ -52,7 +53,7 @@ class _ImageInputState extends State<ImageInput> {
   Widget build(BuildContext context) {
     Widget cameraWidget = TextButton.icon(
       icon: const Icon(Icons.camera),
-      label: const Text('Camera'),
+      label: Text(AppLocalizations.of(context)!.camera),
       onPressed: () {
         _takePicture(ImageSource.camera);
         isCammera = true;
@@ -60,7 +61,7 @@ class _ImageInputState extends State<ImageInput> {
     );
     Widget galleryWidget = TextButton.icon(
       icon: const Icon(Icons.photo_library),
-      label: const Text('Gallery'),
+      label: Text(AppLocalizations.of(context)!.gallery),
       onPressed: () {
         _takePicture(ImageSource.gallery);
         isCammera = false;
