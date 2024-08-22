@@ -37,6 +37,10 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   AssetLocation? _pickedLocation;
   bool _isGettingLocation = false;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
 
   String locationImage(AssetLocation? location) {
     if (location == null) return '';
@@ -74,13 +78,22 @@ class _LocationInputState extends State<LocationInput> {
     locationData = await location.getLocation();
     final lat = locationData.latitude;
     final lng = locationData.longitude;
+    if (!mounted) return;
+
     if (lat == null || lng == null) {
       ErrorDialog.show(
           context, 'Something went wrong with getting the location');
+      setState(() {
+        _isGettingLocation = false;
+      });
       return;
     }
 
-    _savePlace(lat, lng);
+    await _savePlace(lat, lng);
+    if (!mounted) return;
+    setState(() {
+      _isGettingLocation = false;
+    });
   }
 
   Future<void> _setLocation(double latitude, double longitude) async {
@@ -89,7 +102,7 @@ class _LocationInputState extends State<LocationInput> {
 
     try {
       final result = await http.get(url);
-
+      if (!mounted) return;
       if (result.statusCode != 200) {
         throw Exception('Failed to fetch location');
       }
@@ -128,6 +141,7 @@ class _LocationInputState extends State<LocationInput> {
         _isGettingLocation = false;
       });
     } catch (error) {
+      if (!mounted) return;
       setState(() {
         _isGettingLocation = false;
       });
@@ -137,6 +151,7 @@ class _LocationInputState extends State<LocationInput> {
 
   Future<void> _savePlace(double latitude, double longitude) async {
     await _setLocation(latitude, longitude);
+    if (!mounted) return;
     widget.onSelectedLocation(_pickedLocation!);
   }
 
@@ -146,6 +161,7 @@ class _LocationInputState extends State<LocationInput> {
         builder: (ctx) => const MapScreen(),
       ),
     );
+    if (!mounted) return;
     if (pickedLocation == null) return;
     _savePlace(pickedLocation.latitude, pickedLocation.longitude);
   }

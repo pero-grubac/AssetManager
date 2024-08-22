@@ -24,8 +24,8 @@ class _MapScreenState extends State<MapScreen> {
   LatLng? pickedLocation;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _assetLocation = widget.assetLocation ??
         AssetLocation(
           latitude: 37.422,
@@ -56,7 +56,9 @@ class _MapScreenState extends State<MapScreen> {
             IconButton(
               icon: const Icon(Icons.save),
               onPressed: () {
-                Navigator.of(context).pop(pickedLocation);
+                if (pickedLocation != null) {
+                  Navigator.of(context).pop(pickedLocation);
+                }
               },
             )
         ],
