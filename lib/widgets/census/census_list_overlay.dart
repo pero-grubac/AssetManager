@@ -110,13 +110,12 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
   void _submitData() {
     final name = _nameController.text.trim();
     if (name.isEmpty) {
-      // TODO translate empty name
       ErrorDialog.show(context,
           AppLocalizations.of(context)!.emptyPrice); // Handle empty name error
       return;
     }
     if (_selectedDate == null) {
-      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyDate);
+      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyName);
       return;
     }
 

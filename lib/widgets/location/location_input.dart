@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../util/error_dialog.dart';
 import '../util/helper_widgets.dart';
@@ -16,7 +17,6 @@ import 'location_card.dart';
 
 const API_KEY = 'AIzaSyD06o4maRDfYNUvDtzb0xQu9b_Gmo23HCQ';
 
-// TODO translate
 class LocationInput extends StatefulWidget {
   const LocationInput({
     super.key,
@@ -82,8 +82,7 @@ class _LocationInputState extends State<LocationInput> {
     if (!mounted) return;
 
     if (lat == null || lng == null) {
-      ErrorDialog.show(
-          context, 'Something went wrong with getting the location');
+      ErrorDialog.show(context, AppLocalizations.of(context)!.wrongLocation);
       setState(() {
         _isGettingLocation = false;
       });
@@ -105,11 +104,11 @@ class _LocationInputState extends State<LocationInput> {
       final result = await http.get(url);
       if (!mounted) return;
       if (result.statusCode != 200) {
-        throw Exception('Failed to fetch location');
+        throw Exception(AppLocalizations.of(context)!.wrongLocation);
       }
       final resultData = json.decode(result.body);
       if (resultData['results'].isEmpty) {
-        throw Exception('No address found');
+        throw Exception(AppLocalizations.of(context)!.noAddress);
       }
 
       final addressComponents = resultData['results'][0]['address_components'];
@@ -196,8 +195,8 @@ class _LocationInputState extends State<LocationInput> {
               onTap: onTap,
             );
           },
-          title: 'Select Location',
-          emptyMessage: 'No locations found',
+          title: AppLocalizations.of(context)!.selectLocation,
+          emptyMessage: AppLocalizations.of(context)!.noLocation,
         ),
       ),
     );
@@ -214,8 +213,8 @@ class _LocationInputState extends State<LocationInput> {
 
   @override
   Widget build(BuildContext context) {
-    Widget previewContent = const Text(
-      'No location chosen',
+    Widget previewContent = Text(
+      AppLocalizations.of(context)!.noLocationChosen,
       textAlign: TextAlign.center,
     );
 
@@ -251,18 +250,18 @@ class _LocationInputState extends State<LocationInput> {
         TextButton.icon(
           onPressed: _getCurrentLocation,
           icon: const Icon(Icons.location_on),
-          label: const Text('Get current location'),
+          label: Text(AppLocalizations.of(context)!.currentLocation),
         ),
         TextButton.icon(
           onPressed: _selectOnMap,
           icon: const Icon(Icons.map),
-          label: const Text('Select on map'),
+          label: Text(AppLocalizations.of(context)!.selectOnMap),
         ),
         if (widget.isExistingLocation)
           TextButton.icon(
             onPressed: _existingLocation,
             icon: const Icon(Icons.location_city),
-            label: const Text('Existing location'),
+            label: Text(AppLocalizations.of(context)!.existingLocation),
           ),
       ],
     );
