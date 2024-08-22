@@ -56,9 +56,10 @@
   "firstName": "Ime",
   "lastName": "Prezime",
   "email": "Email",
-  "phoneNumber": "Broj telefona"
-
-
-
+  "phoneNumber": "Broj telefona",
+  "locations": "Lokacije",
+  "workers": "Radnici",
+  "assets": "Osnovna sredstva",
+  "censusList": "Popisne liste"
 
 }

@@ -1,19 +1,47 @@
 import 'package:asset_manager/models/category/category.dart';
-import 'package:asset_manager/models/category/category_data.dart';
+import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:asset_manager/widgets/category/category_grid_item.dart';
 import 'package:asset_manager/widgets/util/main_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'asset_screen.dart';
+import 'census_list_screen.dart';
+import 'location_screen.dart';
+
 class HomeScreen extends StatelessWidget {
   static const id = 'home_screen';
   const HomeScreen({super.key});
+
   void _selectCategory(BuildContext context, Category category) {
     Navigator.of(context).pushNamed(category.id);
   }
 
   @override
   Widget build(BuildContext context) {
+    var categories = [
+      Category(
+        id: LocationScreen.id,
+        title: AppLocalizations.of(context)!.locations,
+        icon: const Icon(Icons.location_city),
+      ),
+      Category(
+        id: WorkersScreen.id,
+        title: AppLocalizations.of(context)!.workers,
+        icon: const Icon(Icons.person_2),
+      ),
+      Category(
+        id: AssetScreen.id,
+        title: AppLocalizations.of(context)!.assets,
+        icon: const Icon(Icons.business_center),
+      ),
+      Category(
+        id: CensusListScreen.id,
+        title: AppLocalizations.of(context)!.censusList,
+        icon: const Icon(Icons.checklist),
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
