@@ -3,6 +3,7 @@ import 'package:asset_manager/widgets/worker/worker_card.dart';
 import 'package:asset_manager/widgets/worker/worker_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/worker.dart';
 import '../../providers/worker_provider.dart';
@@ -76,12 +77,14 @@ class _WorkerFieldState extends ConsumerState<WorkerField> {
   void _showWorkerOverlay() async {
     if (_newWorkerController.text.isEmpty) {
       ErrorDialog.show(context, widget.controllerTextEmpty);
-    } else {
-      List<String> parts = _newWorkerController.text.split(" ");
+      return;
+    }
+    List<String> parts = _newWorkerController.text.split(" ");
+    try {
       _newWorker ??= await ref
           .read(workerProvider.notifier)
           .findWorkerByFullName(parts[0], parts[1]);
-
+      if (!mounted) return;
       if (_newWorker != null) {
         showDialog(
           context: context,
@@ -96,8 +99,11 @@ class _WorkerFieldState extends ConsumerState<WorkerField> {
           },
         );
       } else {
-        ErrorDialog.show(context, 'Worker does not exist.');
+        ErrorDialog.show(
+            context, AppLocalizations.of(context)!.workerDoesNotExist);
       }
+    } catch (e) {
+      ErrorDialog.show(context, AppLocalizations.of(context)!.unknownError);
     }
   }
 
@@ -118,8 +124,8 @@ class _WorkerFieldState extends ConsumerState<WorkerField> {
               isSelected: isSelected,
             );
           },
-          title: 'Select worker',
-          emptyMessage: 'No workers found',
+          title: AppLocalizations.of(context)!.selectWorker,
+          emptyMessage: AppLocalizations.of(context)!.noWorker,
         ),
       ),
     );
