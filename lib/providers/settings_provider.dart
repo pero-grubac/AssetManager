@@ -11,28 +11,9 @@ class SettingsNotifier extends StateNotifier<Settings> {
 
   SettingsNotifier(this.ref)
       : super(Settings(
-            themeMode: Settings.lightMode, language: Settings.engLang)) {
-    _loadSettings();
-  }
+            themeMode: Settings.lightMode, language: Settings.engLang));
 
-  void updateThemeMode(String themeMode) {
-    state = Settings(themeMode: themeMode, language: state.language);
-    _saveSettings(); // Save settings after updating
-
-    final themeModeEnum =
-        themeMode == Settings.darkMode ? ThemeMode.dark : ThemeMode.light;
-    ref.read(themeNotifierProvider.notifier).setTheme(themeModeEnum);
-  }
-
-  void updateLanguage(String language) {
-    state = Settings(themeMode: state.themeMode, language: language);
-    _saveSettings();
-
-    final locale = Locale(language == Settings.engLang ? 'en' : 'sr');
-    ref.read(localeProvider.notifier).updateLocale(locale);
-  }
-
-  Future<void> _loadSettings() async {
+  Future<void> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final themeMode = prefs.getString('themeMode') ?? Settings.lightMode;
     final language = prefs.getString('language') ?? Settings.engLang;
@@ -42,6 +23,23 @@ class SettingsNotifier extends StateNotifier<Settings> {
     final themeModeEnum =
         themeMode == Settings.darkMode ? ThemeMode.dark : ThemeMode.light;
     ref.read(themeNotifierProvider.notifier).setTheme(themeModeEnum);
+
+    final locale = Locale(language == Settings.engLang ? 'en' : 'sr');
+    ref.read(localeProvider.notifier).updateLocale(locale);
+  }
+
+  void updateThemeMode(String themeMode) {
+    state = Settings(themeMode: themeMode, language: state.language);
+    _saveSettings();
+
+    final themeModeEnum =
+        themeMode == Settings.darkMode ? ThemeMode.dark : ThemeMode.light;
+    ref.read(themeNotifierProvider.notifier).setTheme(themeModeEnum);
+  }
+
+  void updateLanguage(String language) {
+    state = Settings(themeMode: state.themeMode, language: language);
+    _saveSettings();
 
     final locale = Locale(language == Settings.engLang ? 'en' : 'sr');
     ref.read(localeProvider.notifier).updateLocale(locale);
