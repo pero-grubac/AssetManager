@@ -1,8 +1,8 @@
+import 'package:asset_manager/models/census_item.dart';
 import 'package:asset_manager/models/worker.dart';
 import 'package:asset_manager/providers/util_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/asset.dart';
 import 'database.dart';
 
 class WorkerNotifier extends StateNotifier<List<Worker>> {
@@ -35,12 +35,12 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
 
   Future<bool> removeWorker(Worker worker) async {
     final db = await DatabaseHelper().getWorkerDatabase();
-    final assetDb = await DatabaseHelper().getAssetDatabase();
+    final ciDb = await DatabaseHelper().getCensusItemDatabase();
 
-    final result = await assetDb.query(
-      Asset.dbName,
-      where: 'assignedPersonId = ?',
-      whereArgs: [worker.id],
+    final result = await ciDb.query(
+      CensusItem.dbName,
+      where: 'oldPersonId = ? OR newPersonId = ?',
+      whereArgs: [worker.id, worker.id],
     );
     if (result.isNotEmpty) {
       return false;
