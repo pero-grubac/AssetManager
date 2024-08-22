@@ -114,12 +114,12 @@ class _LocationInputState extends State<LocationInput> {
       final addressComponents = resultData['results'][0]['address_components'];
       String cityName = 'Unknown City';
       for (var component in addressComponents) {
-        if (component['types'].contains('locality') ||
-            component['types'].contains('political')) {
+        if (component['types'].contains('locality')) {
           cityName = component['long_name'];
           break;
         }
       }
+
       if (cityName == 'Unknown City') {
         for (var component in addressComponents) {
           if (component['types'].contains('administrative_area_level_1')) {
