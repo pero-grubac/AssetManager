@@ -9,6 +9,7 @@ import 'package:asset_manager/screens/location_screen.dart';
 import 'package:asset_manager/screens/map_screen.dart';
 import 'package:asset_manager/screens/scan_barcode_screen.dart';
 import 'package:asset_manager/screens/settings_screen.dart';
+import 'package:asset_manager/screens/splash_screen.dart';
 import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:asset_manager/theme/theme_constants.dart';
 import 'package:asset_manager/widgets/util/centered_circular_loading.dart';
@@ -72,8 +73,9 @@ class _AssetManagerState extends ConsumerState<AssetManager> {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             locale: locale,
-            initialRoute: HomeScreen.id,
+            initialRoute: SplashScreen.id,
             routes: {
+              SplashScreen.id: (context) => const SplashScreen(),
               HomeScreen.id: (context) => const HomeScreen(),
               WorkersScreen.id: (context) => const WorkersScreen(),
               LocationScreen.id: (context) => const LocationScreen(),
