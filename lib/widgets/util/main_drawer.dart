@@ -4,14 +4,9 @@ import 'package:flutter/material.dart';
 import '../../screens/settings_screen.dart';
 import '../../theme/drawer_header_theme.dart';
 
-class MainDrawer extends StatefulWidget {
+class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
 
-  @override
-  _MainDrawerState createState() => _MainDrawerState();
-}
-
-class _MainDrawerState extends State<MainDrawer> {
   @override
   Widget build(BuildContext context) {
     final drawerHeaderTheme = Theme.of(context).extension<DrawerHeaderTheme>();

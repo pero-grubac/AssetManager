@@ -1,6 +1,7 @@
 import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/census_list.dart';
 import '../util/build_text_field.dart';
@@ -20,12 +21,12 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
   String? _pickedDate;
   @override
   void initState() {
+    super.initState();
     if (widget.censusList != null) {
       _nameController.text = widget.censusList!.name;
       _selectedDate = widget.censusList!.creationDate;
       _pickedDate = widget.censusList!.formatedDate;
     }
-    super.initState();
   }
 
   @override
@@ -57,7 +58,7 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
   List<Widget> _buildTextFields() {
     final nameTextField = BuildTextField(
       controller: _nameController,
-      label: 'Name',
+      label: AppLocalizations.of(context)!.name,
       isEditable: false,
     );
     final dateField = GestureDetector(
@@ -66,7 +67,7 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            _pickedDate ?? 'Select date',
+            _pickedDate ?? AppLocalizations.of(context)!.selectDate,
           ),
           addHorizontalSpace(8),
           const Icon(Icons.calendar_month),
@@ -91,13 +92,13 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           if (widget.onSave != null) const Spacer(),
           if (widget.onSave != null)
             ElevatedButton(
               onPressed: _submitData,
-              child: const Text('Save'),
+              child: Text(AppLocalizations.of(context)!.save),
             ),
         ],
       )
@@ -107,7 +108,7 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
   void _submitData() {
     final name = _nameController.text.trim();
     if (_selectedDate == null) {
-      ErrorDialog.show(context, 'Date  can not be empty');
+      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyDate);
       return;
     }
     try {
@@ -130,15 +131,13 @@ class _CensusListOverlayState extends State<CensusListOverlay> {
       if (e is ArgumentError) {
         ErrorDialog.show(context, e.message);
       } else {
-        ErrorDialog.show(context, 'An unknown error occurred ');
+        ErrorDialog.show(context, AppLocalizations.of(context)!.unknownError);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
-
     return LayoutBuilder(builder: (ctx, constraints) {
       return SizedBox(
         height: double.infinity,

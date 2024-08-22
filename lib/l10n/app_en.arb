@@ -42,6 +42,8 @@
   "search": "Search...",
   "workerDelete": "Worker deleted",
   "workerNotDeleted": "Worker can not be deleted",
-  "noWorker" : "No workers found"
+  "noWorker" : "No workers found",
+  "cancel": "Cancel",
+  "save": "Save"
 
 }
