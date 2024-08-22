@@ -31,7 +31,7 @@ class AppTheme {
           foregroundColor: colorScheme.onPrimary,
         ),
       ),
-      textTheme: GoogleFonts.latoTextTheme().copyWith(
+      textTheme: GoogleFonts.robotoTextTheme().copyWith(
         titleLarge: TextStyle(
           fontWeight: FontWeight.normal,
           color: colorScheme.onSurface,
