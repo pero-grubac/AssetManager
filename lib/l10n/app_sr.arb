@@ -46,7 +46,9 @@
   "cancel": "Otkaži",
   "save": "Sačuvaj",
   "camera": "Kamera",
-  "gallery": "Galerija"
+  "gallery": "Galerija",
+  "invalidInput": "Ne validan unos",
+  "okay": "Ok"
 
 
 }

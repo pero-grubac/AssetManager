@@ -46,6 +46,8 @@
   "cancel": "Cancel",
   "save": "Save",
   "camera": "Camera",
-  "gallery": "Gallery"
+  "gallery": "Gallery",
+  "invalidInput": "Invalid input",
+  "okay": "Okay"
 
 }

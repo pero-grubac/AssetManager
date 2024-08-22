@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ErrorDialog extends StatelessWidget {
   const ErrorDialog({super.key, required this.message});
@@ -8,14 +9,14 @@ class ErrorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // The ErrorDialog should not itself call showDialog, but return the widget
     return AlertDialog(
-      title: const Text('Invalid input'),
+      title: Text(AppLocalizations.of(context)!.invalidInput),
       content: Text(message),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text('Okay'),
+          child: Text(AppLocalizations.of(context)!.okay),
         ),
       ],
     );
