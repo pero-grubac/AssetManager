@@ -30,8 +30,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     }
   }
 
-  Future<bool> removeLocation(AssetLocation location) async {
-    final db = await DatabaseHelper().getLocationDatabase();
+  Future<bool> canDelete(AssetLocation location) async {
     final ciDb = await DatabaseHelper().getCensusItemDatabase();
 
     final result = await ciDb.query(
@@ -43,6 +42,16 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     if (result.isNotEmpty) {
       return false;
     }
+    return true;
+  }
+
+  Future<void> refresh() async {
+    loadItems();
+  }
+
+  Future<void> removeLocation(AssetLocation location) async {
+    final db = await DatabaseHelper().getLocationDatabase();
+
     await db.delete(
       AssetLocation.dbName,
       where: 'id = ?',
@@ -50,7 +59,6 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
     );
 
     state = state.where((l) => l.id != location.id).toList();
-    return true;
   }
 
   int indexOfLocation(AssetLocation location) {

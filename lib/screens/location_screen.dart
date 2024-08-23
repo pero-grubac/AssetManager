@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:asset_manager/providers/location_provider.dart';
 import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/location/location_card.dart';
@@ -54,31 +56,56 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
 
   Future<void> _removeLocation(AssetLocation location) async {
     final locationNotifier = ref.read(locationProvider.notifier);
-    final shouldDelete = await locationNotifier.removeLocation(location);
-    _showUndoSnackBar(location, shouldDelete);
+    final canDelete = await locationNotifier.canDelete(location);
+
+    if (!mounted) return;
+
+    if (canDelete) {
+      final shouldDelete = await _showUndoSnackBar(location);
+
+      if (!mounted) return;
+
+      if (shouldDelete) {
+        await locationNotifier.removeLocation(location);
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 3),
+            content: Text(AppLocalizations.of(context)!.locationNotDeleted),
+          ),
+        );
+      }
+    }
+    if (mounted) {
+      await locationNotifier.refresh();
+    }
   }
 
-  void _showUndoSnackBar(AssetLocation location, bool shouldDelete) {
+  Future<bool> _showUndoSnackBar(AssetLocation location) async {
+    final completer = Completer<bool>();
+
     ScaffoldMessenger.of(context).clearSnackBars();
-    if (shouldDelete) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: const Duration(seconds: 3),
-          content: Text(AppLocalizations.of(context)!.locationDelete),
-          action: SnackBarAction(
-            label: AppLocalizations.of(context)!.undo,
-            onPressed: () async {
-              await _addLocation(location);
-            },
-          ),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
         duration: const Duration(seconds: 3),
-        content: Text(AppLocalizations.of(context)!.locationNotDeleted),
-      ));
-    }
+        content: Text(AppLocalizations.of(context)!.locationDelete),
+        action: SnackBarAction(
+          label: AppLocalizations.of(context)!.undo,
+          onPressed: () {
+            completer.complete(false);
+          },
+        ),
+      ),
+    );
+    Future.delayed(const Duration(seconds: 3)).then((_) {
+      if (!completer.isCompleted) {
+        completer.complete(true);
+      }
+    });
+    return completer.future;
   }
 
   void _onIconPressed() {

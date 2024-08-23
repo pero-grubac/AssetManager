@@ -82,10 +82,6 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
       if (shouldDelete) {
         await ref.read(assetProvider.notifier).removeAsset(asset);
-      } else {
-        if (mounted) {
-          await ref.read(assetProvider.notifier).refresh();
-        }
       }
     } else {
       if (mounted) {
@@ -96,9 +92,9 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
           ),
         );
       }
-      if (mounted) {
-        await ref.read(assetProvider.notifier).refresh();
-      }
+    }
+    if (mounted) {
+      await ref.read(assetProvider.notifier).refresh();
     }
   }
 
