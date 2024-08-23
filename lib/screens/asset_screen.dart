@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:asset_manager/models/asset_location.dart';
 import 'package:asset_manager/providers/asset_provider.dart';
 import 'package:asset_manager/providers/location_provider.dart';
@@ -69,42 +71,52 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   }
 
   Future<void> _removeAsset(Asset asset) async {
-    final shouldDelete =
-        await ref.read(assetProvider.notifier).removeAsset(asset);
+    final canDelete = await ref.read(assetProvider.notifier).canDelete(asset);
+    if (!mounted) return;
 
-    _showUndoSnackBar(asset, shouldDelete);
+    if (canDelete) {
+      final shouldDelete = await _showUndoSnackBar(asset);
+      if (!mounted) return;
+
+      if (shouldDelete) {
+        await ref.read(assetProvider.notifier).removeAsset(asset);
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 3),
+            content: Text(AppLocalizations.of(context)!.assetNotDeleted),
+          ),
+        );
+      }
+      await ref.read(assetProvider.notifier).refresh();
+    }
   }
 
-  void _showUndoSnackBar(Asset asset, bool shouldDelete) {
+  Future<bool> _showUndoSnackBar(Asset asset) {
+    final completer = Completer<bool>();
+
     ScaffoldMessenger.of(context).clearSnackBars();
-    /* if (shouldDelete) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: const Duration(seconds: 3),
-          content: Text(AppLocalizations.of(context)!.assetDelete),
-          action: SnackBarAction(
-            label: AppLocalizations.of(context)!.undo,
-            onPressed: () async {
-              setIsLoading(true);
-              // obrisao si sliku pa je ne mozes vratiti
-              await ref.read(assetProvider.notifier).addAsset(asset);
-              setIsLoading(false);
-            },
-          ),
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text(AppLocalizations.of(context)!.assetDelete),
+        action: SnackBarAction(
+          label: AppLocalizations.of(context)!.undo,
+          onPressed: () {
+            completer.complete(false);
+          },
         ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: const Duration(seconds: 3),
-        content: Text(AppLocalizations.of(context)!.assetNotDeleted),
-      ));
-    }*/
-    if (!shouldDelete) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: const Duration(seconds: 3),
-        content: Text(AppLocalizations.of(context)!.assetNotDeleted),
-      ));
-    }
+      ),
+    );
+    Future.delayed(const Duration(seconds: 3)).then((_) {
+      if (!completer.isCompleted) {
+        completer.complete(true);
+      }
+    });
+    return completer.future;
   }
 
   Future<void> _editAsset(Asset asset) async {

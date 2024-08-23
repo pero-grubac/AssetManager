@@ -36,6 +36,10 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     state = assets;
   }
 
+  Future<void> refresh() async {
+    await loadItems(null, null);
+  }
+
   Future<List<String>> getAssetsByWorker(String workerId) async {
     final db = await DatabaseHelper().getCensusItemDatabase();
 
@@ -80,6 +84,19 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     db.insert(Asset.dbName, asset.toMap());
 
     state = [asset, ...state];
+  }
+
+  Future<bool> canDelete(Asset asset) async {
+    final ciDB = await DatabaseHelper().getCensusItemDatabase();
+    final result = await ciDB.query(
+      CensusItem.dbName,
+      where: 'assetId = ?',
+      whereArgs: [asset.id],
+    );
+    if (result.isNotEmpty) {
+      return false;
+    }
+    return true;
   }
 
   Future<bool> removeAsset(Asset asset) async {

@@ -33,7 +33,7 @@ class AssetManager extends ConsumerStatefulWidget {
   @override
   ConsumerState<AssetManager> createState() => _AssetManagerState();
 }
-
+// TODO should delete and delete in two methods, splash screen fix
 class _AssetManagerState extends ConsumerState<AssetManager> {
   late Future<void> _initializationFuture;
   @override
