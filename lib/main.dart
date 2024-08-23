@@ -14,12 +14,19 @@ import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:asset_manager/theme/theme_constants.dart';
 import 'package:asset_manager/widgets/util/centered_circular_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'models/settings.dart';
 
-void main() {
+void main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await Future.delayed(
+    const Duration(seconds: 4),
+  );
+  FlutterNativeSplash.remove();
   runApp(
     const ProviderScope(
       child: AssetManager(),
@@ -33,7 +40,7 @@ class AssetManager extends ConsumerStatefulWidget {
   @override
   ConsumerState<AssetManager> createState() => _AssetManagerState();
 }
-// TODO should delete and delete in two methods, splash screen fix
+
 class _AssetManagerState extends ConsumerState<AssetManager> {
   late Future<void> _initializationFuture;
   @override

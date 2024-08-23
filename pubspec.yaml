@@ -34,6 +34,7 @@ dependencies:
   intl: any
   animated_splash_screen: ^1.3.0
   lottie: ^3.1.2
+  flutter_native_splash: ^2.4.1
 
 
 dev_dependencies:
@@ -51,6 +52,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/animation/
+    - assets/images/
 flutter_intl:
   enabled: true
 
