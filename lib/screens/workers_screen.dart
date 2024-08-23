@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:asset_manager/providers/worker_provider.dart';
 import 'package:asset_manager/widgets/worker/worker_overlay.dart';
 import 'package:flutter/material.dart';
@@ -56,34 +58,55 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
   Future<void> _removeWorker(Worker worker) async {
     final workerNotifier = ref.read(workerProvider.notifier);
 
-    final shouldDelete = await workerNotifier.removeWorker(worker);
+    final canDelete = await workerNotifier.canDelete(worker);
 
-    _showUndoSnackBar(worker, shouldDelete);
+    if (!mounted) return;
+
+    if (canDelete) {
+      final shouldDelete = await _showUndoSnackBar(worker);
+
+      if (!mounted) return;
+
+      if (shouldDelete) {
+        await workerNotifier.removeWorker(worker);
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 3),
+            content: Text(AppLocalizations.of(context)!.workerNotDeleted),
+          ),
+        );
+      }
+    }
+    if (mounted) {
+      await workerNotifier.refreshList();
+    }
   }
 
-  void _showUndoSnackBar(Worker worker, bool shouldDelete) {
+  Future<bool> _showUndoSnackBar(Worker worker) {
+    final completer = Completer<bool>();
+
     ScaffoldMessenger.of(context).clearSnackBars();
-    if (shouldDelete) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: const Duration(seconds: 3),
-          content: Text(AppLocalizations.of(context)!.workerDelete),
-          action: SnackBarAction(
-            label: AppLocalizations.of(context)!.undo,
-            onPressed: () async {
-              setIsLoading(true);
-              await ref.read(workerProvider.notifier).addWorker(worker);
-              setIsLoading(false);
-            },
-          ),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
         duration: const Duration(seconds: 3),
-        content: Text(AppLocalizations.of(context)!.workerNotDeleted),
-      ));
-    }
+        content: Text(AppLocalizations.of(context)!.workerDelete),
+        action: SnackBarAction(
+          label: AppLocalizations.of(context)!.undo,
+          onPressed: () async {
+            completer.complete(false);
+          },
+        ),
+      ),
+    );
+    Future.delayed(const Duration(seconds: 3)).then((_) {
+      if (!completer.isCompleted) {
+        completer.complete(true);
+      }
+    });
+    return completer.future;
   }
 
   Future<void> _editWorker(Worker worker) async {

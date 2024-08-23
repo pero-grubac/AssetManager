@@ -64,6 +64,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
+// TODO is barcode unique
   Future<void> _addAsset(Asset asset) async {
     setIsLoading(true);
     await ref.read(assetProvider.notifier).addAsset(asset);
@@ -76,10 +77,15 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
 
     if (canDelete) {
       final shouldDelete = await _showUndoSnackBar(asset);
+
       if (!mounted) return;
 
       if (shouldDelete) {
         await ref.read(assetProvider.notifier).removeAsset(asset);
+      } else {
+        if (mounted) {
+          await ref.read(assetProvider.notifier).refresh();
+        }
       }
     } else {
       if (mounted) {
@@ -90,11 +96,13 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
           ),
         );
       }
-      await ref.read(assetProvider.notifier).refresh();
+      if (mounted) {
+        await ref.read(assetProvider.notifier).refresh();
+      }
     }
   }
 
-  Future<bool> _showUndoSnackBar(Asset asset) {
+  Future<bool> _showUndoSnackBar(Asset asset) async {
     final completer = Completer<bool>();
 
     ScaffoldMessenger.of(context).clearSnackBars();

@@ -33,10 +33,8 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
     }
   }
 
-  Future<bool> removeWorker(Worker worker) async {
-    final db = await DatabaseHelper().getWorkerDatabase();
+  Future<bool> canDelete(Worker worker) async {
     final ciDb = await DatabaseHelper().getCensusItemDatabase();
-
     final result = await ciDb.query(
       CensusItem.dbName,
       where: 'oldPersonId = ? OR newPersonId = ?',
@@ -45,13 +43,22 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
     if (result.isNotEmpty) {
       return false;
     }
+    return true;
+  }
+
+  Future<void> refreshList() async {
+    await loadItems();
+  }
+
+  Future<void> removeWorker(Worker worker) async {
+    final db = await DatabaseHelper().getWorkerDatabase();
+
     await db.delete(
       Worker.dbName,
       where: 'id = ?',
       whereArgs: [worker.id],
     );
     state = state.where((w) => w.id != worker.id).toList();
-    return true;
   }
 
   int indexOfWorker(Worker worker) {
