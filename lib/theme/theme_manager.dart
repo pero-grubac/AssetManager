@@ -6,7 +6,7 @@ import '../providers/settings_provider.dart';
 
 // ThemeNotifier that controls the current theme mode
 class ThemeNotifier extends StateNotifier<ThemeMode> {
-  ThemeNotifier(ThemeMode initialTheme) : super(initialTheme);
+  ThemeNotifier(super.initialTheme);
 
   void setTheme(ThemeMode themeMode) {
     state = themeMode;

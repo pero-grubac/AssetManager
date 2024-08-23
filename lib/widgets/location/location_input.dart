@@ -15,7 +15,7 @@ import '../util/error_dialog.dart';
 import '../util/helper_widgets.dart';
 import 'location_card.dart';
 
-const API_KEY = 'AIzaSyD06o4maRDfYNUvDtzb0xQu9b_Gmo23HCQ';
+const apiKey = 'AIzaSyD06o4maRDfYNUvDtzb0xQu9b_Gmo23HCQ';
 
 class LocationInput extends StatefulWidget {
   const LocationInput({
@@ -47,7 +47,7 @@ class _LocationInputState extends State<LocationInput> {
     if (location == null) return '';
     final lat = location.latitude;
     final lon = location.longitude;
-    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lon&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$lon&key=$API_KEY';
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lon&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$lon&key=$apiKey';
   }
 
   void _getCurrentLocation() async {
@@ -98,7 +98,7 @@ class _LocationInputState extends State<LocationInput> {
 
   Future<void> _setLocation(double latitude, double longitude) async {
     final url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$API_KEY');
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey');
 
     try {
       final result = await http.get(url);

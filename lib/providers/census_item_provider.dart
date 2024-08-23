@@ -1,10 +1,7 @@
 import 'package:asset_manager/models/census_item.dart';
 import 'package:asset_manager/providers/database.dart';
 import 'package:asset_manager/providers/util_provider.dart';
-import 'package:asset_manager/providers/worker_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../models/worker.dart';
 
 class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   CensusItemNotifier() : super(const []);

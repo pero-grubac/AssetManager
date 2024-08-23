@@ -37,7 +37,7 @@ class Asset implements Identifiable {
     if (barcode <= 0) throw ArgumentError('Barcode must be a positive integer');
     if (price <= 0) throw ArgumentError('Price must be a positive number');
 
-    if (image == null) throw ArgumentError('Image  cannot be empty');
+    if (image.path.isEmpty) throw ArgumentError('Image  cannot be empty');
   }
   String get formatedDate {
     return DateFormat('dd.MM.yyyy').format(creationDate);
