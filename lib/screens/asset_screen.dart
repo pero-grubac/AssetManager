@@ -64,11 +64,18 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
     ref.read(searchQueryProvider.notifier).state = query;
   }
 
-// TODO is barcode unique
   Future<void> _addAsset(Asset asset) async {
     setIsLoading(true);
     await ref.read(assetProvider.notifier).addAsset(asset);
     setIsLoading(false);
+  }
+
+  Future<bool> _uniqueBarcode(int barcode) async {
+    setIsLoading(true);
+    final isUnique =
+        await ref.read(assetProvider.notifier).uniqueBarcode(barcode);
+    setIsLoading(false);
+    return isUnique;
   }
 
   Future<void> _removeAsset(Asset asset) async {
@@ -145,6 +152,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
       MaterialPageRoute(
         builder: (ctx) => AssetDetailsScreen(
           onSaveAsset: _addAsset,
+          isUniqueBarcode: _uniqueBarcode,
         ),
       ),
     );

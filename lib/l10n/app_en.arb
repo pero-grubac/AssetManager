@@ -62,6 +62,7 @@
   "startScan": "Start scan",
   "theme": "Theme",
   "undo": "Undo",
+  "uniqueBarcode": "Barcode must be unique",
   "unknownCity": "Unknown city",
   "unknownError": "An unknown error occurred",
   "workerDelete": "Worker deleted",

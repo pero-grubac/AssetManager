@@ -17,10 +17,12 @@ class AssetDetailsScreen extends StatefulWidget {
     this.onSaveAsset,
     this.asset,
     this.isEditable = true,
+    this.isUniqueBarcode,
   });
   final Asset? asset;
   final Future<void> Function(Asset asset)? onSaveAsset;
   final bool isEditable;
+  final Future<bool> Function(int barcode)? isUniqueBarcode;
 
   @override
   State<AssetDetailsScreen> createState() => _AssetDetailsScreenState();
@@ -62,29 +64,45 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
     super.dispose();
   }
 
-  void _submitData() {
+  void _submitData() async {
     final enteredName = _nameController.text.trim();
     final enteredDescription = _descriptionController.text.trim();
     double? enteredPrice = double.tryParse(_priceController.text.trim());
     int? enteredBarcode = int.tryParse(_barcodeController.text.trim());
+
     if (enteredPrice == null) {
-      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyPrice);
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.emptyPrice);
+      }
       return;
     }
     if (enteredBarcode == null) {
-      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyBarcode);
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.emptyBarcode);
+      }
       return;
     }
     if (_selectedImage == null) {
-      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyImage);
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.emptyImage);
+      }
       return;
     }
 
     if (_selectedDate == null) {
-      ErrorDialog.show(context, AppLocalizations.of(context)!.emptyDate);
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.emptyDate);
+      }
       return;
     }
-
+    final isUnique = await widget.isUniqueBarcode!(enteredBarcode);
+    if (!mounted) return;
+    if (!isUnique) {
+      if (mounted) {
+        ErrorDialog.show(context, AppLocalizations.of(context)!.uniqueBarcode);
+      }
+      return;
+    }
     try {
       Asset asset;
       if (widget.asset == null) {
@@ -108,10 +126,13 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
         );
       }
 
-      widget.onSaveAsset!(asset);
+      await widget.onSaveAsset!(asset);
 
-      Navigator.pop(context);
+      if (mounted) {
+        Navigator.pop(context);
+      }
     } catch (e) {
+      if (!mounted) return;
       if (e is ArgumentError) {
         ErrorDialog.show(context, e.message);
       } else {

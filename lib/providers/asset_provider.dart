@@ -86,6 +86,16 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     state = [asset, ...state];
   }
 
+  Future<bool> uniqueBarcode(int barcode) async {
+    final db = await DatabaseHelper().getAssetDatabase();
+    final data = await db.query(
+      Asset.dbName,
+      where: 'barcode = ?',
+      whereArgs: [barcode],
+    );
+    return data.isEmpty;
+  }
+
   Future<bool> canDelete(Asset asset) async {
     final ciDB = await DatabaseHelper().getCensusItemDatabase();
     final result = await ciDB.query(

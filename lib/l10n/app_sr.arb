@@ -62,6 +62,7 @@
   "startScan": "Započni skeniranje",
   "theme": "Tema",
   "undo": "Poništi",
+  "uniqueBarcode": "Barkod mora biti jednistven",
   "unknownCity": "Ne poznati grad",
   "unknownError": "Nepoznata greška",
   "workerDelete": "Ranik obrisan",
