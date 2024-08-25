@@ -64,6 +64,10 @@ class AppTheme {
           foregroundColor: colorScheme.onPrimary,
         ),
       ),
+      /*  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: colorScheme.primary,
+      ),
+      */
       extensions: [
         CustomBoxDecorationTheme(
           boxDecoration: BoxDecoration(
