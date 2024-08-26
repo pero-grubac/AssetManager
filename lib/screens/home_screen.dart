@@ -1,4 +1,5 @@
 import 'package:asset_manager/models/category/category.dart';
+import 'package:asset_manager/screens/general_screen.dart';
 import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:asset_manager/widgets/category/category_grid_item.dart';
 import 'package:asset_manager/widgets/util/main_drawer.dart';
@@ -14,7 +15,8 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   void _selectCategory(BuildContext context, Category category) {
-    Navigator.of(context).pushNamed(category.id);
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (ctx) => GeneralScreen(body: category.body)));
   }
 
   @override
@@ -24,22 +26,25 @@ class HomeScreen extends StatelessWidget {
         id: LocationScreen.id,
         title: AppLocalizations.of(context)!.locations,
         icon: const Icon(Icons.location_city),
+        body: const LocationScreen(),
       ),
       Category(
         id: WorkersScreen.id,
         title: AppLocalizations.of(context)!.workers,
         icon: const Icon(Icons.person_2),
+        body: const WorkersScreen(),
       ),
       Category(
         id: AssetScreen.id,
         title: AppLocalizations.of(context)!.assets,
         icon: const Icon(Icons.business_center),
+        body: const AssetScreen(),
       ),
       Category(
-        id: CensusListScreen.id,
-        title: AppLocalizations.of(context)!.censusList,
-        icon: const Icon(Icons.checklist),
-      ),
+          id: CensusListScreen.id,
+          title: AppLocalizations.of(context)!.censusList,
+          icon: const Icon(Icons.checklist),
+          body: const CensusListScreen()),
     ];
 
     return Scaffold(

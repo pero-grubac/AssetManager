@@ -1,9 +1,5 @@
-import 'package:asset_manager/screens/location_screen.dart';
-import 'package:asset_manager/widgets/util/curved_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../models/asset_location.dart';
 
 class Screen extends StatelessWidget {
   final TextEditingController? searchController;
@@ -33,6 +29,12 @@ class Screen extends StatelessWidget {
                 onChanged: onSearchChanged,
               )
             : null,
+        actions: [
+          IconButton(
+            onPressed: onIconPressed,
+            icon: const Icon(Icons.add),
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -40,14 +42,6 @@ class Screen extends StatelessWidget {
             child: body,
           ),
         ],
-      ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: onIconPressed,
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        child: const Icon(Icons.add),
       ),
     );
   }

@@ -22,11 +22,12 @@ import 'models/settings.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  /* FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Future.delayed(
     const Duration(seconds: 4),
   );
   FlutterNativeSplash.remove();
+  */
   runApp(
     const ProviderScope(
       child: AssetManager(),
