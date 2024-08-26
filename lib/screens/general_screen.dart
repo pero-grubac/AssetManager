@@ -22,17 +22,18 @@ class _GeneralScreenState extends State<GeneralScreen> {
   @override
   void initState() {
     body = widget.body;
+
     switch (body.runtimeType) {
-      case LocationScreen _:
+      case const (LocationScreen):
         selected = 2;
         break;
-      case WorkersScreen _:
+      case const (WorkersScreen):
         selected = 3;
         break;
-      case AssetScreen _:
+      case const (AssetScreen):
         selected = 4;
         break;
-      case CensusListScreen _:
+      case const (CensusListScreen):
         selected = 5;
         break;
       default:
