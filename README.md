@@ -50,16 +50,6 @@ AssetRegistry is an Android application designed to manage and keep track of a c
     <li><strong>Styles and Themes</strong>: Define styles and themes separately to achieve flexibility and modularity in the code.</li>
 </ul>
 
-## Installation
-
-<ol>
-    <li>Clone the repository:
-        <pre><code>git clone https://github.com/yourusername/AssetRegistry.git</code></pre>
-    </li>
-    <li>Open the project in Android Studio.</li>
-    <li>Build the project to download the required dependencies.</li>
-    <li>Run the project on an Android device or emulator.</li>
-</ol>
 
 ## Usage
 
