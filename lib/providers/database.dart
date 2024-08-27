@@ -21,6 +21,7 @@ class DatabaseHelper {
   }
 
   DatabaseHelper._internal();
+
   Future<sql_api.Database> getCensusListDatabase() async {
     if (_censusListDatabase != null) return _censusListDatabase!;
 

@@ -48,7 +48,8 @@ class WorkerCard extends StatelessWidget {
         ),
         subtitle: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Row(
+          child: Wrap(
+            spacing: 8.0,
             children: [
               RowIconWidget(
                 icon: Icons.email,

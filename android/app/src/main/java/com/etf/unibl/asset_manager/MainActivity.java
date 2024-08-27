@@ -1,4 +1,4 @@
-package com.example.asset_manager;
+package com.etf.unibl.asset_manager;
 
 import io.flutter.embedding.android.FlutterActivity;
 

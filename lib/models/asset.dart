@@ -19,7 +19,6 @@ class Asset implements Identifiable {
   final int barcode;
   final double price;
   final DateTime creationDate;
-
   late File image;
 
   Asset({
@@ -31,7 +30,6 @@ class Asset implements Identifiable {
     required this.creationDate,
     required this.image,
   }) : id = id ?? uuid.v4() {
-    // Basic validation
     if (name.isEmpty) throw ArgumentError('Name cannot be empty');
     if (description.isEmpty) throw ArgumentError('Description cannot be empty');
     if (barcode <= 0) throw ArgumentError('Barcode must be a positive integer');
@@ -39,6 +37,7 @@ class Asset implements Identifiable {
 
     if (image.path.isEmpty) throw ArgumentError('Image  cannot be empty');
   }
+
   String get formatedDate {
     return DateFormat('dd.MM.yyyy').format(creationDate);
   }

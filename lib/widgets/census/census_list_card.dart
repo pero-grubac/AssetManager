@@ -1,5 +1,4 @@
 import 'package:asset_manager/providers/util_provider.dart';
-import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:asset_manager/widgets/util/row_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,26 +14,36 @@ class CensusListCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       child: ListTile(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: RowIconWidget(
+        subtitle: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Wrap(
+            spacing: 8.0,
+            runSpacing: 4.0,
+            children: [
+              RowIconWidget(
                 icon: Icons.list,
-                widget: Text(
-                  censusList.name,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  softWrap: false,
+                widget: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.6),
+                  child: Text(
+                    censusList.name,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
-            ),
-            addHorizontalSpace(8), // Space between name and date
-            RowIconWidget(
-              icon: Icons.calendar_month,
-              widget: Text(censusList.formatedDate),
-            ),
-          ],
+              RowIconWidget(
+                icon: Icons.calendar_month,
+                widget: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.6),
+                  child: Text(
+                    censusList.formatedDate,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         onTap: () {
           ref.read(censusListIdProvider.notifier).state = censusList.id;

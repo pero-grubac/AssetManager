@@ -11,6 +11,7 @@ import 'database.dart';
 
 class AssetNotifier extends StateNotifier<List<Asset>> {
   AssetNotifier() : super([]);
+
   Future<void> loadItems(AssetLocation? location, Worker? worker) async {
     final db = await DatabaseHelper().getAssetDatabase();
     List<Asset> assets = [];
