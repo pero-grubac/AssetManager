@@ -1,5 +1,4 @@
 import 'package:asset_manager/models/worker.dart';
-import 'package:asset_manager/widgets/util/center_row_icon_widget.dart';
 import 'package:asset_manager/widgets/util/row_icon_widget.dart';
 import 'package:asset_manager/widgets/worker/worker_overlay.dart';
 import 'package:flutter/material.dart';
@@ -42,23 +41,41 @@ class WorkerCard extends StatelessWidget {
                 ? const Icon(Icons.check_circle)
                 : const Icon(Icons.circle_outlined)
             : null,
-        title: CenterRowIconText(
+        title: RowIconWidget(
           icon: Icons.person_2,
-          widget: Expanded(child: Text(worker.fullName)),
+          widget: Flexible(
+              child: Text(
+            worker.fullName,
+            overflow: TextOverflow.ellipsis,
+          )),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Wrap(
             spacing: 8.0,
+            runSpacing: 4.0,
             children: [
               RowIconWidget(
                 icon: Icons.email,
-                widget: Text(worker.email),
+                widget: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.6),
+                  child: Text(
+                    worker.email,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
-              const Spacer(),
               RowIconWidget(
                 icon: Icons.phone,
-                widget: Text(worker.phoneNumber),
+                widget: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.6),
+                  child: Text(
+                    worker.phoneNumber,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
             ],
           ),

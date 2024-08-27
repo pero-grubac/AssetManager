@@ -30,7 +30,11 @@ class AssetCard extends StatelessWidget {
         ),
         title: RowIconWidget(
           icon: Icons.business_center,
-          widget: Text(asset.name),
+          widget: Flexible(
+              child: Text(
+            asset.name,
+            overflow: TextOverflow.ellipsis,
+          )),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
