@@ -95,7 +95,10 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       }
       return;
     }
-    final isUnique = await widget.isUniqueBarcode!(enteredBarcode);
+    bool isUnique = true;
+    if (widget.isUniqueBarcode != null) {
+      isUnique = await widget.isUniqueBarcode!(enteredBarcode);
+    }
     if (!mounted) return;
     if (!isUnique) {
       if (mounted) {
