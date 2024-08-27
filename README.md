@@ -81,11 +81,4 @@ AssetRegistry is an Android application designed to manage and keep track of a c
     </li>
 </ol>
 
-## Dependencies
 
-<ul>
-    <li>ZXing library for barcode scanning</li>
-    <li>SQLite for local database management</li>
-    <li>Android Jetpack components for architecture and UI</li>
-    <li>Glide or Picasso for image loading</li>
-</ul>
