@@ -38,7 +38,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
   @override
   void initState() {
     super.initState();
-    _loadAssets(); // Load assets when the state is initialized
+    _assetsFuture = _loadAssets(); // Load assets when the state is initialized
   }
 
   Future<void> _loadAssets() async {
@@ -48,10 +48,7 @@ class _AssetScreenState extends ConsumerState<AssetScreen> {
           widget.position!.latitude, widget.position!.longitude);
     }
 
-    setState(() {
-      _assetsFuture =
-          ref.read(assetProvider.notifier).loadItems(location, widget.worker);
-    });
+    return ref.read(assetProvider.notifier).loadItems(location, widget.worker);
   }
 
   void setIsLoading(bool load) {

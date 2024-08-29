@@ -44,16 +44,14 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   Future<List<String>> getAssetsByWorker(String workerId) async {
     final db = await DatabaseHelper().getCensusItemDatabase();
 
-    final List<Map<String, dynamic>> results = await db.rawQuery('''
-    SELECT ci.assetId
-    FROM ${CensusItem.dbName} ci
-    JOIN (
-      SELECT assetId, MAX(id) as maxId
-      FROM ${CensusItem.dbName}
-      GROUP BY assetId
-    ) latest_ci ON ci.id = latest_ci.maxId
-    WHERE ci.newPersonId = ?
-  ''', [workerId]);
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+      '''
+    SELECT assetId
+    FROM ${CensusItem.dbName}
+    WHERE newPersonId = ?
+    ''',
+      [workerId],
+    );
 
     return results.map((row) => row['assetId'] as String).toList();
   }
@@ -61,16 +59,14 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   Future<List<String>> getAssetsByLocation(String locationId) async {
     final db = await DatabaseHelper().getCensusItemDatabase();
 
-    final List<Map<String, dynamic>> results = await db.rawQuery('''
-    SELECT ci.assetId
-    FROM ${CensusItem.dbName} ci
-    JOIN (
-      SELECT assetId, MAX(id) as maxId
-      FROM ${CensusItem.dbName}
-      GROUP BY assetId
-    ) latest_ci ON ci.id = latest_ci.maxId
-    WHERE ci.newLocationId = ?
-  ''', [locationId]);
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+      '''
+    SELECT assetId
+    FROM ${CensusItem.dbName}
+    WHERE newLocationId = ?
+    ''',
+      [locationId],
+    );
 
     return results.map((row) => row['assetId'] as String).toList();
   }
