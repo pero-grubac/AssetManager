@@ -9,7 +9,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   LocationNotifier() : super(const []);
 
   Future<void> loadItems() async {
-    final db = await DatabaseHelper().getLocationDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       AssetLocation.dbName,
       orderBy: 'createdAt DESC',
@@ -19,7 +19,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   }
 
   Future<void> addLocation(AssetLocation location) async {
-    final db = await DatabaseHelper().getLocationDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final l = await findLocationById(location.id);
     if (l == null) {
       await db.insert(
@@ -31,7 +31,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   }
 
   Future<bool> canDelete(AssetLocation location) async {
-    final ciDb = await DatabaseHelper().getCensusItemDatabase();
+    final ciDb = await DatabaseHelper().getDatabase();
 
     final result = await ciDb.query(
       CensusItem.dbName,
@@ -50,7 +50,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   }
 
   Future<void> removeLocation(AssetLocation location) async {
-    final db = await DatabaseHelper().getLocationDatabase();
+    final db = await DatabaseHelper().getDatabase();
 
     await db.delete(
       AssetLocation.dbName,
@@ -66,7 +66,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   }
 
   Future<void> insetLocation(AssetLocation location, int index) async {
-    final db = await DatabaseHelper().getLocationDatabase();
+    final db = await DatabaseHelper().getDatabase();
     await db.update(
       AssetLocation.dbName,
       location.toMap(),
@@ -78,7 +78,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
   }
 
   Future<AssetLocation?> findLocationById(String id) async {
-    final db = await DatabaseHelper().getLocationDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       AssetLocation.dbName,
       where: 'id = ?',
@@ -94,7 +94,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
 
   Future<AssetLocation?> findLocationByLatLng(
       double latitude, double longitude) async {
-    final db = await DatabaseHelper().getLocationDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       AssetLocation.dbName,
       where: 'latitude = ? AND longitude = ?',
@@ -109,7 +109,7 @@ class LocationNotifier extends StateNotifier<List<AssetLocation>> {
 
   @override
   void dispose() async {
-    await DatabaseHelper().closeDatabases();
+    await DatabaseHelper().closeDatabase();
     super.dispose();
   }
 }

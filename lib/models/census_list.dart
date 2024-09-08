@@ -6,7 +6,7 @@ const uuid = Uuid();
 
 class CensusList {
   static const String dbName = 'censusList';
-  static const String dbFullName = 'censusList.db';
+  static const String dbFullName = 'assets.db';
   final String id;
   final String name;
   final DateTime creationDate;

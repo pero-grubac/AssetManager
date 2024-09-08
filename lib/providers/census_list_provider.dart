@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CensusListNotifier extends StateNotifier<List<CensusList>> {
   CensusListNotifier() : super([]);
   Future<void> loadItems() async {
-    final db = await DatabaseHelper().getCensusListDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       CensusList.dbName,
       orderBy: 'creationDate DESC',
@@ -17,7 +17,7 @@ class CensusListNotifier extends StateNotifier<List<CensusList>> {
   }
 
   Future<void> addCensusList(CensusList censusList) async {
-    final db = await DatabaseHelper().getCensusListDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final cl = await findCensusListById(censusList.id);
     if (cl == null) {
       await db.insert(
@@ -29,9 +29,8 @@ class CensusListNotifier extends StateNotifier<List<CensusList>> {
   }
 
   Future<bool> removeCensusList(CensusList censusList) async {
-    final db = await DatabaseHelper().getCensusListDatabase();
-    final itemDB = await DatabaseHelper().getCensusItemDatabase();
-    final result = await itemDB.query(
+    final db = await DatabaseHelper().getDatabase();
+    final result = await db.query(
       CensusItem.dbName,
       where: 'censusListId = ?',
       whereArgs: [censusList.id],
@@ -53,7 +52,7 @@ class CensusListNotifier extends StateNotifier<List<CensusList>> {
   }
 
   Future<CensusList?> findCensusListById(String id) async {
-    final db = await DatabaseHelper().getCensusListDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       CensusList.dbName,
       where: 'id = ?',
@@ -64,7 +63,7 @@ class CensusListNotifier extends StateNotifier<List<CensusList>> {
   }
 
   Future<void> updateCensusList(CensusList censusList) async {
-    final db = await DatabaseHelper().getCensusListDatabase();
+    final db = await DatabaseHelper().getDatabase();
     await db.update(
       CensusList.dbName,
       censusList.toMap(),
@@ -79,7 +78,7 @@ class CensusListNotifier extends StateNotifier<List<CensusList>> {
 
   @override
   void dispose() async {
-    await DatabaseHelper().closeDatabases();
+    await DatabaseHelper().closeDatabase();
     super.dispose();
   }
 }

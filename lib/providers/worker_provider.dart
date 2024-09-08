@@ -9,7 +9,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   WorkerNotifier() : super(const []);
 
   Future<void> loadItems() async {
-    final db = await DatabaseHelper().getWorkerDatabase();
+    final db = await DatabaseHelper().getDatabase();
 
     final data = await db.query(
       Worker.dbName,
@@ -22,7 +22,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   List<Worker> get allWorkers => state;
 
   Future<void> addWorker(Worker worker) async {
-    final db = await DatabaseHelper().getWorkerDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final w = await findWorkerById(worker.id);
     if (w == null) {
       db.insert(
@@ -34,7 +34,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   }
 
   Future<bool> canDelete(Worker worker) async {
-    final ciDb = await DatabaseHelper().getCensusItemDatabase();
+    final ciDb = await DatabaseHelper().getDatabase();
     final result = await ciDb.query(
       CensusItem.dbName,
       where: 'oldPersonId = ? OR newPersonId = ?',
@@ -51,7 +51,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   }
 
   Future<void> removeWorker(Worker worker) async {
-    final db = await DatabaseHelper().getWorkerDatabase();
+    final db = await DatabaseHelper().getDatabase();
 
     await db.delete(
       Worker.dbName,
@@ -66,7 +66,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   }
 
   Future<void> insertWorker(Worker worker, int index) async {
-    final db = await DatabaseHelper().getWorkerDatabase();
+    final db = await DatabaseHelper().getDatabase();
     await db.update(
       Worker.dbName,
       worker.toMap(),
@@ -79,7 +79,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   }
 
   Future<void> updateWorker(Worker updatedWorker) async {
-    final db = await DatabaseHelper().getWorkerDatabase();
+    final db = await DatabaseHelper().getDatabase();
     await db.update(
       Worker.dbName,
       updatedWorker.toMap(),
@@ -94,7 +94,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
   }
 
   Future<Worker?> findWorkerById(String id) async {
-    final db = await DatabaseHelper().getWorkerDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       Worker.dbName,
       where: 'id = ?',
@@ -109,7 +109,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
 
   Future<Worker?> findWorkerByFullName(
       String firstName, String lastName) async {
-    final db = await DatabaseHelper().getWorkerDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       Worker.dbName,
       where: 'firstName = ? AND lastName = ?',
@@ -124,7 +124,7 @@ class WorkerNotifier extends StateNotifier<List<Worker>> {
 
   @override
   void dispose() async {
-    await DatabaseHelper().closeDatabases();
+    await DatabaseHelper().closeDatabase();
     super.dispose();
   }
 }

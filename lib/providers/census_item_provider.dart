@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   CensusItemNotifier() : super(const []);
   Future<void> loadItems(String censusListID) async {
-    final db = await DatabaseHelper().getCensusItemDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       CensusItem.dbName,
       where: 'censusListId = ?',
@@ -18,7 +18,7 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   }
 
   Future<void> addCensusItem(CensusItem censusItem) async {
-    final db = await DatabaseHelper().getCensusItemDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final ci = await findCensusItemById(censusItem.id);
     final existingItems = await db.query(
       CensusItem.dbName,
@@ -40,7 +40,7 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   }
 
   Future<void> removeCensusItem(CensusItem censusItem) async {
-    final db = await DatabaseHelper().getCensusItemDatabase();
+    final db = await DatabaseHelper().getDatabase();
     await db.delete(
       CensusItem.dbName,
       where: 'id = ?',
@@ -54,7 +54,7 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   }
 
   Future<void> insertCensusItem(CensusItem censusItem, int index) async {
-    final db = await DatabaseHelper().getCensusItemDatabase();
+    final db = await DatabaseHelper().getDatabase();
     await db.update(
       CensusItem.dbName,
       censusItem.toMap(),
@@ -65,7 +65,7 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   }
 
   Future<CensusItem?> findCensusItemById(String id) async {
-    final db = await DatabaseHelper().getCensusItemDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       CensusItem.dbName,
       where: 'id = ?',
@@ -76,7 +76,7 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
   }
 
   Future<void> updateCensusItem(CensusItem censusItem) async {
-    final db = await DatabaseHelper().getCensusItemDatabase();
+    final db = await DatabaseHelper().getDatabase();
     await db.update(
       CensusItem.dbName,
       censusItem.toMap(),
@@ -91,7 +91,7 @@ class CensusItemNotifier extends StateNotifier<List<CensusItem>> {
 
   @override
   void dispose() async {
-    await DatabaseHelper().closeDatabases();
+    await DatabaseHelper().closeDatabase();
     super.dispose();
   }
 }

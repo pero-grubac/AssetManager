@@ -13,7 +13,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   AssetNotifier() : super([]);
 
   Future<void> loadItems(AssetLocation? location, Worker? worker) async {
-    final db = await DatabaseHelper().getAssetDatabase();
+    final db = await DatabaseHelper().getDatabase();
     List<Asset> assets = [];
     if (location != null) {
       final assetIds = await getAssetsByLocation(location.id);
@@ -42,7 +42,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<List<String>> getAssetsByWorker(String workerId) async {
-    final db = await DatabaseHelper().getCensusItemDatabase();
+    final db = await DatabaseHelper().getDatabase();
 
     final List<Map<String, dynamic>> results = await db.rawQuery(
       '''
@@ -57,7 +57,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<List<String>> getAssetsByLocation(String locationId) async {
-    final db = await DatabaseHelper().getCensusItemDatabase();
+    final db = await DatabaseHelper().getDatabase();
 
     final List<Map<String, dynamic>> results = await db.rawQuery(
       '''
@@ -77,14 +77,14 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
     final copiedImage = await asset.image.copy('${appDir.path}/$fileName');
     asset.image = copiedImage;
 
-    final db = await DatabaseHelper().getAssetDatabase();
+    final db = await DatabaseHelper().getDatabase();
     db.insert(Asset.dbName, asset.toMap());
 
     state = [asset, ...state];
   }
 
   Future<bool> uniqueBarcode(int barcode) async {
-    final db = await DatabaseHelper().getAssetDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       Asset.dbName,
       where: 'barcode = ?',
@@ -94,7 +94,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<bool> canDelete(Asset asset) async {
-    final ciDB = await DatabaseHelper().getCensusItemDatabase();
+    final ciDB = await DatabaseHelper().getDatabase();
     final result = await ciDB.query(
       CensusItem.dbName,
       where: 'assetId = ?',
@@ -107,7 +107,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<void> removeAsset(Asset asset) async {
-    final db = await DatabaseHelper().getAssetDatabase();
+    final db = await DatabaseHelper().getDatabase();
 
     await db.delete(
       Asset.dbName,
@@ -125,7 +125,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<void> insetAsset(Asset asset, int index) async {
-    final db = await DatabaseHelper().getAssetDatabase();
+    final db = await DatabaseHelper().getDatabase();
     await db.update(
       Asset.dbName,
       asset.toMap(),
@@ -138,7 +138,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<void> updateAsset(Asset updatedAsset) async {
-    final db = await DatabaseHelper().getAssetDatabase();
+    final db = await DatabaseHelper().getDatabase();
     await db.update(
       Asset.dbName,
       updatedAsset.toMap(),
@@ -153,7 +153,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<Asset?> findAssetById(String id) async {
-    final db = await DatabaseHelper().getAssetDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       Asset.dbName,
       where: 'id = ?',
@@ -167,7 +167,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
   }
 
   Future<Asset?> findAssetByBarcode(int barcode) async {
-    final db = await DatabaseHelper().getAssetDatabase();
+    final db = await DatabaseHelper().getDatabase();
     final data = await db.query(
       Asset.dbName,
       where: 'barcode = ?',
@@ -182,7 +182,7 @@ class AssetNotifier extends StateNotifier<List<Asset>> {
 
   @override
   void dispose() async {
-    await DatabaseHelper().closeDatabases();
+    await DatabaseHelper().closeDatabase();
     super.dispose();
   }
 }

@@ -7,7 +7,7 @@ const uuid = Uuid();
 
 class AssetLocation implements Identifiable {
   static const String dbName = 'locations';
-  static const String dbFullName = 'locations.db';
+  static const String dbFullName = 'assets.db';
 
   @override
   final String id;

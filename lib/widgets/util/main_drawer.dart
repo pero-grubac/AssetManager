@@ -21,9 +21,8 @@ class MainDrawer extends StatelessWidget {
     return FutureBuilder(
       future: _delayUIUpdate(),
       builder: (context, snapshot) {
-        // While waiting for the delay, show an empty container or a loading spinner if desired
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CenteredCircularLoading(); // Optionally, you can show a loading indicator here
+          return const CenteredCircularLoading();
         }
 
         return Drawer(

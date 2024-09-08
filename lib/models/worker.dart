@@ -7,7 +7,7 @@ const uuid = Uuid();
 
 class Worker implements Identifiable {
   static const String dbName = 'workers';
-  static const String dbFullName = 'workers.db';
+  static const String dbFullName = 'assets.db';
 
   @override
   final String id;
