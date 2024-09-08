@@ -15,7 +15,7 @@ import '../util/error_dialog.dart';
 import '../util/helper_widgets.dart';
 import 'location_card.dart';
 
-const apiKey = 'AIzaSyD06o4maRDfYNUvDtzb0xQu9b_Gmo23HCQ';
+const apiKey = 'Insert_Google_API_Key';
 
 class LocationInput extends StatefulWidget {
   const LocationInput({
