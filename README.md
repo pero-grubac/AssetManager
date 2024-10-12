@@ -1,6 +1,6 @@
-<h1>AssetRegistry App</h1>
+<h1>AssetManager App</h1>
 
-<p><strong>AssetRegistry</strong> is an Android application designed to manage and track a company's assets, ranging from furniture and electronics to office supplies. The app provides functionalities for adding, updating, deleting, and viewing assets, employees, locations, and inventory lists.</p>
+<p><strong>AssetManager</strong> is an Android application designed to manage and track a company's assets, ranging from furniture and electronics to office supplies. The app provides functionalities for adding, updating, deleting, and viewing assets, employees, locations, and inventory lists.</p>
 
 <h2>Features</h2>
 
