@@ -70,3 +70,7 @@
         </ul>
     </li>
 </ol>
+
+<h2> Setup Instructions</h2>
+
+Before deploying, make sure to configure the connection strings for the Google Cloud Services.
