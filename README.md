@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <h1>📱 AssetManager App</h1>
+   <h1 align="center">📱 AssetManager App</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-Mobile_App-blue?logo=flutter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Riverpod-State_Management-success?logo=dart" />
+  <img src="https://img.shields.io/badge/SQLite-Local_DB-lightgrey?logo=sqlite&logoColor=003B57" />
+  <img src="https://img.shields.io/badge/SharedPreferences-Local_Storage-informational?logo=flutter" />
+</p>
 
 <p><strong>AssetManager</strong> is an Android application designed to manage and track a company's assets, ranging from furniture and electronics to office supplies. The app provides functionalities for adding, updating, deleting, and viewing assets, employees, locations, and inventory lists.</p>
 
