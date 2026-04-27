@@ -4,7 +4,7 @@ import 'package:asset_manager/providers/worker_provider.dart';
 import 'package:asset_manager/widgets/worker/worker_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 import '../models/worker.dart';
 import '../providers/util_provider.dart';

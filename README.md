@@ -1,88 +1,116 @@
-<!DOCTYPE html>
-<html>
-<body>
-   <h1 align="center">📱 AssetManager App</h1>
+<div align="center">
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Flutter-Mobile_App-blue?logo=flutter&logoColor=white" />
-  <img src="https://img.shields.io/badge/Riverpod-State_Management-success?logo=dart" />
-  <img src="https://img.shields.io/badge/SQLite-Local_DB-lightgrey?logo=sqlite&logoColor=003B57" />
-  <img src="https://img.shields.io/badge/SharedPreferences-Local_Storage-informational?logo=flutter" />
-</p>
+# 📱 AssetManager
 
-<p><strong>AssetManager</strong> is an Android application designed to manage and track a company's assets, ranging from furniture and electronics to office supplies. The app provides functionalities for adding, updating, deleting, and viewing assets, employees, locations, and inventory lists.</p>
+![Flutter](https://img.shields.io/badge/Flutter-Mobile_App-02569B?logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-Language-0175C2?logo=dart&logoColor=white)
+![Riverpod](https://img.shields.io/badge/Riverpod-State_Management-success?logo=dart)
+![SQLite](https://img.shields.io/badge/SQLite-Local_DB-lightgrey?logo=sqlite&logoColor=003B57)
+![Google Maps](https://img.shields.io/badge/Google_Maps-Location-4285F4?logo=googlemaps&logoColor=white)
 
-<h2>✨ Features</h2>
+<img src="readme_assets/demo.gif" alt="AssetManager demo" width="300">
 
-<h3>1. 🏷️ Asset Management</h3>
-    <ul>
-        <li><strong>Attributes:</strong> Each asset has the following attributes: name, description, barcode (integer), price, creation date, assigned person (employee), assigned location (city), and image.</li>
-        <li><strong>CRUD Operations:</strong> The app supports Create, Read, Update, and Delete operations for assets.</li>
-        <li><strong>Barcode Input:</strong> Barcode values can be entered manually or scanned using the device's camera. The barcode scanning functionality is implemented using external libraries.</li>
-        <li><strong>Image Upload:</strong> Images can be uploaded from the device or captured using the device's camera.</li>
-    </ul>
+</div>
 
-<h3>2. 📋 Category Views</h3>
-    <ul>
-        <li><strong>Lists:</strong> Display lists of assets, employees, locations, and inventory lists.</li>
-        <li><strong>Search Functionality:</strong> Search items in each list based on at least two criteria.</li>
-    </ul>
+## 📌 Project Overview
 
- <h3>3. 📦 Inventory Lists</h3>
-    <ul>
-        <li><strong>Creation:</strong> Create inventory lists containing multiple items.</li>
-        <li><strong>Attributes:</strong> Each item in the list includes the asset, the current person responsible for the asset, the new person to whom the asset is assigned, the current location of the asset, and the new location of the asset.</li>
-        <li><strong>Barcode Scanning:</strong> During the creation of a new item, scan the barcode of the asset to automatically fill in other related data (e.g., name, assigned person, assigned location).</li>
-  </ul>
+**AssetManager** is an Android application for tracking and managing company assets — furniture, electronics, and office supplies. Features barcode scanning, Google Maps location view, multi-language support, and full CRUD operations.
 
- <h3>4. 📍 Asset Details</h3>
-    <ul>
-        <li><strong>Details View:</strong> View detailed information about each asset, including basic details and an image.</li>
-        <li><strong>Map View:</strong> View the asset's location on a map with a pin indicating the city. Clicking on the pin displays a list of all assets currently in that city.</li>
- </ul>
+---
 
-<h3>5. 🌐 Language Settings</h3>
-    <ul>
-        <li><strong>Language Selection:</strong> Choose between Serbian and English languages in the settings page.</li>
-    </ul>
+## ✨ Features
 
-<h3>6. 🚀 Asynchronous Operations</h3>
-    <ul>
-        <li><strong>Tasks:</strong> Operations that might block the main thread are handled asynchronously, ensuring a smooth and responsive user experience.</li>
-    </ul>
+### 🏷️ Asset Management
 
-<h2>🛠️ Usage</h2>
-    <ol>
-        <li><strong>Assets Management:</strong>
-            <ul>
-                <li>Add new assets by clicking the "Add Asset" button.</li>
-                <li>Fill in the required details, scan the barcode, and upload or capture an image.</li>
-                <li>Save the asset to add it to the list.</li>
-                <li>Edit or delete assets by selecting them from the list.</li>
-            </ul>
-        </li>
-        <li><strong>Employees and Locations:</strong>
-            <ul>
-                <li>Manage employees and locations similarly by adding, editing, or deleting entries.</li>
-                <li>Use the search functionality to find specific employees or locations.</li>
-            </ul>
-        </li>
-        <li><strong>Inventory Lists:</strong>
-            <ul>
-                <li>Create inventory lists and add items by scanning asset barcodes.</li>
-                <li>Ensure all required details are filled in for each item in the list.</li>
-            </ul>
-        </li>
-        <li><strong>Settings:</strong>
-            <ul>
-                <li>Navigate to the settings page to change the application language or theme.</li>
-            </ul>
-        </li>
-    </ol>
+- Full CRUD operations for assets
+- Asset attributes: name, description, barcode, price, creation date, assigned employee, location, and image
+- Barcode entry via manual input or camera scanning
+- Image upload from gallery or camera capture
 
-<h2>⚙️ Setup Instructions</h2>
-    <p>
-        Before deploying, make sure to configure the connection strings for the Google Cloud Services.
-    </p>
-</body>
-</html>
+### 📋 Lists & Search
+
+- Browse assets, employees, locations, and inventory lists
+- Search by multiple criteria in each list
+
+### 📦 Inventory Lists
+
+- Create inventory lists with multiple items
+- Each item tracks current and new employee assignment and location
+- Barcode scanning auto-fills asset data during item creation
+
+### 📍 Asset Location
+
+- View asset location on Google Maps with city pin
+- Click pin to see all assets in that location
+
+### 🌐 Localization
+
+- English and Serbian language support
+- Switchable from Settings screen
+
+### 🎨 Theming
+
+- Dark and Light theme support
+
+---
+
+## 🚀 Setup & Run
+
+### Prerequisites
+
+- Flutter SDK `>=3.4.3`
+- Android Studio with Android SDK
+- Physical Android device or emulator (Android 8.0+)
+- Google Maps API key
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/pero-grubac/AssetManager.git
+cd AssetManager
+```
+
+### 2. Configure Google Maps API key
+
+Create or edit `android/local.properties` and add:
+
+```properties
+MAPS_API_KEY=your_google_maps_api_key_here
+```
+
+Or add the key directly in `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<meta-data
+    android:name="com.google.android.geo.API_KEY"
+    android:value="YOUR_API_KEY_HERE"/>
+```
+
+> Get a free API key at [Google Cloud Console](https://console.cloud.google.com/) — enable **Maps SDK for Android**.
+
+### 3. Install dependencies
+
+```bash
+flutter pub get
+```
+
+### 4. Run the app
+
+```bash
+flutter run
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology            | Usage                              |
+| --------------------- | ---------------------------------- |
+| Flutter / Dart        | Cross-platform mobile framework    |
+| Riverpod              | State management                   |
+| SQLite (sqflite)      | Local database                     |
+| Google Maps Flutter   | Map and location display           |
+| Mobile Scanner        | Barcode scanning via camera        |
+| SharedPreferences     | User preferences (theme, language) |
+| Image Picker          | Camera and gallery image selection |
+| Flutter Localizations | EN / SR language support           |

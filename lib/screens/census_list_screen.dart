@@ -4,7 +4,7 @@ import 'package:asset_manager/screens/screen.dart';
 import 'package:asset_manager/widgets/census/census_list_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 import '../models/census_list.dart';
 import '../widgets/census/census_list_overlay.dart';

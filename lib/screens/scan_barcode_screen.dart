@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../widgets/util/error_dialog.dart';
 
@@ -15,32 +14,13 @@ class ScanBarcodeScreen extends StatefulWidget {
 }
 
 class _ScanBarcodeScreenState extends State<ScanBarcodeScreen> {
-  String? scanResult;
+  MobileScannerController cameraController = MobileScannerController();
+  bool _scanned = false;
 
-  Future<void> scanBarcode() async {
-    String? scanResult;
-    try {
-      scanResult = await FlutterBarcodeScanner.scanBarcode(
-        "#ff6666",
-        "Cancel",
-        true,
-        ScanMode.BARCODE,
-      );
-    } on PlatformException {
-      if (mounted) {
-        ErrorDialog.show(context, AppLocalizations.of(context)!.scanError);
-      }
-    }
-    if (!mounted) return;
-    if (scanResult != '-1') {
-      Navigator.pop(context, scanResult);
-    } else {
-      if (mounted) {
-        setState(() {
-          this.scanResult = null;
-        });
-      }
-    }
+  @override
+  void dispose() {
+    cameraController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,17 +30,16 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen> {
         title: Text(AppLocalizations.of(context)!.scanBarcode),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton.icon(
-              onPressed: scanBarcode,
-              icon: const Icon(Icons.camera_alt_outlined),
-              label: Text(AppLocalizations.of(context)!.startScan),
-            ),
-          ],
-        ),
+      body: MobileScanner(
+        controller: cameraController,
+        onDetect: (capture) {
+          if (_scanned) return;
+          final List<Barcode> barcodes = capture.barcodes;
+          if (barcodes.isNotEmpty && barcodes.first.rawValue != null) {
+            _scanned = true;
+            Navigator.pop(context, barcodes.first.rawValue);
+          }
+        },
       ),
     );
   }

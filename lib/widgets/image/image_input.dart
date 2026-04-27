@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 class ImageInput extends StatefulWidget {
   const ImageInput({

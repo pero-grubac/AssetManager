@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:asset_manager/models/asset.dart';
 import 'package:asset_manager/widgets/image/image_input.dart';
-import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets/util/build_text_field.dart';
 import '../widgets/util/error_dialog.dart';
 import '../widgets/util/helper_widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 class AssetDetailsScreen extends StatefulWidget {
   const AssetDetailsScreen({
@@ -39,11 +38,11 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
 
   DateTime? _selectedDate;
   String? _pickedDate;
+
   @override
   void initState() {
     super.initState();
     if (widget.asset != null) {
-      // Editing an existing asset
       _nameController.text = widget.asset!.name;
       _descriptionController.text = widget.asset!.description;
       _barcodeController.text = widget.asset!.barcode.toString();
@@ -88,7 +87,6 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       }
       return;
     }
-
     if (_selectedDate == null) {
       if (mounted) {
         ErrorDialog.show(context, AppLocalizations.of(context)!.emptyDate);
@@ -154,9 +152,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       lastDate: lastDate,
       initialDate: now,
     ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
+      if (pickedDate == null) return;
       setState(() {
         _selectedDate = pickedDate;
         _pickedDate = DateFormat('dd.MM.yyyy').format(_selectedDate!);
@@ -195,12 +191,20 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
                 shadowColor: Theme.of(context).colorScheme.primary,
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: BarcodeWidget(
-                    data: _barcodeController.text,
-                    barcode: Barcode.code128(),
-                    width: 250,
-                    height: 250,
-                    drawText: false,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.qr_code, size: 100, color: Colors.black),
+                      const SizedBox(height: 16),
+                      Text(
+                        _barcodeController.text,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -273,8 +277,6 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
       isEditable: widget.isEditable,
     );
 
-    final barcodeRow = barcodeIcon;
-
     if (isWideScreen) {
       return [
         Row(
@@ -289,7 +291,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
                   nameTextField,
                   priceDateRow,
                   descriptionTextField,
-                  barcodeRow,
+                  barcodeIcon,
                 ],
               ),
             )
@@ -301,7 +303,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
         nameTextField,
         priceDateRow,
         descriptionTextField,
-        barcodeRow,
+        barcodeIcon,
         addVerticalSpace(10),
         imageWidget,
         addVerticalSpace(10),

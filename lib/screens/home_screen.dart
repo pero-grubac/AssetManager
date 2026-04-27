@@ -4,7 +4,7 @@ import 'package:asset_manager/screens/workers_screen.dart';
 import 'package:asset_manager/widgets/category/category_grid_item.dart';
 import 'package:asset_manager/widgets/util/main_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 import 'asset_screen.dart';
 import 'census_list_screen.dart';

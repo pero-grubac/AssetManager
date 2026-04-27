@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/settings.dart';
 import '../providers/locale_provider.dart';
 import '../providers/settings_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 class SettingsScreen extends ConsumerWidget {
   static const id = 'settings_screen';

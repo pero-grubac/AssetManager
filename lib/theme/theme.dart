@@ -13,7 +13,7 @@ class AppTheme {
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
         iconTheme: IconThemeData(
-          color: colorScheme.onPrimary, // Icon color for AppBar
+          color: colorScheme.onPrimary,
         ),
         titleTextStyle: GoogleFonts.lato(
           fontSize: 20,
@@ -21,7 +21,7 @@ class AppTheme {
           color: colorScheme.onPrimary,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: colorScheme.secondaryContainer,
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       ),
@@ -43,20 +43,20 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: TextStyle(
-          color: colorScheme.onPrimary.withOpacity(0.6), // Hint text color
+          color: colorScheme.onPrimary.withOpacity(0.6),
         ),
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surface,
         contentTextStyle: TextStyle(
-          color: colorScheme.onSurface, // Dialog content text color
+          color: colorScheme.onSurface,
         ),
         titleTextStyle: TextStyle(
-          color: colorScheme.onSurface, // Dialog title text color
+          color: colorScheme.onSurface,
         ),
       ),
       iconTheme: IconThemeData(
-        color: colorScheme.onSurface, // Global icon color
+        color: colorScheme.onSurface,
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
@@ -64,10 +64,6 @@ class AppTheme {
           foregroundColor: colorScheme.onPrimary,
         ),
       ),
-      /*  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: colorScheme.primary,
-      ),
-      */
       extensions: [
         CustomBoxDecorationTheme(
           boxDecoration: BoxDecoration(

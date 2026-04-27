@@ -1,6 +1,6 @@
 import 'package:asset_manager/widgets/util/build_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 import '../../models/worker.dart';
 import '../util/error_dialog.dart';

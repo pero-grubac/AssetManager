@@ -6,7 +6,7 @@ import 'package:asset_manager/widgets/location/location_card.dart';
 import 'package:asset_manager/screens/add_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 import '../models/asset_location.dart';
 import '../providers/util_provider.dart';

@@ -13,7 +13,7 @@ import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:asset_manager/widgets/worker/worker_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 import '../models/asset.dart';
 import '../models/asset_location.dart';

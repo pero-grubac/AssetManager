@@ -1,7 +1,7 @@
 import 'package:asset_manager/widgets/util/helper_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:asset_manager/l10n/app_localizations.dart';
 
 import '../../models/census_list.dart';
 import '../util/build_text_field.dart';
